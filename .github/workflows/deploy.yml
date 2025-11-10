@@ -1,32 +1,22 @@
-name: Deploy to DigitalOcean
+name: Deploy to DigitalOcean App Platform
 
 on:
   push:
-    # Запускаємо тільки при пуші в основну гілку (або develop, залежно від вашого налаштування)
+    # Запускаємо тільки при пуші в основну гілку
     branches:
       - main
 
 jobs:
-  # 1. ТЕХНІЧНИЙ JOB: Вирішує помилку валідатора
-  initial_check:
-    name: Initial Check
-    runs-on: ubuntu-latest
-    # Не має needs, тому задовольняє вимогу GitHub.
-    steps:
-      - run: echo "Starting deployment pipeline logic..."
-
-  # 2. ОСНОВНИЙ JOB: Запускається тільки після успіху всіх залежностей
+  # Цей job є першим і має зовнішні залежності.
   deploy:
     name: DO App Deploy
     runs-on: ubuntu-latest
 
-    # !!! ВИПРАВЛЕННЯ: Тепер залежить від 3-х jobs:
-    # 1. initial_check (з цього ж файлу)
-    # 2. ci (з tests.yml)
-    # 3. quality (з lint.yml)
+    # !!! КЛЮЧОВИЙ МОМЕНТ: needs [ci, quality]
+    # Забезпечує, що цей job чекає на успіх job 'ci' та 'quality' з інших файлів.
     needs: [ci, quality]
 
-    # Цей job запускається, тільки якщо всі jobs у needs були успішні.
+    # Запускаємо деплой, тільки якщо всі jobs у needs були успішні.
     if: success()
 
     steps:
