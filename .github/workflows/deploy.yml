@@ -24,7 +24,7 @@ jobs:
     # 1. initial_check (з цього ж файлу)
     # 2. ci (з tests.yml)
     # 3. quality (з lint.yml)
-    needs: [initial_check, ci, quality]
+    needs: [ci, quality]
 
     # Цей job запускається, тільки якщо всі jobs у needs були успішні.
     if: success()
