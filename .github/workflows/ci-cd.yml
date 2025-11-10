@@ -25,12 +25,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Впевнимося, що інструмент composer:v2 доданий (як у tests.yml)
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.4
-          tools: composer:v2 # Встановлюємо Composer v2
+          tools: composer:v2
           coverage: xdebug
 
       - name: Setup Node
@@ -42,37 +41,53 @@ jobs:
       - name: Install Node Dependencies
         run: npm ci
 
-      # ВИПРАВЛЕННЯ: Додаємо --no-scripts, щоб уникнути можливих помилок хуків, і спрощуємо
-      - name: Install Composer Dependencies
-        run: composer install --no-interaction --prefer-dist --no-scripts
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      # ... (інші кроки залишаються)
+      - name: Copy Environment File
+        run: cp .env.example .env
+
+      - name: Generate Application Key
+        run: php artisan key:generate
+
+      - name: Build Assets
+        run: npm run build
+
       - name: Tests
         run: ./vendor/bin/pest
 
+
   # 2. Job для лінтування (quality)
   quality:
-    name: Run Linter & Quality Checks
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
-      # ВИПРАВЛЕННЯ: Додаємо інструмент composer:v2
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
-          tools: composer:v2 # Додаємо Composer v2
 
-      # ВИПРАВЛЕННЯ: Видаляємо прапорці -q та --no-scripts
       - name: Install Dependencies
         run: |
-          composer install --no-ansi --no-interaction --prefer-dist
+          composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
           npm install
 
       - name: Run Pint
         run: vendor/bin/pint
+
+      - name: Format Frontend
+        run: npm run format
+
+      - name: Lint Frontend
+        run: npm run lint
+
+      # - name: Commit Changes
+      #   uses: stefanzweifel/git-auto-commit-action@v5
+      #   with:
+      #     commit_message: fix code style
+      #     commit_options: '--no-verify'
+
 
   # 3. Job для деплою (deploy)
   deploy:
@@ -80,7 +95,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Залежності: Запускається тільки після успішного завершення 'ci' та 'quality'
-    needs: [ci, quality]
+    needs: [ ci, quality ]
 
     # !!! УМОВА ВИКОНАННЯ: Деплой потрібен ТІЛЬКИ PUSH в main
     if: |
