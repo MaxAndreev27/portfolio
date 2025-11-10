@@ -16,38 +16,61 @@ permissions:
   contents: write
 
 jobs:
-  # 1. Job для тестування (ci) - Запускається на всіх тригерах
+  # 1. Job для тестування (ci)
   ci:
     name: Run Tests
     runs-on: ubuntu-latest
-    # ... (Кроки з tests.yml тут) ...
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # [ВСТАВИТИ ВСІ КРОКИ З tests.yml]
+
+      # Впевнимося, що інструмент composer:v2 доданий (як у tests.yml)
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.4
-          tools: composer:v2
+          tools: composer:v2 # Встановлюємо Composer v2
           coverage: xdebug
-      # ... (інші кроки) ...
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      # ВИПРАВЛЕННЯ: Додаємо --no-scripts, щоб уникнути можливих помилок хуків, і спрощуємо
+      - name: Install Composer Dependencies
+        run: composer install --no-interaction --prefer-dist --no-scripts
+
+      # ... (інші кроки залишаються)
       - name: Tests
         run: ./vendor/bin/pest
 
-  # 2. Job для лінтування (quality) - Запускається на всіх тригерах
+  # 2. Job для лінтування (quality)
   quality:
     name: Run Linter & Quality Checks
     runs-on: ubuntu-latest
-    # ... (Кроки з lint.yml тут) ...
+
     steps:
       - uses: actions/checkout@v4
-      # [ВСТАВИТИ ВСІ КРОКИ З lint.yml]
+
+      # ВИПРАВЛЕННЯ: Додаємо інструмент composer:v2
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
-      # ... (інші кроки) ...
+          tools: composer:v2 # Додаємо Composer v2
+
+      # ВИПРАВЛЕННЯ: Видаляємо прапорці -q та --no-scripts
+      - name: Install Dependencies
+        run: |
+          composer install --no-ansi --no-interaction --prefer-dist
+          npm install
+
       - name: Run Pint
         run: vendor/bin/pint
 
