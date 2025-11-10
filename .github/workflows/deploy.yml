@@ -38,4 +38,4 @@ jobs:
       - name: Deploy to DigitalOcean
         # Вам потрібно вказати гілку, з якої береться код, щоб doctl знав, що деплоїти.
         # Оскільки тригер не push, нам потрібно вказати гілку:
-        run: doctl apps create-deployment portfolio --branch ${{ github.event.workflow_run.head_branch }}
+        run: doctl apps create-deployment portfolio
