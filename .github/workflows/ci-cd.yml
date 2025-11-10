@@ -9,7 +9,6 @@ on:
   pull_request:
     # Запускаємо тільки CI (тести/лінтер) на pull_request до обох гілок
     branches:
-      - dev
       - main
 
 permissions:
@@ -17,7 +16,7 @@ permissions:
 
 jobs:
   # 1. Job для тестування (ci)
-  ci:
+  testing:
     name: Run Tests
     runs-on: ubuntu-latest
 
@@ -58,7 +57,7 @@ jobs:
 
 
   # 2. Job для лінтування (quality)
-  quality:
+  linting:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -82,20 +81,13 @@ jobs:
       - name: Lint Frontend
         run: npm run lint
 
-      # - name: Commit Changes
-      #   uses: stefanzweifel/git-auto-commit-action@v5
-      #   with:
-      #     commit_message: fix code style
-      #     commit_options: '--no-verify'
-
-
   # 3. Job для деплою (deploy)
   deploy:
     name: DO App Deploy
     runs-on: ubuntu-latest
 
-    # Залежності: Запускається тільки після успішного завершення 'ci' та 'quality'
-    needs: [ ci, quality ]
+    # Залежності: Запускається тільки після успішного завершення 'testing' та 'linting'
+    needs: [ testing, linting ]
 
     # !!! УМОВА ВИКОНАННЯ: Деплой потрібен ТІЛЬКИ PUSH в main
     if: |
