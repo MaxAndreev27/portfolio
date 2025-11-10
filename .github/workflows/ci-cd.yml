@@ -1,0 +1,79 @@
+name: CI/CD Pipeline (Tests, Lint, & Deploy)
+
+on:
+  push:
+    # Запускаємо CI/CD на push до обох гілок
+    branches:
+      - dev
+      - main
+  pull_request:
+    # Запускаємо тільки CI (тести/лінтер) на pull_request до обох гілок
+    branches:
+      - dev
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  # 1. Job для тестування (ci) - Запускається на всіх тригерах
+  ci:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    # ... (Кроки з tests.yml тут) ...
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # [ВСТАВИТИ ВСІ КРОКИ З tests.yml]
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          tools: composer:v2
+          coverage: xdebug
+      # ... (інші кроки) ...
+      - name: Tests
+        run: ./vendor/bin/pest
+
+  # 2. Job для лінтування (quality) - Запускається на всіх тригерах
+  quality:
+    name: Run Linter & Quality Checks
+    runs-on: ubuntu-latest
+    # ... (Кроки з lint.yml тут) ...
+    steps:
+      - uses: actions/checkout@v4
+      # [ВСТАВИТИ ВСІ КРОКИ З lint.yml]
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+      # ... (інші кроки) ...
+      - name: Run Pint
+        run: vendor/bin/pint
+
+  # 3. Job для деплою (deploy)
+  deploy:
+    name: DO App Deploy
+    runs-on: ubuntu-latest
+
+    # Залежності: Запускається тільки після успішного завершення 'ci' та 'quality'
+    needs: [ci, quality]
+
+    # !!! УМОВА ВИКОНАННЯ: Деплой потрібен ТІЛЬКИ PUSH в main
+    if: |
+      github.event_name == 'push' && github.ref == 'refs/heads/main' && success()
+
+    steps:
+      - name: Confirmation
+        run: echo "Deployment triggered by push to main. All checks passed."
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install doctl and Authenticate
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      - name: Deploy to DigitalOcean
+        run: doctl apps create-deployment 5e7b70f1-e5bf-450b-8223-3ca36f5a36ac
