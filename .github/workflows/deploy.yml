@@ -38,4 +38,4 @@ jobs:
       - name: Deploy to DigitalOcean
         # Вам потрібно вказати гілку, з якої береться код, щоб doctl знав, що деплоїти.
         # Оскільки тригер не push, нам потрібно вказати гілку:
-        run: doctl apps create-deployment portfolio
+        run: doctl apps create-deployment 5e7b70f1-e5bf-450b-8223-3ca36f5a36ac
