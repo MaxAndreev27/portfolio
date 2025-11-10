@@ -1,0 +1,50 @@
+name: Deployment to DigitalOcean App Platform
+
+on:
+  push:
+    # Деплой запускається тільки після успішного пушу в основну гілку
+    # (Використовуйте 'main' або ту гілку, яка є основною для деплою)
+    branches:
+      - main
+
+jobs:
+  # 1. Job, що перевіряє успішне виконання LINT та TESTS
+  wait_for_checks:
+    name: Checks Status
+    runs-on: ubuntu-latest
+
+    # !!! Ключовий момент: Посилаємося на фактичні ID jobs з інших файлів !!!
+    # 'ci' з tests.yml та 'quality' з lint.yml
+    needs: [ci, quality]
+
+    # Цей job повинен виконуватись тільки якщо всі залежності (ci, quality) успішні
+    if: success()
+    steps:
+      - name: Wait for Checks Confirmation
+        run: echo "Lint (quality) and Tests (ci) passed successfully. Proceeding to deployment..."
+
+  # 2. Job для фактичного деплою на DigitalOcean App Platform
+  deploy:
+    name: DO App Deploy
+    runs-on: ubuntu-latest
+
+    # Деплой запускається тільки після успіху job 'wait_for_checks'
+    needs: [wait_for_checks]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Крок 1: Встановлення doctl CLI та авторизація
+      # DigitalOcean Personal Access Token має бути доданий до GitHub Secrets
+      - name: Install doctl and Authenticate
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      # Крок 2: Ініціація деплою
+      # Цей крок запускає нову збірку та деплой на DigitalOcean App Platform
+      # Вкажіть тут точну назву вашого додатку (App Name)
+      - name: Deploy to DigitalOcean
+        run: doctl apps create-deployment portfolio
+        # ПРИМІТКА: Якщо ви використовуєте файл специфікації (.yaml або .json),
+        # то використовуйте: doctl apps update <APP_ID> --spec .do/app.yaml
