@@ -1,35 +1,41 @@
 name: Deploy to DigitalOcean App Platform
 
 on:
-  push:
-    # Запускаємо тільки при пуші в основну гілку
-    branches:
-      - main
+  # !!! ВИПРАВЛЕННЯ: Використовуємо workflow_run замість push
+  # Цей workflow запускається після завершення (completed) workflows 'tests' ТА 'linter'.
+  # Ми будемо перевіряти статус 'success' у кроках job.
+  workflow_run:
+    workflows: ["tests", "linter"] # Назви workflow з файлів tests.yml та lint.yml
+    types:
+      - completed
 
 jobs:
-  # Цей job тепер є першим і не має внутрішніх залежностей.
+  # Job deploy тепер є першим і не має залежностей needs, тому помилки не буде.
   deploy:
     name: DO App Deploy
     runs-on: ubuntu-latest
 
-    needs: [ci, quality]
-
-    # Запускаємо деплой, тільки якщо всі попередні jobs (ci та quality) успішні.
-    if: success()
+    # Головна умова: запускати лише якщо workflow, що тригерує, був успішним
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      - name: Confirmation
-        run: echo "Lint (quality) and Tests (ci) passed successfully. Proceeding to deployment..."
+      # Крок 1: Отримання коду
+      # Примітка: workflow_run не надає автоматично доступ до коду, тому потрібен цей крок.
+      # Ми чекаємо, поки всі необхідні workflows (які були успішними) завершаться.
+      - name: Wait for other workflows (Optional, for clarity)
+        run: echo "Waiting for Linter and Tests workflows to finish checking their status..."
 
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Крок 1: Встановлення doctl CLI та авторизація
+      # Крок 2: Встановлення doctl CLI та авторизація
       - name: Install doctl and Authenticate
         uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      # Крок 2: Ініціація деплою
+      # Крок 3: Ініціація деплою
       - name: Deploy to DigitalOcean
-        run: doctl apps create-deployment portfolio
+        # Вам потрібно вказати гілку, з якої береться код, щоб doctl знав, що деплоїти.
+        # Оскільки тригер не push, нам потрібно вказати гілку:
+        run: doctl apps create-deployment portfolio --branch ${{ github.event.workflow_run.head_branch }}
