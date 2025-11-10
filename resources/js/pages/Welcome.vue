@@ -49,7 +49,7 @@ withDefaults(
             </nav>
         </header>
         <div class="flex w-full items-center justify-center mb-1">
-            <h1 class="text-4xl text-white">Main Page on dev 17:47 not deploy</h1>
+            <h1 class="text-4xl text-white">Main Page PHP 8.3</h1>
         </div>
         <div
             class="flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0"
