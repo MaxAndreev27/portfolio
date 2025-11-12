@@ -48,8 +48,8 @@ withDefaults(
                 </template>
             </nav>
         </header>
-        <div class="flex w-full items-center justify-center mb-1">
-            <h1 class="text-4xl text-white">Main Page PHP 8.3</h1>
+        <div class="mb-1 flex w-full items-center justify-center">
+            <h1 class="text-4xl text-white">Main Page PHP twin deploy check</h1>
         </div>
         <div
             class="flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0"
