@@ -49,7 +49,7 @@ withDefaults(
             </nav>
         </header>
         <div class="mb-1 flex w-full items-center justify-center">
-            <h1 class="text-4xl text-white">Main Page PHP twin deploy check</h1>
+            <h1 class="text-4xl text-white">Main Page PHP twin deploy 20:08</h1>
         </div>
         <div
             class="flex w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0"
