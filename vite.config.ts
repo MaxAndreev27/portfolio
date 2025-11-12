@@ -4,6 +4,9 @@ import vue from '@vitejs/plugin-vue';
 import laravel from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
 
+// 💡 НОВИЙ КОД: Перевірка змінної середовища
+const runWayfinder = process.env.VITE_WAYFINDER !== 'false';
+
 export default defineConfig({
     plugins: [
         laravel({
@@ -12,9 +15,12 @@ export default defineConfig({
             refresh: true,
         }),
         tailwindcss(),
-        wayfinder({
+        runWayfinder ? wayfinder({
             formVariants: true,
-        }),
+        }) : null,
+        // wayfinder({
+        //     formVariants: true,
+        // }),
         vue({
             template: {
                 transformAssetUrls: {
