@@ -6,7 +6,7 @@ import AppearanceTabs from '@/components/AppearanceTabs.vue';
 
 <template>
     <header
-        class="container fixed shadow top-0 z-50 mb-6 w-full text-sm not-has-[nav]:hidden"
+        class="container fixed shadow bg-neutral-100 dark:bg-neutral-800 top-0 z-50 mb-6 w-full text-sm not-has-[nav]:hidden"
     >
         <nav class="flex items-center justify-end gap-4">
             <Link
