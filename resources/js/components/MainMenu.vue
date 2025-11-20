@@ -1,12 +1,12 @@
 <script setup lang="ts">
+import AppearanceTabs from '@/components/AppearanceTabs.vue';
 import { dashboard, login } from '@/routes';
 import { Link } from '@inertiajs/vue3';
-import AppearanceTabs from '@/components/AppearanceTabs.vue';
 </script>
 
 <template>
     <header
-        class="container fixed shadow bg-neutral-100 dark:bg-neutral-800 top-0 z-50 mb-6 w-full text-sm not-has-[nav]:hidden"
+        class="fixed top-0 z-50 container mb-6 w-full bg-neutral-100 text-sm shadow not-has-[nav]:hidden dark:bg-neutral-800"
     >
         <nav class="flex items-center justify-end gap-4">
             <Link

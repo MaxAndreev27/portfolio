@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { GradientText } from '@/components/ui/gradient-text';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { GradientText } from '@/components/ui/gradient-text';
 </script>
 
 <template>
@@ -8,17 +9,26 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
         <div
             class="container mx-auto flex h-screen flex-col items-center justify-center"
         >
-            <GradientText as="h1" class="text-8xl font-bold mb-2">Max Andreev</GradientText>
-            <h2 class="text-5xl font-bold uppercase mb-4">Full-Stack Developer</h2>
-            <Avatar class="h-50 w-50 overflow-hidden rounded-full">
-                <AvatarImage
-                    :src="'/images/avatar400.jpg'"
-                    :alt="'avatar'"
-                />
+            <GradientText as="h1" class="mb-2 text-8xl font-bold"
+                >Max Andreev</GradientText
+            >
+            <h2 class="mb-4 text-5xl font-bold uppercase">
+                Full-Stack Developer
+            </h2>
+            <Avatar class="mb-8 h-50 w-50 overflow-hidden rounded-full">
+                <AvatarImage :src="'/images/avatar200.jpg'" :alt="'avatar'" />
                 <AvatarFallback class="rounded-lg bg-[#0f3045] text-white">
-                     avatar
+                    avatar
                 </AvatarFallback>
             </Avatar>
+            <div class="grid grid-cols-2 gap-6">
+                <Button class="text-2xl" variant="default" size="xl2"
+                    >About me</Button
+                >
+                <Button class="text-2xl" variant="secondary" size="xl2"
+                    >Contact me</Button
+                >
+            </div>
         </div>
     </section>
 </template>

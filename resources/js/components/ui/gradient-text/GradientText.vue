@@ -21,8 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 <style scoped>
 .gradient_text {
-    background-color: #7b46ed;
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background: #7b46ed linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
     background-size: 400% 300%;
     background-clip: text;
     -webkit-background-clip: text;
@@ -32,13 +31,13 @@ const props = withDefaults(defineProps<Props>(), {
 }
 @keyframes gradient {
     0% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
     }
     50% {
         background-position: 100% 50%;
     }
     100% {
-        background-position: 0% 50%;
+        background-position: 0 50%;
     }
 }
 </style>
