@@ -1,44 +1,70 @@
 <script setup lang="ts">
 import { BemineText } from '@/components/ui/bemine-text';
+import { TimelineList } from '@/components/ui/timeline-list';
 </script>
 
 <template>
-    <section class="main-about w-full">
+    <section id="main-about" class="main-about w-full">
         <div
             class="container mx-auto mt-20 mb-20 flex flex-col items-center justify-center"
         >
-            <BemineText class="mb-8 text-6xl font-bold">About me</BemineText>
+            <BemineText class="text-6xl font-bold">About me</BemineText>
+
+            <TimelineList class="max-w-4xl text-2xl" />
+
             <ul
                 class="flex w-full max-w-4xl list-inside list-disc list-image-[url(/public/images/checkmark.svg)] flex-col items-start text-left text-3xl"
             >
-                <li class="mb-4 text-justify">I am Maksym Andreev, a full-stack
-                    web developer from Ukraine
-                    with over 10 years of development experience.
+                <li class="mb-4 text-justify">
+                    <span class="font-semibold">Programming Languages:</span>
+                    PHP, JavaScript, TypeScript;
                 </li>
-                <li class="mb-4 text-justify">Graduated from University of
-                    Informatics and Artificial
-                    Intelligence 2005-2010, and obtained the qualification of a
-                    software engineer with a specialty in "Software for
-                    Automated Systems"
-                </li>
-                <li class="mb-4 text-justify">2010-2011 programmer at UniCredit
-                    bank
-                </li>
-                <li class="mb-4 text-justify">2011-2014 programmer at the
-                    Regional Directorate of the Bank
-                    "Kyivska Rus"
-                </li>
-                <li class="mb-4 text-justify">2015-2023 worked in the
-                    <a
-                        class="font-bold text-pink-600"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href="https://specialcase.net"
-                        >SpecialCase</a
+                <li class="mb-4 text-justify">
+                    <span class="font-semibold"
+                        >Frameworks, CMS & UI Libraries:</span
                     >
-                    team
+                    WordPress, Laravel (Blade, Livewire, Inertia), Next.js,
+                    Nestjs, React (Redux), Vue (Vuex, Pinia), Tailwind CSS,
+                    Bootstrap;
                 </li>
-                <li>2024-present freelance</li>
+                <li class="mb-4 text-justify">
+                    <span class="font-semibold">Testing:</span> PHPUnit, Jest,
+                    Pest, Cypress E2E, Storybook workshop;
+                </li>
+                <li class="mb-4 text-justify">
+                    <span class="font-semibold">Commercial platform:</span> WP
+                    WooCommerce, Shopify;
+                </li>
+                <li class="mb-4 text-justify">
+                    <span class="font-semibold">Version control:</span> Git,
+                    Github, Gitlab, Bitbucket;
+                </li>
+                <li class="mb-4 text-justify">
+                    <span class="font-semibold"
+                        >Database Management System:</span
+                    >
+                    MySQL, PostgreSQL, SQLite, Redis, MongoDB;
+                </li>
+                <li class="mb-4 text-justify">
+                    <span class="font-semibold">Deployment CI/CD:</span> Docker,
+                    Kubernetes, Terraform (little), Ansible (little), Github
+                    Actions, DigitalOcean, Railway, Render, Vercel, Fly.io;
+                </li>
+                <li class="mb-4 text-justify">
+                    <span class="font-semibold">Tools & Platforms:</span>
+                    Postman, Figma, Worksection, Asana, Trello.
+                </li>
+                <li class="mb-4 text-justify">
+                    <span class="font-semibold">Soft skills:</span> team
+                    collaboration, communication, problem-solving;
+                </li>
+                <li class="mb-4 text-justify">
+                    <span class="font-semibold">Methodologies:</span> Scrum,
+                    Kanban, Agile, SOLID principles, Feature-Sliced Design;
+                </li>
+                <li class="mb-4 text-justify">
+                    <span class="font-semibold">Languages (spoken):</span> Ukrainian (native), English (B1+), French (B1).
+                </li>
             </ul>
         </div>
     </section>
