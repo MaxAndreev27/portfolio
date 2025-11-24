@@ -82,31 +82,31 @@ jobs:
         run: npm run lint
 
   # 3. Job для деплою (deploy)
-  deploy:
-    name: DO App Deploy
-    runs-on: ubuntu-latest
-
-    # Залежності: Запускається тільки після успішного завершення 'testing' та 'linting'
-    needs: [ testing, linting ]
-
-    # !!! УМОВА ВИКОНАННЯ: Деплой потрібен ТІЛЬКИ PUSH в main
-    if: |
-      github.event_name == 'push' && github.ref == 'refs/heads/main' && success()
-
-    steps:
-      - name: Confirmation
-        run: echo "Deployment triggered by push to main. All checks passed."
-
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Install doctl and Authenticate
-        uses: digitalocean/action-doctl@v2
-        with:
-          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-
-      - name: Deploy to DigitalOcean
-        run: doctl apps create-deployment 5e7b70f1-e5bf-450b-8223-3ca36f5a36ac
+#  deploy:
+#    name: DO App Deploy
+#    runs-on: ubuntu-latest
+#
+#    # Залежності: Запускається тільки після успішного завершення 'testing' та 'linting'
+#    needs: [ testing, linting ]
+#
+#    # !!! УМОВА ВИКОНАННЯ: Деплой потрібен ТІЛЬКИ PUSH в main
+#    if: |
+#      github.event_name == 'push' && github.ref == 'refs/heads/main' && success()
+#
+#    steps:
+#      - name: Confirmation
+#        run: echo "Deployment triggered by push to main. All checks passed."
+#
+#      - name: Checkout Code
+#        uses: actions/checkout@v4
+#
+#      - name: Install doctl and Authenticate
+#        uses: digitalocean/action-doctl@v2
+#        with:
+#          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+#
+#      - name: Deploy to DigitalOcean
+#        run: doctl apps create-deployment 5e7b70f1-e5bf-450b-8223-3ca36f5a36ac
 
   # 4. Job для деплою (deploy)
   deploy2:
