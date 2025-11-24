@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import MainMenu from '@/components/MainMenu.vue';
 import AboutSection from '@/sections/AboutSection.vue';
 import HeroSection from '@/sections/HeroSection.vue';
 import { Head } from '@inertiajs/vue3';
+import ElasticMainMenu from '@/components/ElasticMainMenu.vue';
 
 withDefaults(
     defineProps<{
@@ -21,7 +21,7 @@ withDefaults(
     </Head>
 
     <div class="flex min-h-screen flex-col items-center lg:justify-center">
-        <MainMenu />
+        <ElasticMainMenu />
 
         <HeroSection />
 
