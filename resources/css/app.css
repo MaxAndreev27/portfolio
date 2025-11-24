@@ -126,6 +126,7 @@
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --sidebar: hsl(0 0% 98%);
     --main-hero-background: hsl(0, 0%, 92%);
+    --color-pink-600: theme('colors.pink.600');
 }
 
 .dark {
@@ -164,6 +165,7 @@
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --sidebar: hsl(240 5.9% 10%);
     --main-hero-background: hsl(230, 10%, 13%);
+    --color-pink-600: theme('colors.pink.400');
 }
 
 @layer base {
