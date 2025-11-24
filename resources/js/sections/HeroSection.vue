@@ -12,7 +12,7 @@ const goToAbout = () => {
 </script>
 
 <template>
-    <section class="main-hero w-full">
+    <section id="main-hero" class="main-hero w-full">
         <div
             class="container mx-auto flex h-screen flex-col items-center justify-center"
         >
