@@ -13,6 +13,9 @@ onMounted(() => {
 
     const items = Array.from(nav.querySelectorAll('li a')) as HTMLElement[];
 
+    const linkById = new Map<string, HTMLElement>();
+    const sections: Array<{ id: string; el: HTMLElement }> = [];
+
     const animate = (from: number, to: number) => {
         if (anim) window.clearInterval(anim);
 
@@ -128,15 +131,65 @@ onMounted(() => {
         });
     });
 
+    const initSections = () => {
+        linkById.clear();
+        sections.length = 0;
+        items.forEach((item) => {
+            const el = item as HTMLAnchorElement;
+            const id = el.dataset.target;
+            if (!id) return;
+            const target = document.getElementById(id);
+            if (!target) return;
+            linkById.set(id, item);
+            sections.push({ id, el: target });
+        });
+    };
+    initSections();
+
     const navLeave = () => handleMouseLeave();
     nav.addEventListener('mouseleave', navLeave);
     cleanupFns.push(() => nav.removeEventListener('mouseleave', navLeave));
 
-    if (items.length > 0) {
-        window.setTimeout(() => {
-            setActiveItem(items[0]);
-        }, 100);
-    }
+    const updateActiveOnScroll = () => {
+        const header = nav.closest('header') as HTMLElement | null;
+        const offset = (header?.offsetHeight ?? 0) + 8;
+        const pivot = window.scrollY + offset + 1;
+        let activeId: string | null = null;
+        let bestTop = -Infinity;
+        for (const { id, el } of sections) {
+            const top = el.getBoundingClientRect().top + window.scrollY;
+            if (top <= pivot && top > bestTop) {
+                bestTop = top;
+                activeId = id;
+            }
+        }
+        if (!activeId && sections.length) activeId = sections[0].id;
+        if (activeId) {
+            const link = linkById.get(activeId);
+            if (link) setActiveItem(link);
+        }
+    };
+
+    let ticking = false;
+    const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+            ticking = false;
+            updateActiveOnScroll();
+        });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true } as AddEventListenerOptions);
+    window.addEventListener('resize', () => {
+        initSections();
+        onScroll();
+    });
+    cleanupFns.push(() => window.removeEventListener('scroll', onScroll));
+
+    window.setTimeout(() => {
+        updateActiveOnScroll();
+    }, 100);
 });
 
 onBeforeUnmount(() => {
@@ -157,8 +210,6 @@ onBeforeUnmount(() => {
             <ul ref="menuList" class="col-start-2 justify-self-center">
                 <li><a data-target="main-hero">Home</a></li>
                 <li><a data-target="main-about">About</a></li>
-                <li><a data-target="section3">Services</a></li>
-                <li><a data-target="section4">Contact</a></li>
             </ul>
             <AppearanceTabs class="isolate col-start-3 justify-self-end" />
         </nav>
@@ -223,13 +274,15 @@ nav > ul li a {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 nav > ul li a:hover {
-    color: #000000;
+    color: var(--color-pink-600);
     transform: translateY(-2px);
 }
 nav > ul li a:focus {
+    color: var(--color-pink-600);
     outline: none;
 }
 nav > ul li a.active {
+    color: var(--color-pink-600);
     transform: translateY(-2px);
 }
 nav > ul.show-indicator::after {
