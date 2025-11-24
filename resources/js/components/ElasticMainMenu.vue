@@ -151,7 +151,7 @@ onBeforeUnmount(() => {
 
 <template>
     <header
-        class="fixed top-0 z-50 container w-full bg-white/50 px-2 shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 dark:bg-zinc-900/50 dark:ring-white/10"
+        class="fixed top-0 z-50 container w-full text-2xl bg-white/50 px-2 shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 dark:bg-zinc-900/50 dark:ring-white/10"
     >
         <nav class="grid grid-cols-3 items-center gap-4">
             <ul ref="menuList" class="col-start-2 justify-self-center">
