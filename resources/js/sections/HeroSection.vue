@@ -29,10 +29,17 @@ const goToAbout = () => {
                 </AvatarFallback>
             </Avatar>
             <div class="grid grid-cols-2 gap-6">
-                <Button class="text-2xl cursor-pointer" variant="default" size="xl2" @click="goToAbout"
+                <Button
+                    class="cursor-pointer text-2xl"
+                    variant="default"
+                    size="xl2"
+                    @click="goToAbout"
                     >About me</Button
                 >
-                <Button class="text-2xl cursor-pointer" variant="secondary" size="xl2"
+                <Button
+                    class="cursor-pointer text-2xl"
+                    variant="secondary"
+                    size="xl2"
                     >Contact me</Button
                 >
             </div>
