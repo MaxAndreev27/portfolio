@@ -63,7 +63,8 @@ import { TimelineList } from '@/components/ui/timeline-list';
                     Kanban, Agile, SOLID principles, Feature-Sliced Design;
                 </li>
                 <li class="mb-4 text-justify">
-                    <span class="font-semibold">Languages (spoken):</span> Ukrainian (native), English (B1+), French (B1).
+                    <span class="font-semibold">Languages (spoken):</span>
+                    Ukrainian (native), English (B1+), French (B1).
                 </li>
             </ul>
         </div>

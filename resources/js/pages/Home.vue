@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import ElasticMainMenu from '@/components/ElasticMainMenu.vue';
 import AboutSection from '@/sections/AboutSection.vue';
 import HeroSection from '@/sections/HeroSection.vue';
 import { Head } from '@inertiajs/vue3';
-import ElasticMainMenu from '@/components/ElasticMainMenu.vue';
 
 withDefaults(
     defineProps<{
@@ -15,7 +15,7 @@ withDefaults(
 </script>
 
 <template>
-    <Head title="Welcome">
+    <Head title="Home">
         <link rel="preconnect" href="https://rsms.me/" />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     </Head>
