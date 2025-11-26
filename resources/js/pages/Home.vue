@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import ElasticMainMenu from '@/components/ElasticMainMenu.vue';
 import AboutSection from '@/sections/AboutSection.vue';
 import HeroSection from '@/sections/HeroSection.vue';
 import { Head } from '@inertiajs/vue3';
-import ElasticMainMenu from '@/components/ElasticMainMenu.vue';
 
 withDefaults(
     defineProps<{
