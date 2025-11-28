@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import ElasticMainMenu from '@/components/ElasticMainMenu.vue';
 import AboutSection from '@/sections/AboutSection.vue';
+import FooterSection from '@/sections/FooterSection.vue';
 import HeroSection from '@/sections/HeroSection.vue';
+import TechnologySection from '@/sections/TechnologySection.vue';
 import { Head } from '@inertiajs/vue3';
 
 withDefaults(
@@ -26,6 +28,10 @@ withDefaults(
         <HeroSection />
 
         <AboutSection />
+
+        <TechnologySection />
+
+        <FooterSection />
 
         <div class="hidden h-14.5 lg:block"></div>
     </div>

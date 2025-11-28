@@ -212,6 +212,7 @@ onBeforeUnmount(() => {
             <ul ref="menuList" class="col-start-2 justify-self-center">
                 <li><a data-target="main-hero">Home</a></li>
                 <li><a data-target="main-about">About</a></li>
+                <li><a data-target="main-technology">Technology</a></li>
             </ul>
             <AppearanceTabs class="isolate col-start-3 justify-self-end" />
         </nav>
