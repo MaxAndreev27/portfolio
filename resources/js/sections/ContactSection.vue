@@ -1,18 +1,5 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
-import type { Pane as PaneType, InputBindingApi } from 'tweakpane';
-import { Pane } from 'tweakpane';
-
-// Extend the Pane type to include addBinding
-declare module 'tweakpane' {
-  interface Pane {
-    addBinding: <T, K extends keyof T>(
-      target: T,
-      key: K,
-      options?: any
-    ) => InputBindingApi<T[K]>;
-  }
-}
 
 interface KeyConfig {
     travel: number;
@@ -59,7 +46,7 @@ const config = ref<AppConfig>({
     },
     three: {
         travel: 18,
-        text: 'Enter',
+        text: 'send',
         key: 'Enter',
         hue: 0,
         saturation: 0,
@@ -72,6 +59,32 @@ const clickAudio = ref<HTMLAudioElement | null>(null);
 // let recorder: ((event: KeyboardEvent) => void) | null = null;
 const ids = ['one', 'two', 'three'] as const;
 
+// Audio context and initialization state
+let audioContext: AudioContext | null = null;
+let isAudioInitialized = false;
+
+// Initialize audio context on first interaction
+const initAudioOnInteraction = () => {
+    if (isAudioInitialized || typeof window === 'undefined') return;
+
+    try {
+        audioContext = new (window.AudioContext ||
+            (window as any).webkitAudioContext)();
+
+        // Play a silent sound to unlock audio
+        const buffer = audioContext.createBuffer(1, 1, 22050);
+        const source = audioContext.createBufferSource();
+        source.buffer = buffer;
+        source.connect(audioContext.destination);
+        source.start(0);
+
+        isAudioInitialized = true;
+        // console.log('Audio initialized');
+    } catch (e) {
+        console.warn('Audio initialization failed:', e);
+    }
+};
+
 // Initialize audio
 onMounted(() => {
     clickAudio.value = new Audio(
@@ -79,11 +92,21 @@ onMounted(() => {
     );
     clickAudio.value.muted = config.value.muted;
 
+    // Initialize audio on first interaction
+    const initOnInteraction = () => {
+        initAudioOnInteraction();
+        document.removeEventListener('click', initOnInteraction);
+        document.removeEventListener('keydown', initOnInteraction);
+    };
+
+    document.addEventListener('click', initOnInteraction, { once: true });
+    document.addEventListener('keydown', initOnInteraction, { once: true });
+
     // Initialize key styles
     updateKeyStyles();
 
-    // Initialize Tweakpane
-    initTweakpane();
+    // Initialize keypad
+    initKeypad();
 
     // Show keypad
     const keypad = document.querySelector('.keypad') as HTMLElement;
@@ -100,9 +123,6 @@ onMounted(() => {
 
 // Cleanup
 onUnmounted(() => {
-    if (pane) {
-        pane.dispose();
-    }
     window.removeEventListener('keydown', handleKeyDown);
     window.removeEventListener('keyup', handleKeyUp);
 });
@@ -148,98 +168,62 @@ const handleKeyUp = (event: KeyboardEvent) => {
 
 // Play click sound
 const playClickSound = () => {
+    if (!isAudioInitialized) {
+        initAudioOnInteraction();
+        return;
+    }
+
     if (clickAudio.value && !config.value.muted) {
         clickAudio.value.currentTime = 0;
         clickAudio.value
             .play()
-            .catch((e) => console.error('Audio play failed:', e));
+            .catch((e) => console.warn('Audio play failed:', e));
     }
 };
 
 // Update theme
 const updateTheme = () => {
-    document.documentElement.dataset.theme = config.value.theme;
+    // Use system preference if theme is set to 'system'
+    if (config.value.theme === 'system') {
+        const prefersDark = window.matchMedia(
+            '(prefers-color-scheme: dark)',
+        ).matches;
+        document.documentElement.dataset.theme = prefersDark ? 'dark' : 'light';
+    } else {
+        document.documentElement.dataset.theme = config.value.theme;
+    }
 };
 
-// Toggle exploded state
-const toggleExploded = () => {
-    document.documentElement.dataset.exploded =
-        config.value.exploded.toString();
-};
+// Initialize keypad
+const initKeypad = () => {
+    // Set initial theme based on system preference
+    const prefersDark = window.matchMedia(
+        '(prefers-color-scheme: dark)',
+    ).matches;
+    config.value.theme = prefersDark ? 'dark' : 'light';
+    updateTheme();
 
-// Initialize Tweakpane
-let pane: PaneType;
-const initTweakpane = () => {
-    pane = new Pane({
-        title: 'Keypad Config',
-        expanded: false,
-    });
+    // Listen for system theme changes
+    window
+        .matchMedia('(prefers-color-scheme: dark)')
+        .addEventListener('change', (e) => {
+            if (config.value.theme === 'system') {
+                config.value.theme = e.matches ? 'dark' : 'light';
+                updateTheme();
+            }
+        });
 
-    // Theme control
-    (pane as any)
-        .addBinding(config.value, 'theme', {
-            label: 'theme',
-            options: {
-                system: 'system',
-                light: 'light',
-                dark: 'dark',
-            },
-        })
-        .on('change', updateTheme);
-
-    // Mute control
-    pane.addBinding(config.value, 'muted', {
-        label: 'mute',
-    }).on('change', () => {
-        if (clickAudio.value) {
-            clickAudio.value.muted = config.value.muted;
-        }
-    });
-
-    // Exploded view
-    pane.addBinding(config.value, 'exploded', {
-        label: 'explode',
-    }).on('change', toggleExploded);
-
-    // Key-specific controls
-    // ids.forEach((id) => {
-    //     const keyFolder = pane!.addFolder({
-    //         title: `Key ${id}`,
-    //         expanded: false,
-    //     });
-    //
-    //     // Text
-    //     keyFolder
-    //         .addBinding(config.value[id], 'text', {
-    //             label: 'text',
-    //         })
-    //         .on('change', updateKeyStyles);
-    //
-    //     // Travel
-    //     keyFolder
-    //         .addBinding(config.value[id], 'travel', {
-    //             min: 1,
-    //             max: 50,
-    //             step: 1,
-    //         })
-    //         .on('change', updateKeyStyles);
-    //
-    //     // Hue
-    //     keyFolder
-    //         .addBinding(config.value[id], 'hue', {
-    //             min: 0,
-    //             max: 360,
-    //             step: 1,
-    //         })
-    //         .on('change', updateKeyStyles);
-    //
-    //     // Saturation
-    //     keyFolder
-    //         .addBinding(config.value[id], 'saturation', {
-    //             min: 0,
-    //             max: 2,
-    //             step: 0.1,
-    //         })
+    // Add mute toggle button handler if needed
+    const muteButton = document.querySelector('.mute-button');
+    if (muteButton) {
+        muteButton.addEventListener('click', () => {
+            config.value.muted = !config.value.muted;
+            if (clickAudio.value) {
+                clickAudio.value.muted = config.value.muted;
+            }
+        });
+    }
+    // Key configurations are now hardcoded in the config object
     //         .on('change', updateKeyStyles);
     //
     //     // Brightness
@@ -288,12 +272,17 @@ const initTweakpane = () => {
 
 // Handle key press for visual feedback
 const handleKeyPress = (event: PointerEvent, keyId: string) => {
-    const keyConfig = config.value[keyId as keyof typeof config.value];
-    if (keyConfig && typeof keyConfig === 'object' && 'pressed' in keyConfig) {
-        (keyConfig as KeyConfig).pressed = event.type === 'pointerdown';
-        if (event.type === 'pointerdown') {
-            playClickSound();
-        }
+    if (!isAudioInitialized) {
+        initAudioOnInteraction();
+    }
+
+    playClickSound();
+    const key = config.value[keyId as keyof AppConfig] as KeyConfig;
+    if (key) {
+        key.pressed = true;
+        setTimeout(() => {
+            key.pressed = false;
+        }, 200);
     }
 };
 </script>
@@ -322,8 +311,8 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
                 <div class="keypad" :style="{ opacity: 1 }">
                     <div class="keypad__base">
                         <img
-                            src="https://assets.codepen.io/605876/keypad-base.png?format=auto&quality=86"
-                            alt=""
+                            src="/images/keypad/keypad-base.webp?format=auto&quality=86"
+                            alt="keypad-base"
                         />
                     </div>
 
@@ -342,8 +331,8 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
                                     config.one.text
                                 }}</span>
                                 <img
-                                    src="https://assets.codepen.io/605876/keypad-single.png?format=auto&quality=86"
-                                    alt=""
+                                    src="/images/keypad/keypad-single.webp?format=auto&quality=86"
+                                    alt="keypad-single"
                                 />
                             </span>
                         </span>
@@ -364,8 +353,8 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
                                     config.two.text
                                 }}</span>
                                 <img
-                                    src="https://assets.codepen.io/605876/keypad-single.png?format=auto&quality=86"
-                                    alt=""
+                                    src="/images/keypad/keypad-single.webp?format=auto&quality=86"
+                                    alt="keypad-single"
                                 />
                             </span>
                         </span>
@@ -386,8 +375,8 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
                                     config.three.text
                                 }}</span>
                                 <img
-                                    src="https://assets.codepen.io/605876/keypad-double.png?format=auto&quality=86"
-                                    alt=""
+                                    src="/images/keypad/keypad-double.png?format=auto&quality=86"
+                                    alt="keypad-double"
                                 />
                             </span>
                         </span>
@@ -399,141 +388,6 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
 </template>
 
 <style scoped>
-@import url('https://unpkg.com/normalize.css') layer(normalize);
-
-@layer normalize, base, demo, debug, exploding;
-
-@layer exploding {
-    [data-exploded='true'] {
-        section {
-            transition-delay: 0s;
-        }
-        .keypad {
-            translate: calc(-50% - 1rem) 0;
-            transition-delay: 0s, 0.26s;
-            @media (max-width: 768px) {
-                translate: 0 calc(50% + 1rem);
-            }
-        }
-        .keypad__base {
-            --depth: 2.5;
-        }
-        .keypad__single {
-            --depth: -1;
-        }
-        .keypad__single--left {
-            --depth: -2;
-        }
-        .keypad__double {
-            --depth: 0;
-        }
-
-        .keypad__base,
-        .key {
-            translate: 0 calc(var(--depth) * 10vh);
-            transition-delay: 0.52s;
-        }
-    }
-
-    .keypad {
-        transition-delay: 0.26s, 0.52s;
-    }
-
-    .key,
-    .keypad__base {
-        transition-property: translate;
-        transition-duration: 0.26s;
-        transition-timing-function: ease-out;
-    }
-
-    [data-exploded='true'] .key::after {
-        opacity: 1;
-        transition-delay: 0.52s;
-    }
-
-    .key::after {
-        z-index: -1;
-        content: '';
-        position: absolute;
-        opacity: 0;
-        inset: 0;
-        transition-property: opacity;
-        transition-duration: 0.26s;
-        transition-timing-function: ease-out;
-        background: repeating-linear-gradient(
-            -45deg,
-            #0000 0 5px,
-            hsl(220 100% 70%) 5px 6px
-        );
-    }
-    /* timings */
-}
-
-@layer debug {
-    main {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2rem;
-        align-items: center;
-        justify-content: center;
-
-        h1 {
-            letter-spacing: -0.05rem;
-            line-height: 1;
-        }
-
-        p {
-            opacity: 0.7;
-            font-weight: 300;
-        }
-
-        form {
-            display: flex;
-            gap: 0.5rem;
-
-            input {
-                flex: 1;
-                padding: 0.5rem 0.75rem;
-                background: canvas;
-                border: 1px solid color-mix(in oklch, canvasText, #0000 75%);
-                border-radius: 6px;
-                outline-color: red;
-            }
-
-            button {
-                padding-inline: 1.5rem;
-                border-radius: 6px;
-                background: canvas;
-                border: 1px solid color-mix(in oklch, canvasText, #0000 75%);
-                cursor: pointer;
-                color: canvasText;
-                font-size: 0.875rem;
-            }
-        }
-
-        section {
-            transition-property: opacity, filter;
-            transition-duration: 0.26s;
-            transition-delay: 0.26s;
-            transition-timing-function: ease-out;
-        }
-    }
-
-    [data-exploded='true'] section {
-        opacity: 0;
-        filter: blur(4px);
-    }
-
-    @media (max-width: 768px) {
-        .keypad {
-            order: 1;
-        }
-        section {
-            order: 2;
-        }
-    }
-}
-
 @layer demo {
     :root {
         --travel: 20;
@@ -543,8 +397,6 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
     }
     .keypad {
         position: relative;
-        /* outline: 4px dashed red;
-        outline-offset: 2px; */
         aspect-ratio: 400 / 310;
         display: flex;
         place-items: center;
@@ -620,7 +472,7 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
                 12% 23%,
                 47% 0%
             );
-            mask: url(https://assets.codepen.io/605876/keypad-single.png?format=auto&quality=86)
+            mask: url(/images/keypad/keypad-single.webp?format=auto&quality=86)
                 50% 50% / 100% 100%;
 
             &.keypad__single--left {
@@ -666,7 +518,7 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
                 7% 17%,
                 30% 0
             );
-            mask: url(https://assets.codepen.io/605876/keypad-double.png?format=auto&quality=86)
+            mask: url(/images/keypad/keypad-double.png?format=auto&quality=86)
                 50% 50% / 100% 100%;
             img {
                 top: 0;
@@ -693,144 +545,5 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
             width: 100%;
         }
     }
-    /*.reference {
-        pointer-events: none;
-        opacity: 0;
-        z-index: 2;
-    }*/
-}
-
-@layer base {
-    :root {
-        --font-level: 0;
-        --font-size-min: 16;
-        --font-size-max: 20;
-        --font-ratio-min: 1.2;
-        --font-ratio-max: 1.33;
-        --font-width-min: 375;
-        --font-width-max: 1500;
-    }
-
-    html {
-        color-scheme: light dark;
-    }
-
-    [data-theme='light'] {
-        color-scheme: light only;
-    }
-
-    [data-theme='dark'] {
-        color-scheme: dark only;
-    }
-/*
-    :where(.fluid) {
-        --fluid-min: calc(
-            var(--font-size-min) *
-                pow(var(--font-ratio-min), var(--font-level, 0))
-        );
-        --fluid-max: calc(
-            var(--font-size-max) *
-                pow(var(--font-ratio-max), var(--font-level, 0))
-        );
-        --variable-unit: 100vi;
-        --fluid-preferred: calc(
-            (var(--fluid-max) - var(--fluid-min)) /
-                (var(--font-width-max) - var(--font-width-min))
-        );
-        --fluid-type: clamp(
-            (var(--fluid-min) / 16) * 1rem,
-            ((var(--fluid-min) / 16) * 1rem) -
-                (
-                    ((var(--fluid-preferred) * var(--font-width-min)) / 16) *
-                        1rem
-                ) +
-                (var(--fluid-preferred) * var(--variable-unit)),
-            (var(--fluid-max) / 16) * 1rem
-        );
-        font-size: var(--fluid-type);
-    }
-*/
-    *,
-    *:after,
-    *:before {
-        box-sizing: border-box;
-    }
-
-    body {
-        background: light-dark(#fff, #000);
-        display: grid;
-        place-items: center;
-        min-height: 100vh;
-        overflow: hidden;
-        font-family:
-            'SF Pro Text', 'SF Pro Icons', 'AOS Icons', 'Helvetica Neue',
-            Helvetica, Arial, sans-serif, system-ui;
-    }
-
-    body::before {
-        --size: 45px;
-        --line: color-mix(in hsl, canvasText, transparent 80%);
-        content: '';
-        height: 100vh;
-        width: 100vw;
-        position: fixed;
-        background:
-            linear-gradient(90deg, var(--line) 1px, transparent 1px var(--size))
-                calc(var(--size) * 0.36) 50% / var(--size) var(--size),
-            linear-gradient(var(--line) 1px, transparent 1px var(--size)) 0%
-                calc(var(--size) * 0.32) / var(--size) var(--size);
-        mask: linear-gradient(-20deg, transparent 50%, white);
-        top: 0;
-        transform-style: flat;
-        pointer-events: none;
-        z-index: -1;
-    }
-/*
-    .bear-link {
-        color: canvasText;
-        position: fixed;
-        top: 1rem;
-        left: 1rem;
-        width: 48px;
-        aspect-ratio: 1;
-        display: grid;
-        place-items: center;
-        opacity: 0.8;
-    }
-*/
-    /*
-    :where(.x-link, .bear-link):is(:hover, :focus-visible) {
-        opacity: 1;
-    }
-         */
-
-    .bear-link svg {
-        width: 75%;
-    }
-
-    /* Utilities */
-    /*
-    .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border-width: 0;
-    }
-    */
-}
-
-/*div.tp-dfwv {
-    width: 280px;
-}
-*/
-
-
-.keypad {
-    opacity: 0;
 }
 </style>
