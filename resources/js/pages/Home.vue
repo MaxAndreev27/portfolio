@@ -4,6 +4,7 @@ import AboutSection from '@/sections/AboutSection.vue';
 import FooterSection from '@/sections/FooterSection.vue';
 import HeroSection from '@/sections/HeroSection.vue';
 import TechnologySection from '@/sections/TechnologySection.vue';
+import ContactSection from '@/sections/ContactSection.vue';
 import { Head } from '@inertiajs/vue3';
 
 withDefaults(
@@ -30,6 +31,8 @@ withDefaults(
         <AboutSection />
 
         <TechnologySection />
+
+        <ContactSection />
 
         <FooterSection />
 
