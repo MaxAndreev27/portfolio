@@ -661,7 +661,7 @@ onUnmounted(() => {
                         />
                         <g class="m1Orb orb4b">
                             <image
-                                href="/images/logoVue.webp"
+                                href="/images/logo/logoVue.webp"
                                 width="80"
                                 height="80"
                             />
@@ -669,7 +669,7 @@ onUnmounted(() => {
 
                         <g class="m1Orb orb4">
                             <image
-                                href="/images/logoHtml.webp"
+                                href="/images/logo/logoHtml.webp"
                                 width="80"
                                 height="80"
                             />
@@ -677,7 +677,7 @@ onUnmounted(() => {
 
                         <g class="m1Orb orb4c">
                             <image
-                                href="/images/logoRedis.svg"
+                                href="/images/logo/logoRedis.svg"
                                 width="80"
                                 height="80"
                             />
@@ -685,7 +685,7 @@ onUnmounted(() => {
 
                         <g class="m1Orb orb4d">
                             <image
-                                href="/images/logoMongo.webp"
+                                href="/images/logo/logoMongo.webp"
                                 width="80"
                                 height="80"
                                 preserveAspectRatio="xMidYMid meet"
@@ -700,7 +700,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logoTailwind.webp"
+                                href="/images/logo/logoTailwind.webp"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -717,7 +717,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logoNestjs.png"
+                                href="/images/logo/logoNestjs.png"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -741,7 +741,7 @@ onUnmounted(() => {
 
                         <g class="m1Orb orb3c">
                             <image
-                                href="/images/logoPostgre.svg"
+                                href="/images/logo/logoPostgre.svg"
                                 width="80"
                                 height="80"
                                 preserveAspectRatio="xMidYMid meet"
@@ -750,14 +750,14 @@ onUnmounted(() => {
 
                         <g class="m1Orb orb3b">
                             <image
-                                href="/images/logoReact.webp"
+                                href="/images/logo/logoReact.webp"
                                 width="80"
                                 height="80"
                             />
                         </g>
                         <g class="m1Orb orb3d">
                             <image
-                                href="/images/logoK8s.webp"
+                                href="/images/logo/logoK8s.webp"
                                 width="88"
                                 height="88"
                                 preserveAspectRatio="xMidYMid meet"
@@ -772,7 +772,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logoGithub.svg"
+                                href="/images/logo/logoGithub.svg"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -789,7 +789,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logoNextjs.svg"
+                                href="/images/logo/logoNextjs.svg"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -820,7 +820,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logoDocker.webp"
+                                href="/images/logo/logoDocker.webp"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -831,7 +831,7 @@ onUnmounted(() => {
 
                         <g class="m1Orb orb2b">
                             <image
-                                href="/images/logoTypescript.svg"
+                                href="/images/logo/logoTypescript.svg"
                                 x="0"
                                 y="0"
                                 width="88"
@@ -849,7 +849,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logoLaravel.webp"
+                                href="/images/logo/logoLaravel.webp"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -889,7 +889,7 @@ onUnmounted(() => {
                             />
                             <g class="m1Icon m1IconPHP">
                                 <image
-                                    href="/images/logoPhp.svg"
+                                    href="/images/logo/logoPhp.svg"
                                     x="0"
                                     y="0"
                                     width="80"
@@ -907,7 +907,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logoMysql.png"
+                                href="/images/logo/logoMysql.png"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -924,7 +924,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logoWordpress.svg"
+                                href="/images/logo/logoWordpress.svg"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -934,7 +934,7 @@ onUnmounted(() => {
                         </g>
                         <g class="m1Orb orb1d">
                             <image
-                                href="/images/logoNodejs.webp"
+                                href="/images/logo/logoNodejs.webp"
                                 x="0"
                                 y="0"
                                 width="80"

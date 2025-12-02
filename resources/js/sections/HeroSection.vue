@@ -9,6 +9,13 @@ const goToAbout = () => {
         el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 };
+
+const goToContact = () => {
+    const el = document.getElementById('main-contact');
+    if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+};
 </script>
 
 <template>
@@ -40,6 +47,7 @@ const goToAbout = () => {
                     class="cursor-pointer text-2xl"
                     variant="secondary"
                     size="xl2"
+                    @click="goToContact"
                     >Contact me</Button
                 >
             </div>

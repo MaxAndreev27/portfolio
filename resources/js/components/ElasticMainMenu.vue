@@ -213,6 +213,7 @@ onBeforeUnmount(() => {
                 <li><a data-target="main-hero">Home</a></li>
                 <li><a data-target="main-about">About</a></li>
                 <li><a data-target="main-technology">Technology</a></li>
+                <li><a data-target="main-contact">Contact</a></li>
             </ul>
             <AppearanceTabs class="isolate col-start-3 justify-self-end" />
         </nav>
