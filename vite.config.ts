@@ -19,7 +19,7 @@ export default defineConfig({
             formVariants: true,
         }) : null,
         // wayfinder({
-        //     formVariants: true,
+        //     formVariants: true
         // }),
         vue({
             template: {

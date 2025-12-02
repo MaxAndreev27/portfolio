@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { BemineText } from '@/components/ui/bemine-text';
 import { TimelineList } from '@/components/ui/timeline-list';
+import { Separator } from '@/components/ui/separator';
 </script>
 
 <template>
