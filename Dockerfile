@@ -35,6 +35,10 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends gnupg2 ca-certificates git-core curl zip unzip \
                                                   rsync vim-tiny htop sqlite3 nginx supervisor cron \
                                                   postfix \
+    && mkdir -p /var/spool/postfix/public /var/spool/postfix/maildrop \
+    && chmod 1777 /var/spool/postfix/public \
+    && chmod 733 /var/spool/postfix/maildrop \
+    && postconf -e "queue_directory = /var/spool/postfix" \
     && ln -sf /usr/bin/vim.tiny /etc/alternatives/vim \
     && ln -sf /etc/alternatives/vim /usr/bin/vim \
     && echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu jammy main" > /etc/apt/sources.list.d/ondrej-ubuntu-php-focal.list \
