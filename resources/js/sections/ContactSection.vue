@@ -68,7 +68,6 @@ const submit = () => {
                                             autofocus
                                             :tabindex="1"
                                             placeholder="Name"
-                                            autocomplete="name"
                                             v-model="form.name"
                                         />
                                         <InputError
@@ -87,7 +86,6 @@ const submit = () => {
                                             required
                                             :tabindex="1"
                                             placeholder="email@example.com"
-                                            autocomplete="email"
                                             v-model="form.email"
                                         />
                                         <InputError
