@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import AlertError from '@/components/AlertError.vue';
 import InputError from '@/components/InputError.vue';
+import { AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { GlitchText } from '@/components/ui/glitch-text';
@@ -8,8 +10,8 @@ import { Keypad } from '@/components/ui/keypad';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
-import { Form, useForm, usePage } from '@inertiajs/vue3';
-import { watch } from 'vue';
+import { store } from '@/routes/contact';
+import { Form, useForm } from '@inertiajs/vue3';
 
 const form = useForm({
     name: '',
@@ -17,33 +19,15 @@ const form = useForm({
     message: '',
 });
 
-const page = usePage();
-
-// Watch for flash messages
-watch(() => page.props.flash, (newFlash) => {
-    if (newFlash?.success) {
-        console.log('Success:', newFlash.success);
-        // You can add a toast notification here if you want
-    }
-    if (newFlash?.error) {
-        console.error('Error:', newFlash.error);
-    }
-}, { immediate: true });
-
 const submit = () => {
-    form.post('/contact', {
+    form.post(store(), {
         preserveScroll: true,
-        onSuccess: (page) => {
+        onSuccess: () => {
             // form.reset();
-            // The flash message will be available in page.props.flash
-            if (page.props.flash?.success) {
-               console.log(route('contact.store'));
-                console.log('Success:', page.props.flash.success);
-            }
         },
         onError: (errors) => {
             console.error('Form submission error:', errors);
-        }
+        },
     });
 };
 </script>
@@ -137,6 +121,18 @@ const submit = () => {
                                     </Button>
                                 </div>
                             </Form>
+                            <AlertTitle
+                                class="mt-4 mb-4 text-center text-lg font-medium text-chart-2"
+                                v-if="$page.props.flash.success"
+                                :errors="[$page.props.flash.success]"
+                                >{{ $page.props.flash.success }}</AlertTitle
+                            >
+                            <AlertError
+                                class="mt-4 mb-4 text-lg text-chart-5"
+                                v-if="$page.props.flash.error"
+                                :errors="[$page.props.flash.error]"
+                                >{{ $page.props.flash.error }}</AlertError
+                            >
                         </CardContent>
                     </Card>
                 </div>
