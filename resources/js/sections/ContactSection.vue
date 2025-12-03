@@ -20,10 +20,11 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(store(), {
+    const routeData = store();
+    form.post(routeData.url, {
         preserveScroll: true,
         onSuccess: () => {
-            // form.reset();
+            form.reset();
         },
         onError: (errors) => {
             console.error('Form submission error:', errors);
@@ -50,6 +51,7 @@ const submit = () => {
                         <CardContent class="px-10 py-8">
                             <Form
                                 @submit.prevent="submit"
+                                :reset-on-success="['name', 'email', 'message']"
                                 class="flex flex-col"
                             >
                                 <div class="grid gap-4">
