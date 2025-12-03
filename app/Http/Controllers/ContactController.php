@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactFormMail;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -15,14 +18,16 @@ class ContactController extends Controller
             'message' => 'required|string|max:500',
         ]);
 
-        // Here you can add your logic to save to database or send email
-        // For example:
-        // Contact::create($validated);
-        // or
-        // Mail::to('your-email@example.com')->send(new ContactFormMail($validated));
 
-        return redirect()->back()->with('success', 'Message sent successfully!');
-//        return redirect()->back()->with('error', 'An error occurred!');
+        try {
+            Mail::to('maxandreev27@gmail.com')->send(new ContactFormMail($validated));
 
+            return redirect()->back()->with('success', 'Message sent successfully!');
+        } catch (Exception $e) {
+            \Log::error('Помилка надсилання контактної форми: ' . $e->getMessage(), [
+                'email' => $validated['email']
+            ]);
+            return redirect()->back()->with('error', 'An error occurred!');
+        }
     }
 }
