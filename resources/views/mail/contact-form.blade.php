@@ -10,18 +10,19 @@
 
 <hr>
 
-<p><strong>Ім'я:</strong> {{ $name }}</p>
-<p><strong>Email:</strong> {{ $email }}</p>
+<p><strong>Ім'я:</strong> {{ $name ?? 'Name' }}</p>
+<p><strong>Email:</strong> {{ $email ?? 'Email' }}</p>
 
 <p><strong>Повідомлення:</strong></p>
 <div style="
         border: 1px solid #eee;
         padding: 15px;
         margin-top: 10px;
-        background-color: #f9f9f9;
+        background-color: #f2f2f2;
         white-space: pre-wrap;
+        font-size: 20px;
     ">
-    {{ $messageText }}
+    {{ $messageText ?? 'Message' }}
 </div>
 
 <p style="margin-top: 25px;">Це повідомлення було надіслано автоматично.</p>
