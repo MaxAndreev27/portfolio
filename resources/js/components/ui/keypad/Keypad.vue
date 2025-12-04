@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue';
-import { Button } from '@/components/ui/button';
+import { defineEmits, onMounted, ref } from 'vue';
+
+const emit = defineEmits(['keyPress']);
 
 interface KeyConfig {
     travel: number;
@@ -57,7 +58,6 @@ const config = ref<AppConfig>({
 });
 
 const clickAudio = ref<HTMLAudioElement | null>(null);
-// let recorder: ((event: KeyboardEvent) => void) | null = null;
 const ids = ['one', 'two', 'three'] as const;
 
 // Audio context and initialization state
@@ -93,16 +93,6 @@ onMounted(() => {
     );
     clickAudio.value.muted = config.value.muted;
 
-    // Initialize audio on first interaction
-    const initOnInteraction = () => {
-        initAudioOnInteraction();
-        document.removeEventListener('click', initOnInteraction);
-        document.removeEventListener('keydown', initOnInteraction);
-    };
-
-    document.addEventListener('click', initOnInteraction, { once: true });
-    document.addEventListener('keydown', initOnInteraction, { once: true });
-
     // Initialize key styles
     updateKeyStyles();
 
@@ -114,18 +104,6 @@ onMounted(() => {
     if (keypad) {
         keypad.style.opacity = '1';
     }
-
-    // Prevent form submission
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', (e) => e.preventDefault());
-    }
-});
-
-// Cleanup
-onUnmounted(() => {
-    window.removeEventListener('keydown', handleKeyDown);
-    window.removeEventListener('keyup', handleKeyUp);
 });
 
 // Update key styles based on config
@@ -148,25 +126,6 @@ const updateKeyStyles = () => {
     });
 };
 
-// Handle key down
-const handleKeyDown = (event: KeyboardEvent) => {
-    ids.forEach((id) => {
-        if (event.key === config.value[id].key) {
-            config.value[id].pressed = true;
-            playClickSound();
-        }
-    });
-};
-
-// Handle key up
-const handleKeyUp = (event: KeyboardEvent) => {
-    ids.forEach((id) => {
-        if (event.key === config.value[id].key) {
-            config.value[id].pressed = false;
-        }
-    });
-};
-
 // Play click sound
 const playClickSound = () => {
     if (!isAudioInitialized) {
@@ -182,19 +141,6 @@ const playClickSound = () => {
     }
 };
 
-// Update theme
-const updateTheme = () => {
-    // Use system preference if theme is set to 'system'
-    if (config.value.theme === 'system') {
-        const prefersDark = window.matchMedia(
-            '(prefers-color-scheme: dark)',
-        ).matches;
-        document.documentElement.dataset.theme = prefersDark ? 'dark' : 'light';
-    } else {
-        document.documentElement.dataset.theme = config.value.theme;
-    }
-};
-
 // Initialize keypad
 const initKeypad = () => {
     // Set initial theme based on system preference
@@ -202,35 +148,6 @@ const initKeypad = () => {
         '(prefers-color-scheme: dark)',
     ).matches;
     config.value.theme = prefersDark ? 'dark' : 'light';
-    updateTheme();
-
-    // Listen for system theme changes
-    window
-        .matchMedia('(prefers-color-scheme: dark)')
-        .addEventListener('change', (e) => {
-            if (config.value.theme === 'system') {
-                config.value.theme = e.matches ? 'dark' : 'light';
-                updateTheme();
-            }
-        });
-
-    // Add mute toggle button handler if needed
-    const muteButton = document.querySelector('.mute-button');
-    if (muteButton) {
-        muteButton.addEventListener('click', () => {
-            config.value.muted = !config.value.muted;
-            if (clickAudio.value) {
-                clickAudio.value.muted = config.value.muted;
-            }
-        });
-    }
-
-    // Initial theme setup
-    updateTheme();
-
-    // Add event listeners
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
 };
 
 // Handle key press for visual feedback
@@ -243,6 +160,8 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
     const key = config.value[keyId as keyof AppConfig] as KeyConfig;
     if (key) {
         key.pressed = true;
+        // Emit the key press event to parent with the key ID
+        emit('keyPress', { key: key.key, keyId });
         setTimeout(() => {
             key.pressed = false;
         }, 200);
@@ -264,9 +183,7 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
             id="one"
             class="key keypad__single keypad__single--left"
             :class="{ 'key--pressed': config.one.pressed }"
-            @pointerdown="(e) => handleKeyPress(e, 'one')"
-            @pointerup="(e) => handleKeyPress(e, 'one')"
-            @pointerleave="(e) => handleKeyPress(e, 'one')"
+            @click="handleKeyPress($event, 'one')"
         >
                             <span class="key__mask">
                                 <span class="key__content">
@@ -286,9 +203,7 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
             id="two"
             class="key keypad__single"
             :class="{ 'key--pressed': config.two.pressed }"
-            @pointerdown="(e) => handleKeyPress(e, 'two')"
-            @pointerup="(e) => handleKeyPress(e, 'two')"
-            @pointerleave="(e) => handleKeyPress(e, 'two')"
+            @click="(e) => handleKeyPress(e, 'two')"
         >
                             <span class="key__mask">
                                 <span class="key__content">
@@ -308,9 +223,7 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
             id="three"
             class="key keypad__double"
             :class="{ 'key--pressed': config.three.pressed }"
-            @pointerdown="(e) => handleKeyPress(e, 'three')"
-            @pointerup="(e) => handleKeyPress(e, 'three')"
-            @pointerleave="(e) => handleKeyPress(e, 'three')"
+            @click="(e) => handleKeyPress(e, 'three')"
         >
                             <span class="key__mask">
                                 <span class="key__content">
