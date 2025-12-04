@@ -11,13 +11,11 @@ class ContactController extends Controller
 {
     public function store(Request $request)
     {
-
         $validated = $request->validate([
             'name' => 'required|string|max:50',
             'email' => 'required|email',
             'message' => 'required|string|max:500',
         ]);
-
 
         try {
             Mail::to('maxandreev27@gmail.com')->send(new ContactFormMail($validated));
