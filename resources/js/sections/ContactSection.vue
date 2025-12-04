@@ -31,7 +31,6 @@ watch(() => page.props.flash, (newValue) => {
         showSuccess.value = true;
         setTimeout(() => {
             showSuccess.value = false;
-            // page.props.flash.success = null;
         }, 10000);
     }
 
@@ -39,7 +38,6 @@ watch(() => page.props.flash, (newValue) => {
         showError.value = true;
         setTimeout(() => {
             showError.value = false;
-            // page.props.flash.error = null;
         }, 10000);
     }
 }, { immediate: true, deep: true });
@@ -51,10 +49,11 @@ const submit = () => {
         onSuccess: () => {
             form.reset();
         },
-        onError: (errors) => {
-            console.error('Form submission error:', errors);
-        },
     });
+};
+
+const handleKeyPress = () => {
+    submit();
 };
 </script>
 
@@ -164,7 +163,7 @@ const submit = () => {
                     </Card>
                 </div>
                 <div class="flex flex-col items-center justify-center">
-                    <Keypad />
+                    <Keypad @keyPress="handleKeyPress" />
                 </div>
             </div>
         </div>
