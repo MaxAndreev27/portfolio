@@ -183,7 +183,7 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
             id="one"
             class="key keypad__single keypad__single--left"
             :class="{ 'key--pressed': config.one.pressed }"
-            @click="handleKeyPress($event, 'one')"
+            @click="(e) => handleKeyPress(e, 'one')"
         >
                             <span class="key__mask">
                                 <span class="key__content">
