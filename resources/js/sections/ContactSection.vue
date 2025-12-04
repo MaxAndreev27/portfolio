@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue';
 import AlertError from '@/components/AlertError.vue';
 import InputError from '@/components/InputError.vue';
 import { AlertTitle } from '@/components/ui/alert';
@@ -11,13 +12,37 @@ import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import { store } from '@/routes/contact';
-import { Form, useForm } from '@inertiajs/vue3';
+import { Form, useForm, usePage } from '@inertiajs/vue3';
+
+const showSuccess = ref(false);
+const showError = ref(false);
+
+const page = usePage();
 
 const form = useForm({
     name: '',
     email: '',
     message: '',
 });
+
+// Watch for flash messages and set timeouts
+watch(() => page.props.flash, (newValue) => {
+    if (newValue?.success) {
+        showSuccess.value = true;
+        setTimeout(() => {
+            showSuccess.value = false;
+            // page.props.flash.success = null;
+        }, 10000);
+    }
+
+    if (newValue?.error) {
+        showError.value = true;
+        setTimeout(() => {
+            showError.value = false;
+            // page.props.flash.error = null;
+        }, 10000);
+    }
+}, { immediate: true, deep: true });
 
 const submit = () => {
     const routeData = store();
@@ -39,7 +64,7 @@ const submit = () => {
             <div class="grid grid-cols-2">
                 <div>
                     <Card class="rounded-xl">
-                        <CardHeader class="px-10 pt-8 pb-0 text-center">
+                        <CardHeader class="px-10 pt-4 pb-0 text-center">
                             <CardTitle class="text-xl">
                                 <GlitchText
                                     class="content-center text-6xl font-bold"
@@ -48,7 +73,7 @@ const submit = () => {
                                 >
                             </CardTitle>
                         </CardHeader>
-                        <CardContent class="px-10 py-8">
+                        <CardContent class="px-10 py-4">
                             <Form
                                 @submit.prevent="submit"
                                 :reset-on-success="['name', 'email', 'message']"
@@ -111,7 +136,7 @@ const submit = () => {
                                     </div>
                                     <Button
                                         type="submit"
-                                        class="mt-4 w-full"
+                                        class="mt-4 w-full cursor-pointer"
                                         :tabindex="4"
                                         :disabled="form.processing"
                                         data-test="login-button"
@@ -121,22 +146,24 @@ const submit = () => {
                                     </Button>
                                 </div>
                             </Form>
-                            <AlertTitle
-                                class="mt-4 mb-4 text-center text-lg font-medium text-chart-2"
-                                v-if="$page.props.flash.success"
-                                :errors="[$page.props.flash.success]"
-                                >{{ $page.props.flash.success }}</AlertTitle
-                            >
-                            <AlertError
-                                class="mt-4 mb-4 text-lg text-chart-5"
-                                v-if="$page.props.flash.error"
-                                :errors="[$page.props.flash.error]"
-                                >{{ $page.props.flash.error }}</AlertError
-                            >
+                            <Transition name="fade">
+                                <AlertTitle
+                                    v-if="showSuccess && $page.props.flash.success"
+                                    class="mt-4 mb-4 text-center text-lg font-medium text-chart-2"
+                                    :errors="[$page.props.flash.success]"
+                                >{{ $page.props.flash.success }}</AlertTitle>
+                            </Transition>
+                            <Transition name="fade">
+                                <AlertError
+                                    v-if="showError && $page.props.flash.error"
+                                    class="mt-4 mb-4 text-lg text-chart-5"
+                                    :errors="[$page.props.flash.error]"
+                                >{{ $page.props.flash.error }}</AlertError>
+                            </Transition>
                         </CardContent>
                     </Card>
                 </div>
-                <div class="flex items-center justify-center">
+                <div class="flex flex-col items-center justify-center">
                     <Keypad />
                 </div>
             </div>
@@ -145,6 +172,16 @@ const submit = () => {
 </template>
 
 <style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
 :root {
     --travel: 20;
     --hue: 0; /* Default hue value */
