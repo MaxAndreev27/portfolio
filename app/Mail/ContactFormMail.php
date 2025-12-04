@@ -5,6 +5,7 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -30,8 +31,9 @@ class ContactFormMail extends Mailable
     {
         return new Envelope(
             subject: 'Нове повідомлення з сайту Portfolio',
-            // Встановлюємо Reply-To на email користувача, щоб легко відповісти
-            // replyTo: $this->formData['email'],
+            replyTo: [
+                new Address($this->formData['email'], $this->formData['name']),
+            ],
         );
     }
 
