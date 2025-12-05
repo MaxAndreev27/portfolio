@@ -196,7 +196,6 @@ const handleKeyPress = () => {
 
 .main-contact:before {
     --size: 45px;
-    /*--line: color-mix(in hsl, canvasText, transparent 80%);*/
     --line: hsla(0, 0%, 0%, 0.2);
     content: '';
     position: absolute;

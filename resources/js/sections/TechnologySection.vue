@@ -993,7 +993,7 @@ onUnmounted(() => {
                                 letter-spacing="0.5"
                                 opacity="0.7"
                             >
-                                Web
+                                Click
                             </text>
                         </g>
                     </g>
