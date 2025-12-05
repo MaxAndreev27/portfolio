@@ -205,17 +205,16 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <header
-        class="fixed top-0 z-50 container w-full bg-white/50 px-2 text-2xl shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 dark:bg-zinc-900/50 dark:ring-white/10"
-    >
-        <nav class="grid grid-cols-3 items-center gap-4">
-            <ul ref="menuList" class="col-start-2 justify-self-center">
+    <header class="fixed top-[15px] z-50 container w-full">
+        <nav class="grid text-2xl grid-cols-3 mx-[20px] px-8 rounded-full items-center gap-4 shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 bg-[var(--navbar)] dark:ring-white/10">
+            <a href="/" class="logo">LOGO</a>
+            <ul ref="menuList" class="flex justify-center justify-self-center">
                 <li><a data-target="main-hero">Home</a></li>
                 <li><a data-target="main-about">About</a></li>
                 <li><a data-target="main-technology">Technology</a></li>
                 <li><a data-target="main-contact">Contact</a></li>
             </ul>
-            <AppearanceTabs class="isolate col-start-3 justify-self-end" />
+            <AppearanceTabs class="isolate justify-self-end" />
         </nav>
     </header>
 </template>
@@ -223,13 +222,12 @@ onBeforeUnmount(() => {
 <style scoped>
 nav {
     position: relative;
+    border: 1px solid var(--navbar-border);
 }
 
 nav > ul {
     position: relative;
     list-style: none;
-    display: flex;
-    justify-content: center;
     height: 55px;
     isolation: isolate;
     padding: 0 15px;

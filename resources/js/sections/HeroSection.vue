@@ -21,7 +21,7 @@ const goToContact = () => {
 <template>
     <section id="main-hero" class="main-hero w-full">
         <div
-            class="container mx-auto flex h-screen flex-col items-center justify-center"
+            class="container mx-auto flex min-h-screen flex-col items-center justify-center"
         >
             <GradientText as="h1" class="mb-2 text-8xl font-bold"
                 >Max Andreev</GradientText
