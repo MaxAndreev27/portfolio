@@ -3,6 +3,8 @@ import AppearanceTabs from '@/components/AppearanceTabs.vue';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 
 const menuList = ref<HTMLElement | null>(null);
+const mobileOpen = ref(false);
+const toggleMobile = () => (mobileOpen.value = !mobileOpen.value);
 let anim: number | null = null;
 let currentActiveItem: HTMLElement | null = null;
 let cleanupFns: Array<() => void> = [];
@@ -83,6 +85,7 @@ onMounted(() => {
         const enter = () => moveToItem(item);
         const leave = () => handleMouseLeave();
         const click = (e: Event) => {
+            mobileOpen.value = false;
             const el = item as HTMLAnchorElement;
             const dataTarget = el.dataset.target;
 
@@ -92,7 +95,7 @@ onMounted(() => {
                 const targetEl = document.getElementById(dataTarget);
                 if (targetEl) {
                     const header = nav.closest('header') as HTMLElement | null;
-                    const offset = (header?.offsetHeight ?? 0) + 8; // small gap
+                    const offset = (header?.offsetHeight ?? 0) + 8;
                     const y =
                         targetEl.getBoundingClientRect().top +
                         window.scrollY -
@@ -110,7 +113,7 @@ onMounted(() => {
                 const targetEl = document.getElementById(targetId);
                 if (targetEl) {
                     const header = nav.closest('header') as HTMLElement | null;
-                    const offset = (header?.offsetHeight ?? 0) + 8; // small gap
+                    const offset = (header?.offsetHeight ?? 0) + 8;
                     const y =
                         targetEl.getBoundingClientRect().top +
                         window.scrollY -
@@ -186,8 +189,23 @@ onMounted(() => {
     window.addEventListener('resize', () => {
         initSections();
         onScroll();
+        if (window.innerWidth >= 768) mobileOpen.value = false;
     });
     cleanupFns.push(() => window.removeEventListener('scroll', onScroll));
+
+    const wrapper = nav.closest('nav') as HTMLElement | null;
+    const onDocumentClick = (ev: MouseEvent) => {
+        if (!mobileOpen.value) return;
+        const target = ev.target as Node | null;
+        if (!wrapper) return;
+        if (target && !wrapper.contains(target)) {
+            mobileOpen.value = false;
+        }
+    };
+    document.addEventListener('click', onDocumentClick);
+    cleanupFns.push(() =>
+        document.removeEventListener('click', onDocumentClick),
+    );
 
     window.setTimeout(() => {
         updateActiveOnScroll();
@@ -206,14 +224,43 @@ onBeforeUnmount(() => {
 
 <template>
     <header class="fixed top-[15px] z-50 container w-full">
-        <nav class="grid text-2xl grid-cols-3 mx-[20px] px-8 rounded-full items-center gap-4 shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 bg-[var(--navbar)] dark:ring-white/10">
+        <nav
+            class="grid grid-cols-3 items-center gap-4 rounded-full bg-[var(--navbar)] px-5 md:text-xl lg:text-2xl shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 dark:ring-white/10"
+        >
             <a href="/" class="logo">LOGO</a>
-            <ul ref="menuList" class="flex justify-center justify-self-center">
+            <button
+                @click="toggleMobile"
+                :aria-expanded="mobileOpen"
+                aria-controls="main-menu"
+                class="flex h-[55px] cursor-pointer items-center justify-self-center rounded-md p-0 md:hidden"
+                title="Toggle menu"
+            >
+                <!-- use a span wrapper (valid inside button) instead of div -->
+                <span
+                    :class="['hamburger', { open: mobileOpen }]"
+                    aria-hidden="true"
+                >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+                <span class="sr-only">Toggle menu</span>
+            </button>
+            <ul
+                id="main-menu"
+                ref="menuList"
+                :class="
+                    mobileOpen
+                        ? 'absolute top-full right-4 left-4 z-50 mt-2 flex flex-col rounded-xl bg-[var(--navbar)] p-2'
+                        : 'hidden justify-center justify-self-center md:flex'
+                "
+            >
                 <li><a data-target="main-hero">Home</a></li>
                 <li><a data-target="main-about">About</a></li>
                 <li><a data-target="main-technology">Technology</a></li>
                 <li><a data-target="main-contact">Contact</a></li>
             </ul>
+
             <AppearanceTabs class="isolate justify-self-end" />
         </nav>
     </header>
@@ -223,6 +270,18 @@ onBeforeUnmount(() => {
 nav {
     position: relative;
     border: 1px solid var(--navbar-border);
+    min-height: 55px;
+    box-sizing: border-box;
+}
+
+nav > button {
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    line-height: 0;
+    background: transparent;
+    box-sizing: border-box;
 }
 
 nav > ul {
@@ -292,5 +351,78 @@ nav > ul.show-indicator::after {
 }
 nav > ul li a:active {
     transform: translateY(-2px);
+}
+
+button .hamburger {
+    --bar-gap: 6px;
+    --bar-height: 3px;
+    --bar-width: 70%;
+    height: 70%;
+    aspect-ratio: 1 / 1;
+    min-height: 20px;
+    max-height: 40px;
+    display: inline-flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+}
+
+button .hamburger span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: var(--bar-height);
+    width: var(--bar-width);
+    background: currentColor;
+    border-radius: 2px;
+    transition:
+        transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
+        opacity 150ms linear;
+    transform-origin: center center;
+    display: block;
+}
+
+button .hamburger span:nth-child(1) {
+    transform: translate(-50%, calc(-50% - var(--bar-gap)));
+}
+button .hamburger span:nth-child(2) {
+    transform: translate(-50%, -50%);
+}
+button .hamburger span:nth-child(3) {
+    transform: translate(-50%, calc(-50% + var(--bar-gap)));
+}
+
+button .hamburger.open span:nth-child(1) {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+button .hamburger.open span:nth-child(2) {
+    opacity: 0;
+    transform: translate(-50%, -50%) scaleX(0);
+}
+button .hamburger.open span:nth-child(3) {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+@media (max-width: 1023px) {
+    nav > ul li a {
+        padding-inline: 10px;
+    }
+}
+
+@media (max-width: 767px) {
+    nav > ul {
+        height: auto;
+        padding: 8px;
+        position: absolute;
+    }
+    nav > ul::after {
+        display: none;
+    }
+    nav > ul li {
+        padding: 6px 0;
+    }
+    button .hamburger {
+        height: 70%;
+    }
 }
 </style>
