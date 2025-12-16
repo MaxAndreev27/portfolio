@@ -101,4 +101,13 @@ const props = withDefaults(defineProps<Props>(), {
     content: "";
     top: 10px;
 }
+
+@media (max-width: 767px) {
+    .timeline {
+        padding-right: 25px;
+    }
+}
+
+
+
 </style>

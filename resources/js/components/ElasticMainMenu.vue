@@ -223,11 +223,13 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <header class="fixed top-[15px] z-50 container w-full">
+    <header class="fixed top-5 z-50 container w-full px-5">
         <nav
-            class="grid grid-cols-3 items-center gap-4 rounded-full bg-[var(--navbar)] px-5 md:text-xl lg:text-2xl shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 dark:ring-white/10"
+            class="grid grid-cols-3 items-center gap-4 rounded-full bg-[var(--navbar)] px-5 shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 dark:ring-white/10"
         >
-            <a href="/" class="logo">LOGO</a>
+            <a href="/" class="logo flex">
+                <img src="/images/cicd.svg" width="80" height="40" alt="logo" />
+            </a>
             <button
                 @click="toggleMobile"
                 :aria-expanded="mobileOpen"
@@ -235,7 +237,6 @@ onBeforeUnmount(() => {
                 class="flex h-[55px] cursor-pointer items-center justify-self-center rounded-md p-0 md:hidden"
                 title="Toggle menu"
             >
-                <!-- use a span wrapper (valid inside button) instead of div -->
                 <span
                     :class="['hamburger', { open: mobileOpen }]"
                     aria-hidden="true"
@@ -249,6 +250,7 @@ onBeforeUnmount(() => {
             <ul
                 id="main-menu"
                 ref="menuList"
+                class="text-2xl md:text-xl lg:text-2xl"
                 :class="
                     mobileOpen
                         ? 'absolute top-full right-4 left-4 z-50 mt-2 flex flex-col rounded-xl bg-[var(--navbar)] p-2'

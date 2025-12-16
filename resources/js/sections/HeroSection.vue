@@ -19,14 +19,18 @@ const goToContact = () => {
 </script>
 
 <template>
-    <section id="main-hero" class="main-hero w-full">
+    <section id="main-hero" class="main-hero w-full px-5">
         <div
-            class="container mx-auto flex min-h-screen flex-col items-center justify-center"
+            class="container mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center"
         >
-            <GradientText as="h1" class="mb-2 text-8xl font-bold"
+            <GradientText
+                as="h1"
+                class="mb-2 text-center text-5xl font-bold sm:text-6xl md:text-8xl"
                 >Max Andreev</GradientText
             >
-            <h2 class="mb-4 text-5xl font-bold uppercase">
+            <h2
+                class="mb-4 text-center text-2xl font-bold uppercase sm:text-3xl md:text-5xl"
+            >
                 Full-Stack Developer
             </h2>
             <Avatar class="mb-8 h-50 w-50 overflow-hidden rounded-full">
@@ -35,16 +39,16 @@ const goToContact = () => {
                     avatar
                 </AvatarFallback>
             </Avatar>
-            <div class="grid grid-cols-2 gap-6">
+            <div class="grid grid-cols-2 gap-4 md:gap-6">
                 <Button
-                    class="cursor-pointer text-2xl"
+                    class="cursor-pointer text-xl md:text-2xl"
                     variant="default"
                     size="xl2"
                     @click="goToAbout"
                     >About me</Button
                 >
                 <Button
-                    class="cursor-pointer text-2xl"
+                    class="cursor-pointer text-xl md:text-2xl"
                     variant="secondary"
                     size="xl2"
                     @click="goToContact"

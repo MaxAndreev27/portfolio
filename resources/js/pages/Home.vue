@@ -23,7 +23,7 @@ withDefaults(
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     </Head>
 
-    <div class="flex min-h-screen flex-col items-center lg:justify-center">
+    <div class="flex min-h-screen flex-col items-center justify-center">
         <ElasticMainMenu />
 
         <HeroSection />
