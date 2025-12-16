@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
 import AlertError from '@/components/AlertError.vue';
 import InputError from '@/components/InputError.vue';
 import { AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { GlitchText } from '@/components/ui/glitch-text';
 import { Input } from '@/components/ui/input';
 import { Keypad } from '@/components/ui/keypad';
@@ -13,6 +12,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import { store } from '@/routes/contact';
 import { Form, useForm, usePage } from '@inertiajs/vue3';
+import { ref, watch } from 'vue';
 
 const showSuccess = ref(false);
 const showError = ref(false);
@@ -26,21 +26,25 @@ const form = useForm({
 });
 
 // Watch for flash messages and set timeouts
-watch(() => page.props.flash, (newValue) => {
-    if (newValue?.success) {
-        showSuccess.value = true;
-        setTimeout(() => {
-            showSuccess.value = false;
-        }, 10000);
-    }
+watch(
+    () => page.props.flash,
+    (newValue) => {
+        if (newValue?.success) {
+            showSuccess.value = true;
+            setTimeout(() => {
+                showSuccess.value = false;
+            }, 10000);
+        }
 
-    if (newValue?.error) {
-        showError.value = true;
-        setTimeout(() => {
-            showError.value = false;
-        }, 10000);
-    }
-}, { immediate: true, deep: true });
+        if (newValue?.error) {
+            showError.value = true;
+            setTimeout(() => {
+                showError.value = false;
+            }, 10000);
+        }
+    },
+    { immediate: true, deep: true },
+);
 
 const submit = () => {
     const routeData = store();
@@ -58,21 +62,19 @@ const handleKeyPress = () => {
 </script>
 
 <template>
-    <section id="main-contact" class="main-contact w-full">
+    <section id="main-contact" class="main-contact w-full px-5">
         <div class="container mx-auto mt-20 mb-20 max-w-4xl">
-            <div class="grid grid-cols-2">
+            <div class="grid md:grid-cols-2">
                 <div>
                     <Card class="rounded-xl">
-                        <CardHeader class="px-10 pt-4 pb-0 text-center">
-                            <CardTitle class="text-xl">
-                                <GlitchText
-                                    class="content-center text-6xl font-bold"
-                                    data-text="Contact me"
-                                    >Contact me</GlitchText
-                                >
-                            </CardTitle>
+                        <CardHeader class="px-4 pt-4 pb-0 text-center sm:px-10">
+                            <GlitchText
+                                class="content-center text-4xl font-bold sm:text-5xl lg:text-6xl"
+                                data-text="Contact me"
+                                >Contact me</GlitchText
+                            >
                         </CardHeader>
-                        <CardContent class="px-10 py-4">
+                        <CardContent class="px-4 py-4 sm:px-10">
                             <Form
                                 @submit.prevent="submit"
                                 :reset-on-success="['name', 'email', 'message']"
@@ -89,7 +91,6 @@ const handleKeyPress = () => {
                                             type="text"
                                             name="name"
                                             required
-                                            autofocus
                                             :tabindex="1"
                                             placeholder="Name"
                                             v-model="form.name"
@@ -147,22 +148,28 @@ const handleKeyPress = () => {
                             </Form>
                             <Transition name="fade">
                                 <AlertTitle
-                                    v-if="showSuccess && $page.props.flash.success"
+                                    v-if="
+                                        showSuccess && $page.props.flash.success
+                                    "
                                     class="mt-4 mb-4 text-center text-lg font-medium text-chart-2"
                                     :errors="[$page.props.flash.success]"
-                                >{{ $page.props.flash.success }}</AlertTitle>
+                                    >{{ $page.props.flash.success }}</AlertTitle
+                                >
                             </Transition>
                             <Transition name="fade">
                                 <AlertError
                                     v-if="showError && $page.props.flash.error"
                                     class="mt-4 mb-4 text-lg text-chart-5"
                                     :errors="[$page.props.flash.error]"
-                                >{{ $page.props.flash.error }}</AlertError>
+                                    >{{ $page.props.flash.error }}</AlertError
+                                >
                             </Transition>
                         </CardContent>
                     </Card>
                 </div>
-                <div class="flex flex-col items-center justify-center">
+                <div
+                    class="mt-10 flex flex-col items-center justify-center md:mt-0"
+                >
                     <Keypad @keyPress="handleKeyPress" />
                 </div>
             </div>

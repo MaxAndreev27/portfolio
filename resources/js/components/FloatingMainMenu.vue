@@ -16,7 +16,6 @@
                         <a href="#" class="auth-btn signup-btn">Sign Up</a>
                     </li>
                 </ul>
-
             </div>
             <div class="auth-buttons">
                 <a href="#" class="auth-btn login-btn">Login</a>
@@ -25,11 +24,9 @@
             <button class="menu-toggle" id="menuToggle">☰</button>
         </div>
     </nav>
-
 </template>
 
 <style scoped>
-
 /* Floating Navbar */
 .navbar {
     position: fixed;
