@@ -1,20 +1,21 @@
 <script setup lang="ts">
 import { BemineText } from '@/components/ui/bemine-text';
 import { TimelineList } from '@/components/ui/timeline-list';
-import { Separator } from '@/components/ui/separator';
 </script>
 
 <template>
-    <section id="main-about" class="main-about w-full">
+    <section id="main-about" class="main-about w-full px-5">
         <div
-            class="container mx-auto mt-20 mb-20 flex flex-col items-center justify-center"
+            class="container mx-auto mt-20 mb-20 flex max-w-4xl flex-col items-center justify-center"
         >
-            <BemineText class="text-6xl font-bold">About me</BemineText>
+            <BemineText class="text-5xl font-bold md:text-6xl"
+                >About me</BemineText
+            >
 
-            <TimelineList class="max-w-4xl text-2xl" />
+            <TimelineList class="text-lg sm:text-xl md:text-2xl" />
 
             <ul
-                class="flex w-full max-w-4xl list-inside list-disc list-image-[url(/public/images/checkmark.svg)] flex-col items-start text-left text-3xl"
+                class="flex w-full list-inside list-disc list-image-[url(/public/images/checkmark.svg)] flex-col items-start text-left text-xl sm:text-2xl md:text-3xl"
             >
                 <li class="mb-4 text-justify">
                     <span class="font-semibold">Programming Languages:</span>
