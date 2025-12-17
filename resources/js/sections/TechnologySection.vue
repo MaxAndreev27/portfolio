@@ -34,8 +34,38 @@ onMounted(() => {
         if (!containerW || !bbox.width) return;
         const padding = 0; // px margin from edges
         const target = Math.max(containerW - padding, 0.0001);
-        const scale = Math.min(1, target / bbox.width);
+        let scale = Math.min(1, target / bbox.width);
+
+        // detect small/mobile screens and avoid shrinking the SVG there
+        const isMobile = typeof window !== 'undefined' && window.matchMedia
+            ? window.matchMedia('(max-width: 640px)').matches
+            : false;
+
+        if (isMobile) {
+            // don't shrink on mobile — use natural SVG size
+            scale = 1;
+        } else {
+            // avoid extremely small scales on wider viewports
+            scale = Math.max(scale, 0.6);
+        }
+
         gsap.set(stage, { scale: scale, transformOrigin: '50% 50%' });
+
+        // Debug info: visible in browser console
+        // try {
+        //     // gsap.getProperty can retrieve the applied scale
+        //     // (may throw in some older GSAP builds, hence try/catch)
+        //     // eslint-disable-next-line no-console
+        //     console.log('[TechnologySection] fitStageToContainer', {
+        //         computedScale: scale,
+        //         appliedScale: gsap.getProperty(stage as Element, 'scale'),
+        //         isMobile,
+        //         containerW,
+        //         bboxWidth: bbox.width,
+        //     });
+        // } catch (e) {
+        //     // ignore
+        // }
     };
 
     window.onresize = window.onload = function () {
