@@ -32,7 +32,7 @@ onMounted(() => {
         const bbox = stage.getBBox();
         const containerW = container.clientWidth;
         if (!containerW || !bbox.width) return;
-        const padding = 32; // px margin from edges
+        const padding = 0; // px margin from edges
         const target = Math.max(containerW - padding, 0.0001);
         const scale = Math.min(1, target / bbox.width);
         gsap.set(stage, { scale: scale, transformOrigin: '50% 50%' });
