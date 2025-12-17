@@ -587,8 +587,7 @@ onUnmounted(() => {
     >
         <div class="container mx-auto max-w-4xl overflow-visible px-0">
             <svg
-                class="main1 block h-auto w-full overflow-visible"
-                width="150%"
+                class="main1 block h-auto w-[100%] overflow-visible sm:w-full"
                 viewBox="-700 -600 1400 1400"
                 preserveAspectRatio="xMidYMid meet"
             >
