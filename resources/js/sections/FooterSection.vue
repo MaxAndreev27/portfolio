@@ -70,7 +70,7 @@
 .footer-bottom {
     text-align: center;
     padding-top: 20px;
-    border-top: 1px solid #333;
+    border-top: 1px solid var(--navbar-border);
 }
 
 @media (prefers-reduced-motion: no-preference) {

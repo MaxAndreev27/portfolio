@@ -136,6 +136,7 @@ const handleKeyPress = () => {
                                     </div>
                                     <Button
                                         type="submit"
+                                        size="xl"
                                         class="mt-4 w-full cursor-pointer"
                                         :tabindex="4"
                                         :disabled="form.processing"
