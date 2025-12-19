@@ -50,7 +50,6 @@ const props = withDefaults(defineProps<Props>(), {
     border-bottom-right-radius: 4px;
     border-top-right-radius: 4px;
     background: rgba(255, 255, 255, 0.03);
-    margin: 50px auto;
     position: relative;
     line-height: 1.4em;
     padding: 50px;

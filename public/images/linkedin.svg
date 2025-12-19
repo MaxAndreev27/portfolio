@@ -1,0 +1,19 @@
+<svg version="1.1"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    role="img"
+     xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+>
+    <circle
+        class="bg"
+        cx="12"
+        cy="12"
+        r="12"
+        fill="#0A66C2"
+    />
+    <path
+        class="logo"
+        fill="#ffffff"
+        d="M6.94 8.5H9.5V20H6.94zM8.22 4.75a1.6 1.6 0 1 0 0 3.2 1.6 1.6 0 0 0 0-3.2zM11.84 8.5h2.41v1.57h.03c.33-.62 1.14-1.27 2.35-1.27 2.51 0 2.97 1.66 2.97 3.82V20h-2.56v-5.25c0-1.25-.02-2.85-1.74-2.85-1.74 0-2.01 1.36-2.01 2.76V20h-2.45V8.5z"
+    />
+</svg>
