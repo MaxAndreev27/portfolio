@@ -3,74 +3,63 @@
 <template>
     <footer
         id="footer-hero"
-        class="footer-hero footer mb-5 flex w-full justify-center px-5"
+        class="bg-transparent footer-hero footer mb-5 flex w-full justify-center px-5"
     >
         <div
-            class="footer-container mx-auto w-full rounded-xl bg-card p-8 shadow lg:container"
+            class="footer-container p-4 sm:p-8 mx-auto w-full rounded-xl border border-[var(--border)] bg-card shadow lg:container"
         >
             <div
-                class="footer-content mb-8 grid grid-cols-1 gap-8 sm:grid-cols-3"
+                class="footer-content mb-6 flex items-center justify-center gap-5"
             >
-                <div class="footer-section">
-                    <h3>Company</h3>
-                    <a href="#about">About Us</a>
-                    <a href="#services">Services</a>
-                    <a href="#contact">Contact</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <a href="#portfolio">Portfolio</a>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Connect</h3>
-                    <a href="#">hello@company.com</a>
-                    <a href="#">+1 (555) 123-4567</a>
-                    <a href="#">Follow Us</a>
-                </div>
+                <a
+                    href="https://github.com/MaxAndreev27"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="GitHub"
+                    class="social-icon transform text-current transition-colors hover:-translate-y-1"
+                >
+                    <img
+                        width="48px"
+                        height="48px"
+                        src="/images/github.svg"
+                        alt="LinkedIn"
+                    />
+                </a>
+                <a
+                    href="https://www.linkedin.com/in/your-profile"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn"
+                    class="social-icon transform text-current transition-colors hover:-translate-y-1"
+                >
+                    <img
+                        width="48px"
+                        height="48px"
+                        src="/images/linkedin.svg"
+                        alt="LinkedIn"
+                    />
+                </a>
             </div>
-            <div class="footer-bottom">
+            <div
+                class="footer-bottom border-top[var(--navbar-border)] border-t pt-5 text-center"
+            >
                 <p>
                     &copy; {{ new Date().getFullYear() }} Max Andreev. All
                     rights reserved.
                 </p>
+                <p>Powered by Laravel and Vue</p>
             </div>
         </div>
     </footer>
 </template>
 
 <style scoped>
-.footer {
-    background: transparent;
-}
-
-.footer-container {
-    border: 1px solid var(--border);
-}
-
-.footer-section h3 {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 15px;
-}
-
 .footer-section p,
 .footer-section a {
     text-decoration: none;
     margin-bottom: 8px;
     display: block;
     transition: color 0.3s ease;
-    font-size: 0.9rem;
-}
-
-.footer-section a:hover {
-}
-
-.footer-bottom {
-    text-align: center;
-    padding-top: 20px;
-    border-top: 1px solid var(--navbar-border);
 }
 
 @media (prefers-reduced-motion: no-preference) {

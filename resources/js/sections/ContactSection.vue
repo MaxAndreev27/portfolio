@@ -63,7 +63,7 @@ const handleKeyPress = () => {
 
 <template>
     <section id="main-contact" class="main-contact w-full px-5">
-        <div class="container mx-auto mt-20 mb-20 max-w-4xl">
+        <div class="container mx-auto my-15 max-w-4xl md:my-20">
             <div class="grid md:grid-cols-2">
                 <div>
                     <Card class="rounded-xl">
@@ -74,7 +74,7 @@ const handleKeyPress = () => {
                                 >Contact me</GlitchText
                             >
                         </CardHeader>
-                        <CardContent class="px-4 py-4 sm:px-10">
+                        <CardContent class="p-4 sm:px-10">
                             <Form
                                 @submit.prevent="submit"
                                 :reset-on-success="['name', 'email', 'message']"
