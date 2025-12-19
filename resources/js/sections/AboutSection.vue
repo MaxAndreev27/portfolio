@@ -6,13 +6,13 @@ import { TimelineList } from '@/components/ui/timeline-list';
 <template>
     <section id="main-about" class="main-about w-full px-5">
         <div
-            class="container mx-auto mt-20 mb-20 flex max-w-4xl flex-col items-center justify-center"
+            class="container mx-auto my-15 md:my-20 flex max-w-4xl flex-col items-center justify-center"
         >
             <BemineText class="text-5xl font-bold md:text-6xl"
                 >About me</BemineText
             >
 
-            <TimelineList class="text-lg sm:text-xl md:text-2xl" />
+            <TimelineList class="text-lg my-10 sm:text-xl md:text-2xl" />
 
             <ul
                 class="flex w-full list-inside list-disc list-image-[url(/public/images/checkmark.svg)] flex-col items-start text-left text-xl sm:text-2xl md:text-3xl"
