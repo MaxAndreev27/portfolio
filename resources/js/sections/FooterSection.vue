@@ -9,7 +9,7 @@
             class="footer-container p-4 sm:p-8 mx-auto w-full rounded-xl border border-[var(--border)] bg-card shadow lg:container"
         >
             <div
-                class="footer-content mb-6 flex items-center justify-center gap-5"
+                class="footer-content mb-4 flex items-center justify-center gap-5"
             >
                 <a
                     href="https://github.com/MaxAndreev27"

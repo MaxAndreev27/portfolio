@@ -74,7 +74,6 @@ import { TimelineList } from '@/components/ui/timeline-list';
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Onest:wght@300;900&display=swap');
 .main-about {
     font-family: 'Onest', sans-serif;
 }

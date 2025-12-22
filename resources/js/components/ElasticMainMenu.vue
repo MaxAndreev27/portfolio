@@ -227,7 +227,7 @@ onBeforeUnmount(() => {
         <nav
             class="grid grid-cols-3 items-center gap-4 rounded-full bg-[var(--navbar)] px-5 shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 dark:ring-white/10"
         >
-            <a href="/" class="logo flex">
+            <a href="/" class="logo flex justify-self-start">
                 <img src="/images/cicd.svg" width="80" height="40" alt="logo" />
             </a>
             <button
@@ -257,10 +257,20 @@ onBeforeUnmount(() => {
                         : 'hidden justify-center justify-self-center md:flex'
                 "
             >
-                <li><a data-target="main-hero">Home</a></li>
-                <li><a data-target="main-about">About</a></li>
-                <li><a data-target="main-technology">Technology</a></li>
-                <li><a data-target="main-contact">Contact</a></li>
+                <li><a href="#main-hero" data-target="main-hero">Home</a></li>
+                <li>
+                    <a href="#main-about" data-target="main-about">About</a>
+                </li>
+                <li>
+                    <a href="#main-technology" data-target="main-technology"
+                        >Technology</a
+                    >
+                </li>
+                <li>
+                    <a href="#main-contact" data-target="main-contact"
+                        >Contact</a
+                    >
+                </li>
             </ul>
 
             <AppearanceTabs class="isolate justify-self-end" />
