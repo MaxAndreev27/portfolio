@@ -37,9 +37,10 @@ onMounted(() => {
         let scale = Math.min(1, target / bbox.width);
 
         // detect small/mobile screens and avoid shrinking the SVG there
-        const isMobile = typeof window !== 'undefined' && window.matchMedia
-            ? window.matchMedia('(max-width: 640px)').matches
-            : false;
+        const isMobile =
+            typeof window !== 'undefined' && window.matchMedia
+                ? window.matchMedia('(max-width: 640px)').matches
+                : false;
 
         if (isMobile) {
             // don't shrink on mobile — use natural SVG size
@@ -426,26 +427,6 @@ onMounted(() => {
 
         // Orbit 4 - 5 logos with more spacing
         .fromTo(
-            '.orb4',
-            { xPercent: -40, yPercent: -15 },
-            {
-                xPercent: 0,
-                yPercent: 0,
-                motionPath: {
-                    path: MotionPathPlugin.convertToPath(
-                        '.c1_line4',
-                        false,
-                    )[0] as SVGPathElement,
-                    start: 0.0,
-                    end: 0.15,
-                },
-                ease: 'none',
-                yoyo: true,
-                repeat: -1,
-            },
-            'orbs',
-        )
-        .fromTo(
             '.orb4b',
             { xPercent: -40, yPercent: -15 },
             {
@@ -696,14 +677,6 @@ onUnmounted(() => {
                             />
                         </g>
 
-                        <g class="m1Orb orb4">
-                            <image
-                                href="/images/logo/logoHtml.webp"
-                                width="80"
-                                height="80"
-                            />
-                        </g>
-
                         <g class="m1Orb orb4c">
                             <image
                                 href="/images/logo/logoRedis.svg"
@@ -746,7 +719,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logo/logoNestjs.png"
+                                href="/images/logo/logoNestjs.webp"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -936,7 +909,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logo/logoMysql.png"
+                                href="/images/logo/logoMysql.webp"
                                 x="0"
                                 y="0"
                                 width="80"

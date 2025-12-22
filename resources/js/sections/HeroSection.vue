@@ -34,7 +34,7 @@ const goToContact = () => {
                 Full-Stack Developer
             </h2>
             <Avatar class="mb-8 h-50 w-50 overflow-hidden rounded-full">
-                <AvatarImage :src="'/images/avatar200.jpg'" :alt="'avatar'" />
+                <AvatarImage :src="'/images/avatar200.webp'" :alt="'avatar'" />
                 <AvatarFallback class="rounded-lg bg-[#0f3045] text-white">
                     avatar
                 </AvatarFallback>
@@ -60,9 +60,8 @@ const goToContact = () => {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Onest:wght@300;900&display=swap');
 .main-hero {
-    background-image: url('https://images.unsplash.com/photo-1530569673472-307dc017a82d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2788&q=80');
+    background-image: url('@/assets/images/heroBg.webp');
     background-size: cover;
     animation: animate-bg 30s ease infinite;
     background-color: #e0edfe;

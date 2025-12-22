@@ -36,7 +36,19 @@
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+        <link rel="preload" as="style" href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600&display=swap" />
+        <link rel="stylesheet" href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600&display=swap" media="print" onload="this.media='all'">
+
+        <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Onest:wght@300;900&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300;900&display=swap" media="print" onload="this.media='all'">
+
+        <noscript>
+            <link rel="stylesheet" href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600&display=swap" />
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300;900&display=swap" />
+        </noscript>
 
         @vite(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
         @inertiaHead

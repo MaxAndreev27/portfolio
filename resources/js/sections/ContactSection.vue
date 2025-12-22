@@ -91,7 +91,6 @@ const handleKeyPress = () => {
                                             type="text"
                                             name="name"
                                             required
-                                            :tabindex="1"
                                             placeholder="Name"
                                             v-model="form.name"
                                         />
@@ -109,7 +108,6 @@ const handleKeyPress = () => {
                                             type="email"
                                             name="email"
                                             required
-                                            :tabindex="1"
                                             placeholder="email@example.com"
                                             v-model="form.email"
                                         />
@@ -126,7 +124,6 @@ const handleKeyPress = () => {
                                             id="message"
                                             name="message"
                                             required
-                                            :tabindex="1"
                                             placeholder="Message"
                                             v-model="form.message"
                                         />
@@ -138,7 +135,6 @@ const handleKeyPress = () => {
                                         type="submit"
                                         size="xl"
                                         class="mt-4 w-full cursor-pointer"
-                                        :tabindex="4"
                                         :disabled="form.processing"
                                         data-test="login-button"
                                     >
