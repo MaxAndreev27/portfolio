@@ -173,7 +173,7 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
     <div class="keypad" :style="{ opacity: 1 }">
         <div class="keypad__base">
             <img
-                src="/images/keypad/keypad-base.webp?format=auto&quality=86"
+                src="@/assets/images/keypad-base.webp?format=auto&quality=86"
                 alt="keypad-base"
             />
         </div>
@@ -191,7 +191,7 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
                                             config.one.text
                                         }}</span>
                                     <img
-                                        src="/images/keypad/keypad-single.webp?format=auto&quality=86"
+                                        src="@/assets/images/keypad-single.webp?format=auto&quality=86"
                                         alt="keypad-single"
                                     />
                                 </span>
@@ -211,7 +211,7 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
                                             config.two.text
                                         }}</span>
                                     <img
-                                        src="/images/keypad/keypad-single.webp?format=auto&quality=86"
+                                        src="@/assets/images/keypad-single.webp?format=auto&quality=86"
                                         alt="keypad-single"
                                     />
                                 </span>
@@ -231,7 +231,7 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
                                             config.three.text
                                         }}</span>
                                     <img
-                                        src="/images/keypad/keypad-double.png?format=auto&quality=86"
+                                        src="@/assets/images/keypad-double.webp?format=auto&quality=86"
                                         alt="keypad-double"
                                     />
                                 </span>
@@ -317,7 +317,7 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
             12% 23%,
             47% 0%
         );
-        mask: url(/images/keypad/keypad-single.webp?format=auto&quality=86) 50%
+        mask: url(@/assets/images/keypad-single.webp?format=auto&quality=86) 50%
         50% / 100% 100%;
 
         &.keypad__single--left {
@@ -363,7 +363,7 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
             7% 17%,
             30% 0
         );
-        mask: url(/images/keypad/keypad-double.png?format=auto&quality=86) 50%
+        mask: url(@/assets/images/keypad-double.webp?format=auto&quality=86) 50%
         50% / 100% 100%;
         img {
             top: 0;

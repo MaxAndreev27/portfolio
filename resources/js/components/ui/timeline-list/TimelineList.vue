@@ -15,31 +15,31 @@ const props = withDefaults(defineProps<Props>(), {
 <template>
     <component :is="as" :class="cn('timeline', props.class)">
         <li class="event">
-            <h2>2005-2010</h2>
-            <h3>Graduated from University of Informatics and Artificial Intelligence, and obtained the qualification of a software engineer with a specialty in "Software for Automated Systems"</h3>
+            <h3>2005-2010</h3>
+            <p>Graduated from University of Informatics and Artificial Intelligence, and obtained the qualification of a software engineer with a specialty in "Software for Automated Systems"</p>
         </li>
         <li class="event">
-            <h2>2010-2011</h2>
-            <h3>Programmer at UniCredit bank</h3>
+            <h3>2010-2011</h3>
+            <p>Programmer at UniCredit bank</p>
         </li>
         <li class="event">
-            <h2>2011-2014</h2>
-            <h3>Programmer at the Regional Directorate of the Bank "Kyivska Rus"</h3>
+            <h3>2011-2014</h3>
+            <p>Programmer at the Regional Directorate of the Bank "Kyivska Rus"</p>
         </li>
         <li class="event">
-            <h2>2015-2023</h2>
-            <h3>Worked in the
+            <h3>2015-2023</h3>
+            <p>Worked in the
                 <a
                     class="font-bold text-pink-600"
                     target="_blank"
                     rel="noopener noreferrer"
                     href="https://specialcase.net"
                 >SpecialCase</a>
-                team</h3>
+                team</p>
         </li>
         <li class="event">
-            <h2>2024-present</h2>
-            <h3>Freelance</h3>
+            <h3>2024-present</h3>
+            <p>Freelance</p>
         </li>
     </component>
 </template>
@@ -58,11 +58,11 @@ const props = withDefaults(defineProps<Props>(), {
     font-weight: 100;
 }
 
-.timeline h2 {
+.timeline h3 {
     font-weight: bold;
 }
 
-.timeline h3 {
+.timeline p {
 
 }
 .timeline .event {
@@ -106,7 +106,4 @@ const props = withDefaults(defineProps<Props>(), {
         padding-right: 25px;
     }
 }
-
-
-
 </style>
