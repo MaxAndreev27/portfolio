@@ -21,7 +21,7 @@
                     <img
                         width="48px"
                         height="48px"
-                        src="/images/github.svg"
+                        src="@/assets/images/github.svg"
                         alt="LinkedIn"
                     />
                 </a>
@@ -35,7 +35,7 @@
                     <img
                         width="48px"
                         height="48px"
-                        src="/images/linkedin.svg"
+                        src="@/assets/images/linkedin.svg"
                         alt="LinkedIn"
                     />
                 </a>

@@ -175,6 +175,8 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
             <img
                 src="@/assets/images/keypad-base.webp?format=auto&quality=86"
                 alt="keypad-base"
+                width="400"
+                height="265"
             />
         </div>
 
@@ -193,6 +195,8 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
                                     <img
                                         src="@/assets/images/keypad-single.webp?format=auto&quality=86"
                                         alt="keypad-single"
+                                        width="156"
+                                        height="139"
                                     />
                                 </span>
                             </span>
@@ -213,6 +217,8 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
                                     <img
                                         src="@/assets/images/keypad-single.webp?format=auto&quality=86"
                                         alt="keypad-single"
+                                        width="156"
+                                        height="139"
                                     />
                                 </span>
                             </span>
@@ -233,6 +239,8 @@ const handleKeyPress = (event: PointerEvent, keyId: string) => {
                                     <img
                                         src="@/assets/images/keypad-double.webp?format=auto&quality=86"
                                         alt="keypad-double"
+                                        width="253"
+                                        height="197"
                                     />
                                 </span>
                             </span>

@@ -2,6 +2,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { GradientText } from '@/components/ui/gradient-text';
+import avatarUrl from '@/assets/images/avatar200.webp';
 
 const goToAbout = () => {
     const el = document.getElementById('main-about');
@@ -34,7 +35,12 @@ const goToContact = () => {
                 Full-Stack Developer
             </h2>
             <Avatar class="mb-8 h-50 w-50 overflow-hidden rounded-full">
-                <AvatarImage :src="'/images/avatar200.webp'" :alt="'avatar'" />
+                <AvatarImage
+                    :src="avatarUrl"
+                    :alt="'avatar'"
+                    loading="eager"
+                    fetchpriority="high"
+                />
                 <AvatarFallback class="rounded-lg bg-[#0f3045] text-white">
                     avatar
                 </AvatarFallback>
@@ -61,12 +67,24 @@ const goToContact = () => {
 
 <style scoped>
 .main-hero {
-    background-image: url('@/assets/images/heroBg.webp');
+    background-image: url('@/assets/images/heroBg768.webp');
     background-size: cover;
     animation: animate-bg 30s ease infinite;
     background-color: #e0edfe;
     font-family: 'Onest', sans-serif;
     position: relative;
+}
+
+@media (min-width: 769px) {
+    .main-hero {
+        background-image: url('@/assets/images/heroBg1920.webp');
+    }
+}
+
+@media (min-width: 1921px) {
+    .main-hero {
+        background-image: url('@/assets/images/heroBg2560.webp');
+    }
 }
 
 @keyframes animate-bg {
