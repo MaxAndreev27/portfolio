@@ -33,8 +33,6 @@ withDefaults(
             name="description"
             content="Site portfolio by Max Andreev Full-Stack Developer."
         />
-        <link rel="preconnect" href="https://rsms.me/" />
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     </Head>
 
     <div class="flex min-h-screen flex-col items-center justify-center">

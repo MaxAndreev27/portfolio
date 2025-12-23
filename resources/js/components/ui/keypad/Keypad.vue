@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { defineEmits, onMounted, ref } from 'vue';
+import keyClickUrl from '@/assets/sounds/keyClick.mp3';
 
 const emit = defineEmits(['keyPress']);
 
@@ -64,7 +65,7 @@ const ids = ['one', 'two', 'three'] as const;
 let audioContext: AudioContext | null = null;
 let isAudioInitialized = false;
 
-// Initialize audio context on first interaction
+// Initialize sounds context on first interaction
 const initAudioOnInteraction = () => {
     if (isAudioInitialized || typeof window === 'undefined') return;
 
@@ -72,7 +73,7 @@ const initAudioOnInteraction = () => {
         audioContext = new (window.AudioContext ||
             (window as any).webkitAudioContext)();
 
-        // Play a silent sound to unlock audio
+        // Play a silent sound to unlock sounds
         const buffer = audioContext.createBuffer(1, 1, 22050);
         const source = audioContext.createBufferSource();
         source.buffer = buffer;
@@ -86,10 +87,10 @@ const initAudioOnInteraction = () => {
     }
 };
 
-// Initialize audio
+// Initialize sounds
 onMounted(() => {
     clickAudio.value = new Audio(
-        'https://cdn.freesound.org/previews/378/378085_6260145-lq.mp3',
+        keyClickUrl,
     );
     clickAudio.value.muted = config.value.muted;
 
