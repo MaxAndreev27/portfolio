@@ -228,7 +228,7 @@ onBeforeUnmount(() => {
             class="grid grid-cols-3 items-center gap-4 rounded-full bg-[var(--navbar)] px-5 shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 dark:ring-white/10"
         >
             <a href="/" class="logo flex justify-self-start">
-                <img src="/images/cicd.svg" width="80" height="40" alt="logo" />
+                <img src="@/assets/images/cicd.svg" width="80" height="40" alt="logo" />
             </a>
             <button
                 @click="toggleMobile"

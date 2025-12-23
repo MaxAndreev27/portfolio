@@ -15,7 +15,7 @@ import { TimelineList } from '@/components/ui/timeline-list';
             <TimelineList class="text-lg my-10 sm:text-xl md:text-2xl" />
 
             <ul
-                class="flex w-full list-inside list-disc list-image-[url(/public/images/checkmark.svg)] flex-col items-start text-left text-xl sm:text-2xl md:text-3xl"
+                class="flex w-full list-inside list-disc list-image-[url(@/assets/images/checkmark.svg)] flex-col items-start text-left text-xl sm:text-2xl md:text-3xl"
             >
                 <li class="mb-4 text-justify">
                     <span class="font-semibold">Programming Languages:</span>

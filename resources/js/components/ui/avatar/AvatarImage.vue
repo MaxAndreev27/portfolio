@@ -10,6 +10,7 @@ const props = defineProps<AvatarImageProps>()
     data-slot="avatar-image"
     v-bind="props"
     class="aspect-square size-full"
+    fetchpriority="high"
   >
     <slot />
   </AvatarImage>

@@ -32,41 +32,21 @@ onMounted(() => {
         const bbox = stage.getBBox();
         const containerW = container.clientWidth;
         if (!containerW || !bbox.width) return;
-        const padding = 0; // px margin from edges
-        const target = Math.max(containerW - padding, 0.0001);
+        const target = Math.max(containerW, 0.0001);
         let scale = Math.min(1, target / bbox.width);
 
-        // detect small/mobile screens and avoid shrinking the SVG there
         const isMobile =
             typeof window !== 'undefined' && window.matchMedia
                 ? window.matchMedia('(max-width: 640px)').matches
                 : false;
 
         if (isMobile) {
-            // don't shrink on mobile — use natural SVG size
             scale = 1;
         } else {
-            // avoid extremely small scales on wider viewports
             scale = Math.max(scale, 0.6);
         }
 
         gsap.set(stage, { scale: scale, transformOrigin: '50% 50%' });
-
-        // Debug info: visible in browser console
-        // try {
-        //     // gsap.getProperty can retrieve the applied scale
-        //     // (may throw in some older GSAP builds, hence try/catch)
-        //     // eslint-disable-next-line no-console
-        //     console.log('[TechnologySection] fitStageToContainer', {
-        //         computedScale: scale,
-        //         appliedScale: gsap.getProperty(stage as Element, 'scale'),
-        //         isMobile,
-        //         containerW,
-        //         bboxWidth: bbox.width,
-        //     });
-        // } catch (e) {
-        //     // ignore
-        // }
     };
 
     window.onresize = window.onload = function () {
@@ -147,7 +127,7 @@ onMounted(() => {
 
                 handleClick = (e: Event) => {
                     e.preventDefault();
-                    if (gsap.getProperty('.m1_cGroup', 'scale') != 1) return; //prevent overlapping bouncy tweens
+                    if (gsap.getProperty('.m1_cGroup', 'scale') != 1) return;
 
                     const m1cGroups = document.querySelectorAll('.m1_cGroup');
                     m1cGroups.forEach((group, i) => {
@@ -165,7 +145,6 @@ onMounted(() => {
                     });
                 };
 
-                // Add event listeners
                 mainElement.addEventListener(
                     'mousemove',
                     handleMouseMove as EventListener,
@@ -179,7 +158,6 @@ onMounted(() => {
             'orbs+=0.5',
         )
 
-        // Orbit 1 - 4 logos with more spacing
         .fromTo(
             '.orb1',
             { xPercent: -40, yPercent: -15 },
@@ -261,7 +239,6 @@ onMounted(() => {
             'orbs',
         )
 
-        // Orbit 2 - 3 logos with more spacing
         .fromTo(
             '.orb2',
             { xPercent: -40, yPercent: -15 },
@@ -323,7 +300,6 @@ onMounted(() => {
             'orbs',
         )
 
-        // Orbit 3 - 5 logos with more spacing
         .fromTo(
             '.orb3',
             { xPercent: -40, yPercent: -15 },
@@ -425,7 +401,6 @@ onMounted(() => {
             'orbs',
         )
 
-        // Orbit 4 - 5 logos with more spacing
         .fromTo(
             '.orb4b',
             { xPercent: -40, yPercent: -15 },
@@ -671,7 +646,7 @@ onUnmounted(() => {
                         />
                         <g class="m1Orb orb4b">
                             <image
-                                href="/images/logo/logoVue.webp"
+                                href="@/assets/images/logo/logoVue.webp"
                                 width="80"
                                 height="80"
                             />
@@ -679,7 +654,7 @@ onUnmounted(() => {
 
                         <g class="m1Orb orb4c">
                             <image
-                                href="/images/logo/logoRedis.svg"
+                                href="@/assets/images/logo/logoRedis.svg"
                                 width="80"
                                 height="80"
                             />
@@ -687,7 +662,7 @@ onUnmounted(() => {
 
                         <g class="m1Orb orb4d">
                             <image
-                                href="/images/logo/logoMongo.webp"
+                                href="@/assets/images/logo/logoMongo.webp"
                                 width="80"
                                 height="80"
                                 preserveAspectRatio="xMidYMid meet"
@@ -702,7 +677,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logo/logoTailwind.webp"
+                                href="@/assets/images/logo/logoTailwind.webp"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -719,7 +694,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logo/logoNestjs.webp"
+                                href="@/assets/images/logo/logoNestjs.webp"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -743,7 +718,7 @@ onUnmounted(() => {
 
                         <g class="m1Orb orb3c">
                             <image
-                                href="/images/logo/logoPostgre.svg"
+                                href="@/assets/images/logo/logoPostgre.svg"
                                 width="80"
                                 height="80"
                                 preserveAspectRatio="xMidYMid meet"
@@ -752,14 +727,14 @@ onUnmounted(() => {
 
                         <g class="m1Orb orb3b">
                             <image
-                                href="/images/logo/logoReact.webp"
+                                href="@/assets/images/logo/logoReact.webp"
                                 width="80"
                                 height="80"
                             />
                         </g>
                         <g class="m1Orb orb3d">
                             <image
-                                href="/images/logo/logoK8s.webp"
+                                href="@/assets/images/logo/logoK8s.webp"
                                 width="88"
                                 height="88"
                                 preserveAspectRatio="xMidYMid meet"
@@ -774,7 +749,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logo/logoGithub.svg"
+                                href="@/assets/images/logo/logoGithub.svg"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -791,7 +766,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logo/logoNextjs.svg"
+                                href="@/assets/images/logo/logoNextjs.svg"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -822,7 +797,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logo/logoDocker.webp"
+                                href="@/assets/images/logo/logoDocker.webp"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -833,7 +808,7 @@ onUnmounted(() => {
 
                         <g class="m1Orb orb2b">
                             <image
-                                href="/images/logo/logoTypescript.svg"
+                                href="@/assets/images/logo/logoTypescript.svg"
                                 x="0"
                                 y="0"
                                 width="88"
@@ -851,7 +826,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logo/logoLaravel.webp"
+                                href="@/assets/images/logo/logoLaravel.webp"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -891,7 +866,7 @@ onUnmounted(() => {
                             />
                             <g class="m1Icon m1IconPHP">
                                 <image
-                                    href="/images/logo/logoPhp.svg"
+                                    href="@/assets/images/logo/logoPhp.svg"
                                     x="0"
                                     y="0"
                                     width="80"
@@ -909,7 +884,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logo/logoMysql.webp"
+                                href="@/assets/images/logo/logoMysql.webp"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -926,7 +901,7 @@ onUnmounted(() => {
                                 fill="#f0f6fc"
                             />
                             <image
-                                href="/images/logo/logoWordpress.svg"
+                                href="@/assets/images/logo/logoWordpress.svg"
                                 x="0"
                                 y="0"
                                 width="80"
@@ -936,7 +911,7 @@ onUnmounted(() => {
                         </g>
                         <g class="m1Orb orb1d">
                             <image
-                                href="/images/logo/logoNodejs.webp"
+                                href="@/assets/images/logo/logoNodejs.webp"
                                 x="0"
                                 y="0"
                                 width="80"
