@@ -2,7 +2,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { GradientText } from '@/components/ui/gradient-text';
-import avatarUrl from '@/assets/images/avatar200.webp';
+import avatarUrl from '@/assets/images/avatar300.webp';
 
 const goToAbout = () => {
     const el = document.getElementById('main-about');
@@ -34,7 +34,9 @@ const goToContact = () => {
             >
                 Full-Stack Developer
             </h2>
-            <Avatar class="mb-8 h-50 w-50 overflow-hidden rounded-full">
+            <Avatar
+                class="mb-8 h-[200px] w-[200px] overflow-hidden rounded-full sm:h-[300px] sm:w-[300px]"
+            >
                 <AvatarImage
                     :src="avatarUrl"
                     :alt="'avatar'"
