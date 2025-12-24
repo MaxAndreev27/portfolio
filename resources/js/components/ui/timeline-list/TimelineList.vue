@@ -30,7 +30,7 @@ const props = withDefaults(defineProps<Props>(), {
             <h3>2015-2023</h3>
             <p>Worked in the
                 <a
-                    class="font-bold text-pink-600"
+                    class="font-bold text-pink-700 dark:text-pink-400"
                     target="_blank"
                     rel="noopener noreferrer"
                     href="https://specialcase.net"
