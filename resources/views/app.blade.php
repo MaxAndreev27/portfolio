@@ -19,7 +19,6 @@
             })();
         </script>
 
-        {{-- Inline style to set the HTML background color based on our theme in app.css --}}
         <style>
             html {
                 background-color: oklch(1 0 0);
@@ -45,12 +44,15 @@
         <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Onest:wght@300;900&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300;900&display=swap" media="print" onload="this.media='all'">
 
+
         <noscript>
             <link rel="stylesheet" href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600&display=swap" />
             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300;900&display=swap" />
         </noscript>
 
-        @vite(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
+        <link rel="preload" as="image" href="{{ Vite::asset('resources/js/assets/images/avatar300.webp') }}" fetchpriority="high">
+
+        @vite(['resources/css/app.css', 'resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
         @inertiaHead
     </head>
     <body class="font-sans antialiased">
