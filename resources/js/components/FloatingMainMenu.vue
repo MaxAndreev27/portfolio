@@ -98,9 +98,18 @@ onUnmounted(() => {
             <button
                 @click.stop="toggleMobile"
                 class="flex h-[55px] items-center justify-self-center md:hidden"
+                :aria-expanded="mobileOpen"
+                aria-controls="main-menu"
+                aria-label="Відкрити головне меню"
             >
-                <span :class="['hamburger', { open: mobileOpen }]">
+                <span
+                    :class="['hamburger', { open: mobileOpen }]"
+                    aria-hidden="true"
+                >
                     <span></span><span></span><span></span>
+                </span>
+                <span class="sr-only">
+                    {{ mobileOpen ? 'Закрити меню' : 'Відкрити меню' }}
                 </span>
             </button>
 
