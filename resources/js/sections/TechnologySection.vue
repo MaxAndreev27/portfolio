@@ -51,6 +51,11 @@ onMounted(() => {
         gsap.set(stage, { scale: scale, transformOrigin: '50% 50%' });
     };
 
+    window.onresize = window.onload = function () {
+        centerStage();
+        fitStageToContainer();
+    };
+
     centerStage();
     fitStageToContainer();
 

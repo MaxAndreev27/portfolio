@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ElasticMainMenu from '@/components/ElasticMainMenu.vue';
+import FloatingMainMenu from '@/components/FloatingMainMenu.vue';
 import HeroSection from '@/sections/HeroSection.vue';
 import { Head } from '@inertiajs/vue3';
 import { defineAsyncComponent } from 'vue';
@@ -36,7 +36,7 @@ withDefaults(
     </Head>
 
     <div class="flex min-h-screen flex-col items-center justify-center">
-        <ElasticMainMenu />
+        <FloatingMainMenu />
 
         <main class="flex w-full flex-col">
             <HeroSection />
