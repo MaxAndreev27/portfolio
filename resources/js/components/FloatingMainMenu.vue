@@ -106,7 +106,7 @@ onUnmounted(() => {
 
             <ul
                 id="main-menu"
-                class="text-2xl md:text-xl lg:text-2xl"
+                class="text-2xl shadow md:text-xl md:shadow-none lg:text-2xl"
                 :class="
                     mobileOpen
                         ? 'absolute top-full right-4 left-4 z-50 mt-2 flex flex-col rounded-xl bg-[var(--navbar)] p-2'
@@ -280,6 +280,7 @@ button .hamburger.open span:nth-child(3) {
         height: auto;
         padding: 8px;
         position: absolute;
+        border: 1px solid var(--navbar-border);
     }
     nav > ul li {
         padding: 6px 0;
