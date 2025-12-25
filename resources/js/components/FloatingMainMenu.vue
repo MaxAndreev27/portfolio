@@ -199,23 +199,14 @@ nav > ul li a {
     padding-inline: 20px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-nav > ul li a:hover {
-    color: var(--color-pink-600);
-    transform: translateY(-2px);
-}
 nav > ul li a:focus {
     color: var(--color-pink-600);
     outline: none;
 }
+
+nav > ul li a:hover,
 nav > ul li a.active {
     color: var(--color-pink-600);
-    transform: translateY(-2px);
-}
-
-nav > ul.show-indicator::after {
-    opacity: 1;
-}
-nav > ul li a:active {
     transform: translateY(-2px);
 }
 
@@ -269,12 +260,6 @@ button .hamburger.open span:nth-child(3) {
     transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-@media (max-width: 1023px) {
-    nav > ul li a {
-        padding-inline: 10px;
-    }
-}
-
 @media (max-width: 767px) {
     nav > ul {
         height: auto;
@@ -287,6 +272,12 @@ button .hamburger.open span:nth-child(3) {
     }
     button .hamburger {
         height: 70%;
+    }
+}
+
+@media (max-width: 1023px) {
+    nav > ul li a {
+        padding-inline: 10px;
     }
 }
 </style>
