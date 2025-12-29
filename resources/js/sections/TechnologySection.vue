@@ -10,8 +10,6 @@ let handleMouseMove: ((e: MouseEvent) => void) | null = null;
 let handleClick: ((e: Event) => void) | null = null;
 let baseStageX = 0;
 let baseStageY = 0;
-let cachedRect: DOMRect | null = null;
-let updateRect: () => void;
 
 onMounted(() => {
     const centerStage = () => {
@@ -51,6 +49,10 @@ onMounted(() => {
         gsap.set(stage, { scale: scale, transformOrigin: '50% 50%' });
     };
 
+    window.onresize = window.onload = function () {
+        centerStage();
+        fitStageToContainer();
+    };
     centerStage();
     fitStageToContainer();
 
@@ -79,54 +81,47 @@ onMounted(() => {
                 mainElement = document.querySelector('.main1');
                 if (!mainElement) return;
 
-                cachedRect = mainElement.getBoundingClientRect();
-
-                updateRect = () => {
-                    if (mainElement)
-                        cachedRect = mainElement.getBoundingClientRect();
-                };
-                window.addEventListener('resize', updateRect);
-
                 handleMouseMove = (e: MouseEvent) => {
-                    if (!cachedRect) return;
-
+                    const rect = (
+                        mainElement as Element
+                    ).getBoundingClientRect();
                     const dxNorm =
-                        (e.clientX - (cachedRect.left + cachedRect.width / 2)) /
-                        cachedRect.width;
+                        (e.clientX - (rect.left + rect.width / 2)) / rect.width;
                     const dyNorm =
-                        (e.clientY - (cachedRect.top + cachedRect.height / 2)) /
-                        cachedRect.height;
+                        (e.clientY - (rect.top + rect.height / 2)) /
+                        rect.height;
+                    gsap.to('.m1_cGroup', {
+                        duration: 1,
+                        x: function (i: number) {
+                            return dxNorm * (150 / (i + 1));
+                        },
+                        y: function (i: number) {
+                            return i * -20 * dyNorm;
+                        },
+                        rotation: Math.random() * 0.1,
+                        overwrite: 'auto',
+                    });
 
-                    requestAnimationFrame(() => {
-                        gsap.to('.m1_cGroup', {
-                            duration: 1,
-                            x: (i: number) => dxNorm * (150 / (i + 1)),
-                            y: (i: number) => i * -20 * dyNorm,
-                            overwrite: 'auto',
-                        });
+                    const n =
+                        document.querySelectorAll('.m1_cGroup').length || 1;
+                    let sumFactors = 0;
+                    for (let i = 0; i < n; i++) sumFactors += 150 / (i + 1);
+                    const xMean = dxNorm * (sumFactors / n);
+                    const yMean = dyNorm * (-20 * ((n - 1) / 2));
 
-                        const n =
-                            document.querySelectorAll('.m1_cGroup').length || 1;
-                        let sumFactors = 0;
-                        for (let i = 0; i < n; i++) sumFactors += 150 / (i + 1);
-                        const xMean = dxNorm * (sumFactors / n);
-                        const yMean = dyNorm * (-20 * ((n - 1) / 2));
+                    gsap.to('.m1_stage', {
+                        duration: 1,
+                        x: baseStageX - xMean,
+                        y: baseStageY - yMean,
+                        overwrite: 'auto',
+                    });
 
-                        gsap.to('.m1_stage', {
-                            duration: 1,
-                            x: baseStageX - xMean,
-                            y: baseStageY - yMean,
-                            overwrite: 'auto',
-                        });
-
-                        gsap.to('.c1_solid, .c1_line', {
-                            duration: 1,
-                            attr: {
-                                opacity:
-                                    1.1 -
-                                    0.75 * (e.clientY / window.innerHeight),
-                            },
-                        });
+                    gsap.to('.c1_solid, .c1_line', {
+                        duration: 1,
+                        attr: {
+                            opacity:
+                                1.1 - 0.75 * (e.clientY / window.innerHeight),
+                        },
                     });
                 };
 
@@ -552,7 +547,6 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-    window.removeEventListener('resize', updateRect);
     if (mainElement && handleMouseMove) {
         mainElement.removeEventListener(
             'mousemove',
