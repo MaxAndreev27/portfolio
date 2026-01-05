@@ -20,6 +20,9 @@ console_command = 'php /var/www/html/artisan tinker'
   SESSION_DRIVER = 'cookie'
   SESSION_SECURE_COOKIE = 'true'
 
+[processes]
+  app = ""
+
 [http_service]
   internal_port = 8080
   force_https = true
