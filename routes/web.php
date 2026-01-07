@@ -27,4 +27,3 @@ Route::fallback(function () {
 })->name('fallback');
 
 require __DIR__ . '/settings.php';
-
