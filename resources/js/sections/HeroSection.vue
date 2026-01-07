@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import avatarUrl from '@/assets/images/avatar300.webp';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { GradientText } from '@/components/ui/gradient-text';
-import avatarUrl from '@/assets/images/avatar300.webp';
 
 const goToAbout = () => {
     const el = document.getElementById('main-about');
