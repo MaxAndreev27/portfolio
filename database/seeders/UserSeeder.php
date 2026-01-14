@@ -29,9 +29,9 @@ class UserSeeder extends Seeder
         $adminRole = Role::where('name', 'admin')->first();
         $admin->roles()->attach($adminRole);
 
-        $userRole = Role::where('name', 'user')->first();
-        User::factory(10)->create()->each(function ($user) use ($userRole) {
-            $user->roles()->attach($userRole);
-        });
+        // $userRole = Role::where('name', 'user')->first();
+        // User::factory(10)->create()->each(function ($user) use ($userRole) {
+        //     $user->roles()->attach($userRole);
+        // });
     }
 }
