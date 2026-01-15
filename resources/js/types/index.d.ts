@@ -28,6 +28,10 @@ export type AppPageProps<
         success: string;
         error: string;
     };
+    features: {
+        registration: boolean;
+        twoFactorAuthentication: boolean;
+    };
 };
 
 export interface User {
