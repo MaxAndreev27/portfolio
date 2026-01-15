@@ -8,13 +8,18 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import { useTwoFactorAuth } from '@/composables/useTwoFactorAuth';
-import { regenerateRecoveryCodes } from '@/routes/two-factor';
+// import { useTwoFactorAuth } from '@/composables/useTwoFactorAuth';
+// import { regenerateRecoveryCodes } from '@/routes/two-factor';
 import { Form } from '@inertiajs/vue3';
 import { Eye, EyeOff, LockKeyhole, RefreshCw } from 'lucide-vue-next';
 import { nextTick, onMounted, ref, useTemplateRef } from 'vue';
 
-const { recoveryCodesList, fetchRecoveryCodes, errors } = useTwoFactorAuth();
+// const { recoveryCodesList, fetchRecoveryCodes, errors } = useTwoFactorAuth();
+const { recoveryCodesList, fetchRecoveryCodes, errors } = {
+    recoveryCodesList: ref<string[]>([]),
+    fetchRecoveryCodes: async () => {},
+    errors: ref<string[]>([]),
+};
 const isRecoveryCodesVisible = ref<boolean>(false);
 const recoveryCodeSectionRef = useTemplateRef('recoveryCodeSectionRef');
 
@@ -64,7 +69,7 @@ onMounted(async () => {
 
                 <Form
                     v-if="isRecoveryCodesVisible && recoveryCodesList.length"
-                    v-bind="regenerateRecoveryCodes.form()"
+                    removeme-v-bind="regenerateRecoveryCodes.form()"
                     method="post"
                     :options="{ preserveScroll: true }"
                     @success="fetchRecoveryCodes"

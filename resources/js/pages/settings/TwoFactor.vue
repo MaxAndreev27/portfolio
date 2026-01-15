@@ -4,10 +4,10 @@ import TwoFactorRecoveryCodes from '@/components/TwoFactorRecoveryCodes.vue';
 import TwoFactorSetupModal from '@/components/TwoFactorSetupModal.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { useTwoFactorAuth } from '@/composables/useTwoFactorAuth';
+// import { useTwoFactorAuth } from '@/composables/useTwoFactorAuth';
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
-import { disable, enable, show } from '@/routes/two-factor';
+import { /*disable, enable,*/ show } from '@/routes/two-factor';
 import { BreadcrumbItem } from '@/types';
 import { Form, Head } from '@inertiajs/vue3';
 import { ShieldBan, ShieldCheck } from 'lucide-vue-next';
@@ -30,7 +30,11 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-const { hasSetupData, clearTwoFactorAuthData } = useTwoFactorAuth();
+// const { hasSetupData, clearTwoFactorAuthData } = useTwoFactorAuth();
+const { hasSetupData, clearTwoFactorAuthData } = {
+    hasSetupData: false,
+    clearTwoFactorAuthData: () => {},
+};
 const showSetupModal = ref<boolean>(false);
 
 onUnmounted(() => {
@@ -70,7 +74,7 @@ onUnmounted(() => {
                         </Button>
                         <Form
                             v-else
-                            v-bind="enable.form()"
+                            removeme-v-bind="enable.form()"
                             @success="showSetupModal = true"
                             #default="{ processing }"
                         >
@@ -97,7 +101,10 @@ onUnmounted(() => {
                     <TwoFactorRecoveryCodes />
 
                     <div class="relative inline">
-                        <Form v-bind="disable.form()" #default="{ processing }">
+                        <Form
+                            removeme-v-bind="disable.form()"
+                            #default="{ processing }"
+                        >
                             <Button
                                 variant="destructive"
                                 type="submit"
