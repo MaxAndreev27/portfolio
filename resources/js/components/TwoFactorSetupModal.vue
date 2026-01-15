@@ -15,8 +15,8 @@ import {
     PinInputSlot,
 } from '@/components/ui/pin-input';
 import { Spinner } from '@/components/ui/spinner';
-import { useTwoFactorAuth } from '@/composables/useTwoFactorAuth';
-import { confirm } from '@/routes/two-factor';
+// import { useTwoFactorAuth } from '@/composables/useTwoFactorAuth';
+// import { confirm } from '@/routes/two-factor';
 import { Form } from '@inertiajs/vue3';
 import { useClipboard } from '@vueuse/core';
 import { Check, Copy, ScanLine } from 'lucide-vue-next';
@@ -31,8 +31,20 @@ const props = defineProps<Props>();
 const isOpen = defineModel<boolean>('isOpen');
 
 const { copy, copied } = useClipboard();
-const { qrCodeSvg, manualSetupKey, clearSetupData, fetchSetupData, errors } =
-    useTwoFactorAuth();
+// const { qrCodeSvg, manualSetupKey, clearSetupData, fetchSetupData, errors } =
+//     useTwoFactorAuth();
+
+const { qrCodeSvg, manualSetupKey, clearSetupData, fetchSetupData, errors } = {
+    qrCodeSvg: ref<string | null>(null),
+    manualSetupKey: ref<string | null>(null),
+    clearSetupData: () => {},
+    fetchSetupData: async () => {
+        qrCodeSvg.value =
+            '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="#fff"/><circle cx="50" cy="50" r="40" stroke="#000" stroke-width="3" fill="#000"/></svg>';
+        manualSetupKey.value = 'ABCD-EFGH-IJKL-MNOP';
+    },
+    errors: ref<string[]>([]),
+};
 
 const showVerificationStep = ref(false);
 const code = ref<number[]>([]);
@@ -232,7 +244,7 @@ watch(
 
                 <template v-else>
                     <Form
-                        v-bind="confirm.form()"
+                        removeme-v-bind="confirm.form()"
                         reset-on-error
                         @finish="code = []"
                         @success="isOpen = false"
@@ -266,7 +278,7 @@ watch(
                                 <InputError
                                     :message="
                                         errors?.confirmTwoFactorAuthentication
-                                            ?.code
+                                        /*?.code*/
                                     "
                                 />
                             </div>
