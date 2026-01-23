@@ -9,14 +9,6 @@ if [ ! -f "$DB_FILE" ]; then
   mkdir -p /var/www/html/database
   touch "$DB_FILE"
 
-  # .env
-  if [ ! -f /var/www/html/.env ]; then
-      cp /var/www/html/.env.example /var/www/html/.env
-  fi
-
-  # Генеруємо ключ Laravel, якщо його ще нема
-  php artisan key:generate || true
-
   # Виконуємо міграції та seed
   php artisan migrate --force --seed
 
