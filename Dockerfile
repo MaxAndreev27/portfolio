@@ -111,7 +111,6 @@ COPY --from=base /var/www/html/vendor /app/vendor
 # 🚀 Крок 3: Ініціалізація Laravel
 # Очищуємо кеш та генеруємо ключ у новому шляху (/app).
 RUN rm -f bootstrap/cache/*.php \
-    && touch .env \
     && mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views
 
 
