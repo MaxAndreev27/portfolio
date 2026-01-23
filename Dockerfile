@@ -57,18 +57,15 @@ COPY . /var/www/html
 WORKDIR /var/www/html
 
 # 4. Setup application dependencies
-RUN composer install --optimize-autoloader --no-dev \
+RUN mkdir -p database && touch database/database.sqlite \
+    && composer install --optimize-autoloader --no-dev \
     && mkdir -p storage/logs \
     && php artisan optimize:clear \
+    && rm database/database.sqlite \
     && chown -R www-data:www-data /var/www/html \
     && echo "MAILTO=\"\"\n* * * * * www-data /usr/bin/php /var/www/html/artisan schedule:run" > /etc/cron.d/laravel \
-    && sed -i='' '/->withMiddleware(function (Middleware \$middleware) {/a\
-    \$middleware->trustProxies(at: "*");\
-    ' bootstrap/app.php; \
+    && sed -i='' '/->withMiddleware(function (Middleware \$middleware) {/a    \$middleware->trustProxies(at: "*");    ' bootstrap/app.php; \
     if [ -d .fly ]; then cp .fly/entrypoint.sh /entrypoint; chmod +x /entrypoint; fi;
-
-
-
 
 # Multi-stage build: Build static assets
 # This allows us to not include Node within the final container
@@ -110,9 +107,11 @@ COPY --from=base /var/www/html/vendor /app/vendor
 
 # 🚀 Крок 3: Ініціалізація Laravel (без генерації секретів)
 # Очищуємо кеш та генеруємо ключ у новому шляху (/app).
-RUN rm -f bootstrap/cache/*.php \
+RUN mkdir -p database && touch database/database.sqlite \
+    && rm -f bootstrap/cache/*.php \
     && php artisan optimize:clear \
-    && mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views
+    && mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views \
+    && rm database/database.sqlite
 
 # 💡 НОВИЙ КРОК: Згенерувати Wayfinder файли/типи
 # Це створює файл `resources/js/routes.ts` або подібний,
