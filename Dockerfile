@@ -33,7 +33,7 @@ ADD .fly/php/packages/${PHP_VERSION}.txt /tmp/php-packages.txt
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends gnupg2 ca-certificates git-core curl zip unzip \
-                                                  rsync vim-tiny htop sqlite3 nginx supervisor cron \
+    rsync vim-tiny htop sqlite3 nginx supervisor cron \
     && ln -sf /usr/bin/vim.tiny /etc/alternatives/vim \
     && ln -sf /etc/alternatives/vim /usr/bin/vim \
     && echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu jammy main" > /etc/apt/sources.list.d/ondrej-ubuntu-php-focal.list \
@@ -63,7 +63,7 @@ RUN composer install --optimize-autoloader --no-dev \
     && chown -R www-data:www-data /var/www/html \
     && echo "MAILTO=\"\"\n* * * * * www-data /usr/bin/php /var/www/html/artisan schedule:run" > /etc/cron.d/laravel \
     && sed -i='' '/->withMiddleware(function (Middleware \$middleware) {/a\
-        \$middleware->trustProxies(at: "*");\
+    \$middleware->trustProxies(at: "*");\
     ' bootstrap/app.php; \
     if [ -d .fly ]; then cp .fly/entrypoint.sh /entrypoint; chmod +x /entrypoint; fi;
 
@@ -105,6 +105,9 @@ RUN mkdir -p /app
 WORKDIR /app
 COPY . .
 
+# Створюємо database каталог і пустий файл database.sqlite
+RUN mkdir -p database && touch database/database.sqlite
+
 # Копіюємо vendor
 COPY --from=base /var/www/html/vendor /app/vendor
 
@@ -126,23 +129,23 @@ RUN php artisan wayfinder:generate --with-form
 # NPM if no lock file is found.
 # Note: We run "production" for Mix and "build" for Vite
 RUN if [ -f "vite.config.js" ] || [ -f "vite.config.ts" ]; then \
-        ASSET_CMD="build"; \
+    ASSET_CMD="build"; \
     else \
-        ASSET_CMD="production"; \
+    ASSET_CMD="production"; \
     fi; \
     if [ -f "yarn.lock" ]; then \
-        yarn install --frozen-lockfile; \
-        VITE_WAYFINDER=false yarn $ASSET_CMD; \
+    yarn install --frozen-lockfile; \
+    VITE_WAYFINDER=false yarn $ASSET_CMD; \
     elif [ -f "pnpm-lock.yaml" ]; then \
-        corepack enable && corepack prepare pnpm@latest-8 --activate; \
-        pnpm install --frozen-lockfile; \
-        VITE_WAYFINDER=false pnpm run $ASSET_CMD; \
+    corepack enable && corepack prepare pnpm@latest-8 --activate; \
+    pnpm install --frozen-lockfile; \
+    VITE_WAYFINDER=false pnpm run $ASSET_CMD; \
     elif [ -f "package-lock.json" ]; then \
-        npm ci --no-audit; \
-        VITE_WAYFINDER=false npm run $ASSET_CMD; \
+    npm ci --no-audit; \
+    VITE_WAYFINDER=false npm run $ASSET_CMD; \
     else \
-        npm install; \
-        VITE_WAYFINDER=false npm run $ASSET_CMD; \
+    npm install; \
+    VITE_WAYFINDER=false npm run $ASSET_CMD; \
     fi;
 
 # From our base container created above, we
