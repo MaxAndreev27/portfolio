@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:experimental
 
-ARG PHP_VERSION=8.3
+ARG PHP_VERSION=8.4
 ARG NODE_VERSION=22
 FROM ubuntu:22.04 as base
 LABEL fly_launch_runtime="laravel"
@@ -108,11 +108,11 @@ COPY . .
 # Копіюємо vendor
 COPY --from=base /var/www/html/vendor /app/vendor
 
-# 🚀 Крок 3: Ініціалізація Laravel
+# 🚀 Крок 3: Ініціалізація Laravel (без генерації секретів)
 # Очищуємо кеш та генеруємо ключ у новому шляху (/app).
 RUN rm -f bootstrap/cache/*.php \
+    && php artisan optimize:clear \
     && mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views
-
 
 # 💡 НОВИЙ КРОК: Згенерувати Wayfinder файли/типи
 # Це створює файл `resources/js/routes.ts` або подібний,
@@ -155,6 +155,9 @@ COPY --from=node_modules_go_brrr /app/public /var/www/html/public-npm
 RUN rsync -ar /var/www/html/public-npm/ /var/www/html/public/ \
     && rm -rf /var/www/html/public-npm \
     && chown -R www-data:www-data /var/www/html
+
+RUN mkdir -p /var/www/html/storage/database && \
+    chown -R www-data:www-data /var/www/html/storage/database
 
 # 5. Setup Entrypoint
 EXPOSE 8080

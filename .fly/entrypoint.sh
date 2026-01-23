@@ -1,21 +1,26 @@
 #!/usr/bin/env sh
 set -e
 
-DB_FILE=/var/www/html/database/database.sqlite
+# Шлях до бази на МОНТОВАНОМУ диску
+DB_FILE=/var/www/html/storage/database/database.sqlite
 
 # 1️⃣ Створюємо файл бази та виконуємо міграції лише якщо його нема
 if [ ! -f "$DB_FILE" ]; then
-  echo "SQLite database not found. Creating database and running migrations..."
-  mkdir -p /var/www/html/database
+  echo "SQLite database not found on volume. Creating..."
   touch "$DB_FILE"
 
-  # Виконуємо міграції та seed
-  php artisan migrate --force --seed
+  # Встановлюємо права, щоб PHP міг писати у файл
+  chown www-data:www-data "$DB_FILE"
+  chown www-data:www-data /var/www/html/storage/database
 
-  # Очищуємо кеш
+  echo "Running migrations and seed..."
+  php artisan migrate --force --seed
   php artisan optimize:clear
 else
-  echo "SQLite database already exists. Skipping migrations."
+  echo "SQLite database found. Skipping initial setup."
+  # Про всяк випадок запускаємо міграції (без seed),
+  # щоб оновити структуру при деплої нового коду
+  php artisan migrate --force
 fi
 
 # 2️⃣ Виконуємо user scripts, якщо вони є
