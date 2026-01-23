@@ -59,7 +59,7 @@ WORKDIR /var/www/html
 # 4. Setup application dependencies
 RUN mkdir -p database && touch database/database.sqlite \
     && composer install --optimize-autoloader --no-dev \
-    && DB_CONNECTION=sqlite DATABASE_URL=sqlite:////var/www/html/database/database.sqlite php artisan optimize:clear \
+    && DB_CONNECTION=sqlite DATABASE_URL=sqlite:////var/www/html/database/database.sqlite \
     && rm database/database.sqlite \
     && chown -R www-data:www-data /var/www/html \
     && echo "MAILTO=\"\"\n* * * * * www-data /usr/bin/php /var/www/html/artisan schedule:run" > /etc/cron.d/laravel \
@@ -108,7 +108,7 @@ COPY --from=base /var/www/html/vendor /app/vendor
 # Очищуємо кеш та генеруємо ключ у новому шляху (/app).
 RUN mkdir -p database && touch database/database.sqlite \
     && rm -f bootstrap/cache/*.php \
-    && DB_CONNECTION=sqlite DATABASE_URL=sqlite:////app/database/database.sqlite php artisan optimize:clear \
+    && DB_CONNECTION=sqlite DATABASE_URL=sqlite:////app/database/database.sqlite \
     && mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views \
     && rm database/database.sqlite
 
