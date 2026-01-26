@@ -1,38 +1,38 @@
 #!/usr/bin/env sh
 set -e
 
-# Шлях до бази на МОНТОВАНОМУ диску
-DB_FILE=/var/www/html/storage/database/database.sqlite
+DB_DIR="/var/www/html/storage/database"
+DB_FILE="$DB_DIR/database.sqlite"
 
-# 1️⃣ Створюємо файл бази та виконуємо міграції лише якщо його нема
+echo "🔎 Checking SQLite database..."
+
+# 1. Створюємо директорію (volume вже змонтований сюди)
+mkdir -p "$DB_DIR"
+
+# 2. Якщо БД ще нема — ініціалізуємо
 if [ ! -f "$DB_FILE" ]; then
-  echo "SQLite database not found on volume. Creating..."
+  echo "🆕 SQLite database not found. Initializing..."
+
   touch "$DB_FILE"
+  chown -R www-data:www-data "$DB_DIR"
 
-  # Встановлюємо права, щоб PHP міг писати у файл
-  chown www-data:www-data "$DB_FILE"
-  chown www-data:www-data /var/www/html/storage/database
-
-  echo "Running migrations and seed..."
-  php artisan migrate --force --seed
-  php artisan optimize:clear
-else
-  echo "SQLite database found. Skipping initial setup."
-  # Про всяк випадок запускаємо міграції (без seed),
-  # щоб оновити структуру при деплої нового коду
+  echo "🚀 Running migrations..."
   php artisan migrate --force
+
+  echo "🌱 Seeding database..."
+  php artisan db:seed --force
+
+else
+  echo "✅ SQLite database already exists. Skipping migrations."
 fi
 
-# 2️⃣ Виконуємо user scripts, якщо вони є
+# 3. Запуск користувацьких скриптів (як у тебе було)
 if [ -d /var/www/html/.fly/scripts ]; then
   for f in /var/www/html/.fly/scripts/*.sh; do
-    [ -f "$f" ] && bash "$f" -e
+    echo "▶ Running $f"
+    bash "$f"
   done
 fi
 
-# 3️⃣ Запускаємо передану команду або supervisord
-if [ $# -gt 0 ]; then
-    exec "$@"
-else
-    exec supervisord -c /etc/supervisor/supervisord.conf
-fi
+# 4. Старт основного процесу
+exec supervisord -c /etc/supervisor/supervisord.conf

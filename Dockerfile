@@ -57,13 +57,14 @@ COPY . /var/www/html
 WORKDIR /var/www/html
 
 # 4. Setup application dependencies
-RUN mkdir -p database && touch database/database.sqlite \
-    && composer install --optimize-autoloader --no-dev \
-    && DB_CONNECTION=sqlite DATABASE_URL=sqlite:////var/www/html/database/database.sqlite \
-    && rm database/database.sqlite \
+RUN composer install --optimize-autoloader --no-dev \
+    && mkdir -p storage/logs \
+    && php artisan optimize:clear \
     && chown -R www-data:www-data /var/www/html \
     && echo "MAILTO=\"\"\n* * * * * www-data /usr/bin/php /var/www/html/artisan schedule:run" > /etc/cron.d/laravel \
-    && sed -i='' '/->withMiddleware(function (Middleware \$middleware) {/a    \$middleware->trustProxies(at: "*");    ' bootstrap/app.php; \
+    && sed -i='' '/->withMiddleware(function (Middleware \$middleware) {/a\
+    \$middleware->trustProxies(at: "*");\
+    ' bootstrap/app.php; \
     if [ -d .fly ]; then cp .fly/entrypoint.sh /entrypoint; chmod +x /entrypoint; fi;
 
 # Multi-stage build: Build static assets
@@ -104,13 +105,13 @@ COPY . .
 # Копіюємо vendor
 COPY --from=base /var/www/html/vendor /app/vendor
 
-# 🚀 Крок 3: Ініціалізація Laravel (без генерації секретів)
+# 🚀 Крок 3: Ініціалізація Laravel
 # Очищуємо кеш та генеруємо ключ у новому шляху (/app).
-RUN mkdir -p database && touch database/database.sqlite \
-    && rm -f bootstrap/cache/*.php \
-    && DB_CONNECTION=sqlite DATABASE_URL=sqlite:////app/database/database.sqlite \
-    && mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views \
-    && rm database/database.sqlite
+RUN rm -f bootstrap/cache/*.php \
+    && touch .env \
+    && php artisan optimize:clear \
+    && php artisan key:generate \
+    && mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views
 
 # 💡 НОВИЙ КРОК: Згенерувати Wayfinder файли/типи
 # Це створює файл `resources/js/routes.ts` або подібний,
@@ -153,9 +154,6 @@ COPY --from=node_modules_go_brrr /app/public /var/www/html/public-npm
 RUN rsync -ar /var/www/html/public-npm/ /var/www/html/public/ \
     && rm -rf /var/www/html/public-npm \
     && chown -R www-data:www-data /var/www/html
-
-RUN mkdir -p /var/www/html/storage/database && \
-    chown -R www-data:www-data /var/www/html/storage/database
 
 # 5. Setup Entrypoint
 EXPOSE 8080
