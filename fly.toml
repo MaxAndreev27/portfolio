@@ -22,7 +22,7 @@ console_command = 'php /var/www/html/artisan tinker'
   DATABASE_URL = 'sqlite:////var/www/html/storage/database/database.sqlite'
 
 [processes]
-  app = ""
+  app = "/usr/bin/supervisord -c /etc/supervisor/supervisord.conf"
 
 [http_service]
   internal_port = 8080
