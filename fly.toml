@@ -32,11 +32,14 @@ console_command = 'php /var/www/html/artisan tinker'
   min_machines_running = 0
   processes = ['app']
 
+[mounts]
+  source = "portfolio_db"
+  destination = "/var/www/html/storage/database"
+  processes = ['app']
+
 [[vm]]
   memory = '2gb'
   cpu_kind = 'shared'
   cpus = 2
 
-[mounts]
-  source = "portfolio_db"
-  destination = "/var/www/html/storage/database"
+
