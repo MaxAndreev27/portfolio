@@ -4,26 +4,39 @@ set -e
 APP_DIR="/var/www/html"
 DB_DIR="$APP_DIR/storage/database"
 DB_FILE="$DB_DIR/database.sqlite"
+SEED_FLAG="$DB_DIR/.seeded"
 
 echo "🚀 Laravel entrypoint started"
 
-# ensure dirs exist
+# Переконаємось, що директорія існує та має правильні права
 mkdir -p "$DB_DIR"
 chown -R www-data:www-data "$APP_DIR/storage"
 
-# if DB does not exist → first boot
+# Створюємо файл бази даних, якщо він фізично відсутній
 if [ ! -f "$DB_FILE" ]; then
-  echo "📦 SQLite database not found, creating..."
+  echo "📦 SQLite database file not found, creating..."
   touch "$DB_FILE"
   chown www-data:www-data "$DB_FILE"
-
-  echo "🧱 Running migrations & seeders..."
-  php artisan migrate --force --seed
-else
-  echo "✅ SQLite database already exists, skipping migrations"
 fi
 
-# clear cache safely (now DB exists)
+# 1️⃣ Завжди запускаємо міграції.
+# Це безпечно: нові таблиці додадуться, а існуючі не зміняться.
+echo "🧱 Running migrations..."
+php artisan migrate --force
+
+# 2️⃣ Запускаємо сідери лише один раз, перевіряючи наявність файлу-маркера
+if [ ! -f "$SEED_FLAG" ]; then
+    echo "🌱 Seeding database for the first time..."
+    php artisan db:seed --force
+
+    # Створюємо маркер, щоб наступного разу пропустити цей крок
+    touch "$SEED_FLAG"
+    chown www-data:www-data "$SEED_FLAG"
+else
+    echo "✅ Database already seeded, skipping seeders."
+fi
+
+# Очищення кешу
 php artisan optimize:clear || true
 
 exec "$@"
