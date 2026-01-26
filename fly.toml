@@ -38,5 +38,5 @@ console_command = 'php /var/www/html/artisan tinker'
   cpus = 2
 
 [mounts]
-  source = "portfolio_data"
+  source = "portfolio_db"
   destination = "/var/www/html/storage/database"
