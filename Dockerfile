@@ -105,14 +105,6 @@ COPY . .
 # Копіюємо vendor
 COPY --from=base /var/www/html/vendor /app/vendor
 
-# 🚀 Крок 3: Ініціалізація Laravel
-# Очищуємо кеш та генеруємо ключ у новому шляху (/app).
-RUN rm -f bootstrap/cache/*.php \
-    && touch .env \
-    && php artisan optimize:clear \
-    && php artisan key:generate \
-    && mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views
-
 # 💡 НОВИЙ КРОК: Згенерувати Wayfinder файли/типи
 # Це створює файл `resources/js/routes.ts` або подібний,
 # який вимагає ваш фронтенд.
