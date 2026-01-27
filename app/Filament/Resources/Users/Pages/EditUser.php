@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\Roles\Pages;
+namespace App\Filament\Resources\Users\Pages;
 
-use App\Filament\Resources\Roles\RoleResource;
-use Filament\Actions\ViewAction;
+use App\Filament\Resources\Users\UserResource;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
-class EditRole extends EditRecord
+class EditUser extends EditRecord
 {
-    protected static string $resource = RoleResource::class;
+    protected static string $resource = UserResource::class;
 
     protected function getHeaderActions(): array
     {

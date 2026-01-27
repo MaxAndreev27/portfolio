@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Roles\Tables;
+namespace App\Filament\Resources\Users\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -10,7 +10,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class RolesTable
+class UsersTable
 {
     public static function configure(Table $table): Table
     {
@@ -24,10 +24,12 @@ class RolesTable
                 TextColumn::make('id')->label('ID')->sortable(),
                 TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('display_name')
+                TextColumn::make('email')
+                    ->label('Email address')
                     ->searchable(),
-                TextColumn::make('description')
-                    ->searchable(),
+                TextColumn::make('email_verified_at')
+                    ->dateTime()
+                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -36,6 +38,9 @@ class RolesTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('two_factor_confirmed_at')
+                    ->dateTime()
+                    ->sortable(),
             ])
             ->filters([
                 //

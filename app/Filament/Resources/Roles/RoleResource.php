@@ -7,6 +7,7 @@ use App\Filament\Resources\Roles\Pages\EditRole;
 use App\Filament\Resources\Roles\Pages\ViewRole;
 use App\Filament\Resources\Roles\Pages\ListRoles;
 use App\Filament\Resources\Roles\Schemas\RoleForm;
+use App\Filament\Resources\Roles\Schemas\RoleInfolist;
 use App\Filament\Resources\Roles\Tables\RolesTable;
 use App\Models\Role;
 use BackedEnum;
@@ -19,13 +20,18 @@ class RoleResource extends Resource
 {
     protected static ?string $model = Role::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::UserGroup;
 
     protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {
         return RoleForm::configure($schema);
+    }
+
+    public static function infolist(Schema $schema): Schema
+    {
+        return RoleInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table

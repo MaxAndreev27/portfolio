@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ContactFormMail;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {
@@ -18,11 +20,17 @@ class ContactController extends Controller
         ]);
 
         try {
-            Mail::to('maxandreev27@gmail.com')->send(new ContactFormMail($validated));
+            $emails = User::whereHas('roles', function ($query) {
+                $query->where('name', 'admin');
+            })->pluck('email')->toArray();
+
+            foreach ($emails as $email) {
+                Mail::to($email)->send(new ContactFormMail($validated));
+            }
 
             return redirect()->back()->with('success', 'Message sent successfully!');
         } catch (Exception $e) {
-            \Log::error('Помилка надсилання контактної форми: ' . $e->getMessage(), [
+            Log::error('Помилка надсилання контактної форми: ' . $e->getMessage(), [
                 'email' => $validated['email']
             ]);
             return redirect()->back()->with('error', 'An error occurred!');
