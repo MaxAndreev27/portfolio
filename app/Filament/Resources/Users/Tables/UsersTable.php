@@ -20,16 +20,23 @@ class UsersTable
             ->extremePaginationLinks()
             ->defaultPaginationPageOption(25)
             ->defaultSort('id', direction: 'desc')
+            ->searchPlaceholder('Search by ID, Name, Email')
             ->columns([
-                TextColumn::make('id')->label('ID')->sortable(),
+                TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email address')
-                    ->searchable(),
+                    ->label('Email (copyclick)')
+                    ->searchable()
+                    ->copyable()
+                    ->copyMessage('Copied!'),
                 TextColumn::make('email_verified_at')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -40,7 +47,8 @@ class UsersTable
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('two_factor_confirmed_at')
                     ->dateTime()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

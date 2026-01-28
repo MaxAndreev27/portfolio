@@ -20,8 +20,12 @@ class RolesTable
             ->extremePaginationLinks()
             ->defaultPaginationPageOption(25)
             ->defaultSort('id', direction: 'desc')
+            ->searchPlaceholder('Search by ID, Name, Display name, Description')
             ->columns([
-                TextColumn::make('id')->label('ID')->sortable(),
+                TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('display_name')
