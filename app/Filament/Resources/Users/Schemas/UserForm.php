@@ -25,10 +25,12 @@ class UserForm
                 TextInput::make('password')
                     ->password()
                     ->required(),
-                Select::make('role_id')
-                    ->label('Role')
-                    ->placeholder('Select role')
-                    ->options(Role::all()->pluck('name', 'id')),
+                Select::make('roles')
+                    ->relationship('roles', 'display_name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable()
+                    ->label('Role'),
                 Textarea::make('two_factor_secret')
                     ->columnSpanFull(),
                 Textarea::make('two_factor_recovery_codes')

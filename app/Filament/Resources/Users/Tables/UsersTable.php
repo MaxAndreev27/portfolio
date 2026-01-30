@@ -37,6 +37,17 @@ class UsersTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('roles.display_name')
+                    ->label('Ролі')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'Адміністратор' => 'danger',
+                        'Редактор' => 'warning',
+                        'Користувач' => 'gray',
+                        default => 'info',
+                    })
+                    ->separator(',')
+                    ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
