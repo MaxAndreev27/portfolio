@@ -9,6 +9,10 @@ use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Support\Icons\Heroicon;
+use Filament\Support\Enums\TextSize;
+
 
 class UsersTable
 {
@@ -16,11 +20,16 @@ class UsersTable
     {
         return $table
             ->striped()
+            ->deferLoading()
             ->paginated([10, 25, 50, 100, 'all'])
             ->extremePaginationLinks()
             ->defaultPaginationPageOption(25)
             ->defaultSort('id', direction: 'desc')
             ->searchPlaceholder('Search by ID, Name, Email')
+            ->persistSortInSession()
+            ->persistSearchInSession()
+            ->reorderableColumns()
+            ->deferColumnManager(false)
             ->columns([
                 TextColumn::make('id')
                     ->label('ID')
@@ -29,27 +38,29 @@ class UsersTable
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email (copyclick)')
+                    ->label('Email (click to copy)')
+                    ->icon(Heroicon::Envelope)
                     ->searchable()
                     ->copyable()
-                    ->copyMessage('Copied!'),
+                    ->copyMessage('Email address copied'),
                 TextColumn::make('email_verified_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('roles.display_name')
+                TextColumn::make('roles.name')
                     ->label('Ролі')
                     ->badge()
                     ->color(fn(string $state): string => match ($state) {
-                        'Адміністратор' => 'danger',
-                        'Редактор' => 'warning',
-                        'Користувач' => 'gray',
+                        'admin' => 'success',
+                        'editor' => 'warning',
+                        'user' => 'gray',
                         default => 'info',
                     })
                     ->separator(',')
                     ->searchable(),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('j M Y H:i:s')
+                    ->timezone('Europe/Kyiv')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
@@ -62,7 +73,12 @@ class UsersTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                SelectFilter::make('roles')
+                    ->label('Фільтр за роллю')
+                    ->relationship('roles', 'name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable()
             ])
             ->recordActions([
                 ViewAction::make(),

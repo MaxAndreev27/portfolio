@@ -14,9 +14,15 @@ class UserInfolist
                 TextEntry::make('name'),
                 TextEntry::make('email')
                     ->label('Email address'),
-                TextEntry::make('roles.display_name')
+                TextEntry::make('roles.name')
                     ->label('Roles')
-                    ->badge(),
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'admin' => 'success',
+                        'editor' => 'warning',
+                        'user' => 'gray',
+                        default => 'info',
+                    }),
                 TextEntry::make('email_verified_at')
                     ->dateTime()
                     ->placeholder('-'),

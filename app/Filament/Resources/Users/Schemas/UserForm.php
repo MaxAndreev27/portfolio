@@ -7,6 +7,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
+use Filament\Support\Enums\Operation;
 use App\Models\Role;
 
 class UserForm
@@ -21,21 +22,22 @@ class UserForm
                     ->label('Email address')
                     ->email()
                     ->required(),
-                DateTimePicker::make('email_verified_at'),
                 TextInput::make('password')
                     ->password()
-                    ->required(),
+                    ->required()
+                    ->hiddenOn(Operation::Edit),
                 Select::make('roles')
-                    ->relationship('roles', 'display_name')
+                    ->relationship('roles', 'name')
                     ->multiple()
                     ->preload()
                     ->searchable()
                     ->label('Role'),
-                Textarea::make('two_factor_secret')
-                    ->columnSpanFull(),
-                Textarea::make('two_factor_recovery_codes')
-                    ->columnSpanFull(),
-                DateTimePicker::make('two_factor_confirmed_at'),
+                // DateTimePicker::make('email_verified_at'),
+                // Textarea::make('two_factor_secret')
+                //     ->columnSpanFull(),
+                // Textarea::make('two_factor_recovery_codes')
+                //     ->columnSpanFull(),
+                // DateTimePicker::make('two_factor_confirmed_at'),
             ]);
     }
 }
