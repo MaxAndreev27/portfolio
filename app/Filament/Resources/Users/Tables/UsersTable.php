@@ -10,9 +10,9 @@ use Filament\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Support\Icons\Heroicon;
-use Filament\Support\Enums\TextSize;
-
+use Filament\Tables\Enums\FiltersLayout;
 
 class UsersTable
 {
@@ -50,6 +50,14 @@ class UsersTable
                 TextColumn::make('roles.name')
                     ->label('Ролі')
                     ->badge()
+                    ->icon(
+                        fn(string $state): Heroicon => match ($state) {
+                            'admin' => Heroicon::BuildingLibrary,
+                            'editor' => Heroicon::PencilSquare,
+                            'user' => Heroicon::User,
+                            default => Heroicon::User,
+                        }
+                    )
                     ->color(fn(string $state): string => match ($state) {
                         'admin' => 'success',
                         'editor' => 'warning',
@@ -72,14 +80,21 @@ class UsersTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->stackedOnMobile()
             ->filters([
                 SelectFilter::make('roles')
-                    ->label('Фільтр за роллю')
+                    ->label('Filter by role')
                     ->relationship('roles', 'name')
                     ->multiple()
                     ->preload()
-                    ->searchable()
-            ])
+                    ->searchable(),
+                TernaryFilter::make('email_verified_at')
+                    ->nullable(),
+                TernaryFilter::make('two_factor_confirmed_at')
+                    ->nullable()
+            ], layout: FiltersLayout::AboveContent)
+            ->deferFilters(false)
+            ->persistFiltersInSession()
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),

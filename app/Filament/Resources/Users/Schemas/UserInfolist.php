@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Users\Schemas;
 
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 
 class UserInfolist
 {
@@ -17,6 +18,14 @@ class UserInfolist
                 TextEntry::make('roles.name')
                     ->label('Roles')
                     ->badge()
+                     ->icon(
+                        fn(string $state): Heroicon => match ($state) {
+                            'admin' => Heroicon::BuildingLibrary,
+                            'editor' => Heroicon::PencilSquare,
+                            'user' => Heroicon::User,
+                            default => Heroicon::User,
+                        }
+                    )
                     ->color(fn(string $state): string => match ($state) {
                         'admin' => 'success',
                         'editor' => 'warning',
