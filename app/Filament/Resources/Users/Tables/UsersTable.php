@@ -67,8 +67,7 @@ class UsersTable
                     ->separator(',')
                     ->searchable(),
                 TextColumn::make('created_at')
-                    ->dateTime('j M Y H:i:s')
-                    ->timezone('Europe/Kyiv')
+                    ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
