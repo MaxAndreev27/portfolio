@@ -2,6 +2,11 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Filament\Exports\UserExporter;
+use App\Filament\Imports\UserImporter;
+use Filament\Actions\ExportBulkAction;
+use Filament\Actions\ImportAction;
+use Filament\Actions\ExportAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -95,6 +100,15 @@ class UsersTable
             ], layout: FiltersLayout::AboveContent)
             ->deferFilters(false)
             ->persistFiltersInSession()
+            ->headerActions([
+                ImportAction::make()
+                    ->importer(UserImporter::class)
+                    ->chunkSize(100)
+                    ->csvDelimiter(';'),
+                ExportAction::make()
+                    ->exporter(UserExporter::class)
+                    ->chunkSize(100),
+            ])
             ->recordActions([
                 ActionGroup::make([
                     ViewAction::make()
@@ -109,6 +123,9 @@ class UsersTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
+                ExportBulkAction::make()
+                    ->exporter(UserExporter::class)
+                    ->chunkSize(100),
             ]);
     }
 }
