@@ -9,10 +9,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
-use Filament\Support\Enums\Operation;
-use App\Models\Role;
 use Filament\Support\Icons\Heroicon;
-use Filament\Schemas\Components\Callout;
 
 class UserForm
 {
@@ -35,6 +32,7 @@ class UserForm
                                 TextInput::make('email')
                                     ->label('Email address')
                                     ->email()
+                                    ->unique()
                                     ->suffixIcon(Heroicon::Envelope)
                                     ->required()
                                     ->maxLength(255),
@@ -44,7 +42,11 @@ class UserForm
                                     ->required(fn(string $operation): bool => $operation === 'create')
                                     ->dehydrated(fn($state) => filled($state))
                                     ->minLength(5)
-                                    ->maxLength(255),
+                                    ->maxLength(255)
+                                    ->confirmed(),
+                                TextInput::make('password_confirmation')
+                                    ->password()
+                                    ->revealable(),
                             ]),
                         Section::make('Addition')
                             ->columnSpan(1)
@@ -59,10 +61,8 @@ class UserForm
                                 DateTimePicker::make('email_verified_at')
                                     ->suffixIcon(Heroicon::CalendarDays)
                                     ->readOnly(),
-                                Textarea::make('two_factor_secret')
-                                    ->columnSpanFull(),
-                                Textarea::make('two_factor_recovery_codes')
-                                    ->columnSpanFull(),
+                                Textarea::make('two_factor_secret'),
+                                Textarea::make('two_factor_recovery_codes'),
                                 DateTimePicker::make('two_factor_confirmed_at')
                                     ->suffixIcon(Heroicon::CalendarDays)
                                     ->readOnly(),
