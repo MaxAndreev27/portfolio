@@ -51,11 +51,11 @@
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -c \"#93c5fd,#c4b5fd,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"npm run dev\" \"php artisan schedule:work\" --names='server,queue,vite,cron'"
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fdba74,#86efac\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"npm run dev\" \"php artisan schedule:work\" --names='server,queue,vite,cron'"
         ],
         "dev:build": [
             "Composer\\Config::disableProcessTimeout",
-            "npx concurrently -c \"#93c5fd,#c4b5fd,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"npm run build\" \"php artisan schedule:work\" --names='server,queue,vite,cron'"
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fdba74,#86efac\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"npm run build\" \"php artisan schedule:work\" --names='server,queue,vite,cron'"
         ],
         "dev:ssr": [
             "npm run build:ssr",
