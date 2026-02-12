@@ -16,17 +16,15 @@ class UserExporter extends Exporter
     public static function getColumns(): array
     {
         return [
-            ExportColumn::make('id'),
             ExportColumn::make('name'),
             ExportColumn::make('email'),
             ExportColumn::make('email_verified_at'),
-            ExportColumn::make('password'),
-            ExportColumn::make('remember_token'),
             ExportColumn::make('created_at'),
             ExportColumn::make('updated_at'),
-            ExportColumn::make('two_factor_secret'),
-            ExportColumn::make('two_factor_recovery_codes'),
             ExportColumn::make('two_factor_confirmed_at'),
+            ExportColumn::make('roles_list')
+                ->label('Roles')
+                ->state(fn(User $record): string => $record->roles->pluck('name')->implode(', ')),
         ];
     }
 

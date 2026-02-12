@@ -25,11 +25,9 @@ class User extends Authenticatable implements FilamentUser
     protected $fillable = [
         'name',
         'email',
-        'email_verified_at',
         'password',
-        'two_factor_secret',
-        'two_factor_recovery_codes',
-        'two_factor_confirmed_at',
+        'email_verified_at',      // Додано
+        'two_factor_confirmed_at' // Додано
     ];
 
     /**
@@ -38,10 +36,10 @@ class User extends Authenticatable implements FilamentUser
      * @var list<string>
      */
     protected $hidden = [
-        // 'password',
-        // 'two_factor_secret',
-        // 'two_factor_recovery_codes',
-        // 'remember_token',
+        'password',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
+        'remember_token',
     ];
 
     /**
