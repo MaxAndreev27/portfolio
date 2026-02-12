@@ -32,9 +32,15 @@ class AdminPanelProvider extends PanelProvider
             // ->registration()
             ->passwordReset()
             ->sidebarCollapsibleOnDesktop()
+            ->spa()
+            ->unsavedChangesAlerts()
+            ->databaseTransactions()
             ->colors([
                 'primary' => Color::Amber,
             ])
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
+            ->resourceCreatePageRedirect('index')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([

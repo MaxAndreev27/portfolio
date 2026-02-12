@@ -26,6 +26,8 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'email_verified_at',      // Додано
+        'two_factor_confirmed_at' // Додано
     ];
 
     /**
@@ -68,7 +70,6 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->roles()->whereIn('name', $roleNames)->exists();
     }
-
 
     public function canAccessPanel(Panel $panel): bool
     {

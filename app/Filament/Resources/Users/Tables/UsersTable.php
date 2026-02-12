@@ -2,13 +2,23 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Filament\Exports\UserExporter;
+use App\Filament\Imports\UserImporter;
+use Filament\Actions\ExportBulkAction;
+use Filament\Actions\ImportAction;
+use Filament\Actions\ExportAction;
 use Filament\Actions\BulkActionGroup;
+use Filament\Actions\ActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Enums\FiltersLayout;
 
 class UsersTable
 {
@@ -16,11 +26,16 @@ class UsersTable
     {
         return $table
             ->striped()
+            ->deferLoading()
             ->paginated([10, 25, 50, 100, 'all'])
             ->extremePaginationLinks()
             ->defaultPaginationPageOption(25)
             ->defaultSort('id', direction: 'desc')
             ->searchPlaceholder('Search by ID, Name, Email')
+            ->persistSortInSession()
+            ->persistSearchInSession()
+            ->reorderableColumns()
+            ->deferColumnManager(false)
             ->columns([
                 TextColumn::make('id')
                     ->label('ID')
@@ -29,7 +44,8 @@ class UsersTable
                 TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email (copyclick)')
+                    ->label('Email (click to copy)')
+                    ->icon(Heroicon::Envelope)
                     ->searchable()
                     ->copyable()
                     ->copyMessage('Copied!'),
@@ -37,13 +53,21 @@ class UsersTable
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('roles.display_name')
+                TextColumn::make('roles.name')
                     ->label('Ролі')
                     ->badge()
+                    ->icon(
+                        fn(string $state): Heroicon => match ($state) {
+                            'admin' => Heroicon::BuildingLibrary,
+                            'editor' => Heroicon::PencilSquare,
+                            'user' => Heroicon::User,
+                            default => Heroicon::User,
+                        }
+                    )
                     ->color(fn(string $state): string => match ($state) {
-                        'Адміністратор' => 'danger',
-                        'Редактор' => 'warning',
-                        'Користувач' => 'gray',
+                        'admin' => 'success',
+                        'editor' => 'warning',
+                        'user' => 'gray',
                         default => 'info',
                     })
                     ->separator(',')
@@ -61,18 +85,47 @@ class UsersTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->stackedOnMobile()
             ->filters([
-                //
+                SelectFilter::make('roles')
+                    ->label('Filter by role')
+                    ->relationship('roles', 'name')
+                    ->multiple()
+                    ->preload()
+                    ->searchable(),
+                TernaryFilter::make('email_verified_at')
+                    ->nullable(),
+                TernaryFilter::make('two_factor_confirmed_at')
+                    ->nullable()
+            ], layout: FiltersLayout::AboveContent)
+            ->deferFilters(false)
+            ->persistFiltersInSession()
+            ->headerActions([
+                ImportAction::make()
+                    ->importer(UserImporter::class)
+                    ->chunkSize(100)
+                    ->csvDelimiter(';'),
+                ExportAction::make()
+                    ->exporter(UserExporter::class)
+                    ->chunkSize(100),
             ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
+                ActionGroup::make([
+                    ViewAction::make()
+                        ->hiddenLabel(),
+                    EditAction::make()
+                        ->hiddenLabel(),
+                    DeleteAction::make()
+                        ->hiddenLabel(),
+                ])->buttonGroup(),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
+                ExportBulkAction::make()
+                    ->exporter(UserExporter::class)
+                    ->chunkSize(100),
             ]);
     }
 }
