@@ -32,6 +32,9 @@ class AdminPanelProvider extends PanelProvider
             // ->registration()
             ->passwordReset()
             ->sidebarCollapsibleOnDesktop()
+            ->spa()
+            ->unsavedChangesAlerts()
+            ->databaseTransactions()
             ->colors([
                 'primary' => Color::Amber,
             ])
