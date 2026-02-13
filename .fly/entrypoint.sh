@@ -39,4 +39,8 @@ fi
 # Очищення кешу
 php artisan optimize:clear || true
 
+echo "⚡️ Optimizing Laravel..."
+php artisan optimize
+
+
 exec "$@"
