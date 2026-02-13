@@ -143,8 +143,12 @@ FROM base
 # in the assets we generated above rather than overwrite them
 COPY --from=node_modules_go_brrr /app/public /var/www/html/public-npm
 RUN rsync -ar /var/www/html/public-npm/ /var/www/html/public/ \
-    && rm -rf /var/www/html/public-npm \
-    && chown -R www-data:www-data /var/www/html
+    && rm -rf /var/www/html/public-npm
+
+# Optimize filament for production
+RUN php artisan filament:optimize
+
+RUN chown -R www-data:www-data /var/www/html
 
 # 5. Setup Entrypoint
 EXPOSE 8080
