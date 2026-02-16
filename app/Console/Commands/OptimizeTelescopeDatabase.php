@@ -40,6 +40,11 @@ class OptimizeTelescopeDatabase extends Command
                 $connection->statement(
                     'OPTIMIZE TABLE telescope_entries, telescope_entries_tags, telescope_monitoring'
                 );
+            } elseif ($driver === 'pgsql') {
+                $this->info('Running VACUUM ANALYZE (PostgreSQL)...');
+                $connection->statement('VACUUM ANALYZE telescope_entries');
+                $connection->statement('VACUUM ANALYZE telescope_entries_tags');
+                $connection->statement('VACUUM ANALYZE telescope_monitoring');
             } else {
                 $this->warn("Driver '{$driver}' is not supported.");
                 return self::FAILURE;
