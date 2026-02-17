@@ -14,6 +14,9 @@ use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Enums\FiltersLayout;
 
 class ProjectsTable
 {
@@ -26,7 +29,7 @@ class ProjectsTable
             ->extremePaginationLinks()
             ->defaultPaginationPageOption(25)
             ->defaultSort('id', direction: 'desc')
-            ->searchPlaceholder('Search by ID, Title')
+            ->searchPlaceholder('Search by ID, Title, Slug')
             ->persistSortInSession()
             ->persistSearchInSession()
             ->reorderableColumns()
@@ -37,37 +40,51 @@ class ProjectsTable
                     ->sortable()
                     ->searchable(),
                 ImageColumn::make('image'),
+
                 TextColumn::make('title')
+                    ->limit(30)
                     ->searchable(),
                 TextColumn::make('slug')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('excerpt')
+
+                TextColumn::make('description')
+                    ->limit(50)
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('excerpt')
+                    ->limit(50)
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
                 TextColumn::make('url')
                     ->searchable()
-                    ->icon(Heroicon::Link)
+                    ->icon(Heroicon::GlobeAlt)
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->openUrlInNewTab(),
                 TextColumn::make('github_url')
                     ->searchable()
+                    ->icon(Heroicon::Link)
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->openUrlInNewTab(),
+
                 TextColumn::make('completed_at')
                     ->date()
                     ->sortable(),
-                ToggleColumn::make('is_featured'),
+                ToggleColumn::make('is_featured')
+                    ->sortable()
+                    ->alignCenter()
+                    ->onColor('success')
+                    ->offColor('danger'),
+
                 TextColumn::make('order')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->alignCenter(),
                 IconColumn::make('status')
                     ->sortable()
-                    ->color(fn(string $state): string => match ($state) {
-                        'draft' => 'warning',
-                        'published' => 'success',
-                        'archived' => 'gray',
-                        default => 'info',
-                    }),
+                    ->alignCenter(),
+
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -77,9 +94,15 @@ class ProjectsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->stackedOnMobile()
             ->filters([
-                //
-            ])
+                SelectFilter::make('status')
+                    ->label('Filter by status'),
+                TernaryFilter::make('is_featured')
+                    ->nullable(),
+                TernaryFilter::make('completed_at')
+                    ->nullable()
+            ], layout: FiltersLayout::AboveContent)
             ->recordActions([
                 ActionGroup::make([
                     ViewAction::make()
