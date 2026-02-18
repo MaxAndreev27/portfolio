@@ -9,6 +9,7 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Select;
+use Filament\Actions\Action;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Grid;
@@ -18,6 +19,7 @@ use Illuminate\Support\Str;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Support\Icons\Heroicon;
 use App\Enums\ProjectStatus;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class ProjectForm
 {
@@ -92,30 +94,68 @@ class ProjectForm
                                     ->reactive()
                                     ->helperText(function ($state) {
                                         return (160 - mb_strlen($state ?? '')) . " left";
-                                    }),
+                                    })
+                                    ->hintAction(
+                                        Action::make('generateExcerpt')
+                                            ->label('Generate from Description')
+                                            ->icon('heroicon-m-sparkles')
+                                            ->action(function (Set $set, Get $get) {
+                                                $description = $get('description');
+                                                $cleanText = strip_tags($description ?? '');
+                                                $set('excerpt', Str::limit($cleanText, 160, ''));
+                                            })
+                                    ),
                             ]),
 
                         Section::make('Addition')
                             ->columnSpan(1)
                             ->schema([
                                 FileUpload::make('image')
-                                    ->image(),
+                                    ->image()
+                                    ->maxSize(1024)
+                                    ->disk('public')
+                                    ->directory('projects')
+                                    ->visibility('public')
+                                    ->getUploadedFileNameForStorageUsing(
+                                        fn(TemporaryUploadedFile $file, Get $get): string => str($get('title'))
+                                            ->slug()
+                                            ->limit(30, '')
+                                            ->append('-' . now()->format('Y-m-d-H-i'))
+                                            ->append('.' . $file->getClientOriginalExtension())
+                                    )
+                                    ->moveFiles()
+                                    ->imageEditor()
+                                    ->imageEditorAspectRatioOptions([
+                                        '16:9',
+                                        '4:3',
+                                        '1:1',
+                                        null,
+                                    ])
+                                    ->imageAspectRatio('16:9')
+                                    ->automaticallyOpenImageEditorForAspectRatio()
+                                    ->automaticallyResizeImagesMode('cover'),
+                                // ->automaticallyResizeImagesToWidth('1920')
+                                // ->automaticallyResizeImagesToHeight('1080'),
 
                                 Select::make('status')
                                     ->required()
                                     ->selectablePlaceholder(false)
                                     ->options(ProjectStatus::class)
                                     ->default(ProjectStatus::Published)
-                                    ->suffixIcon(Heroicon::Pencil)
-                                    ->native(false),
+                                    ->native(false)
+                                    ->live()
+                                    ->suffixIcon(fn($state) => $state instanceof ProjectStatus ? $state->getIcon() : 'heroicon-m-chevron-down')
+                                    ->suffixIconColor(fn($state) => $state instanceof ProjectStatus ? $state->getColor() : 'gray'),
 
                                 TextInput::make('url')
                                     ->label('Website link')
+                                    ->maxLength(255)
                                     ->suffixIcon(Heroicon::Link)
                                     ->url(),
                                 TextInput::make('github_url')
                                     ->label('Github link')
-                                    ->suffixIcon(Heroicon::GlobeAlt)
+                                    ->maxLength(255)
+                                    ->suffixIcon(Heroicon::ServerStack)
                                     ->url(),
 
                                 DatePicker::make('completed_at')

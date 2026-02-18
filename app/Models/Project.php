@@ -27,7 +27,9 @@ class Project extends Model
         'status',
     ];
 
-    protected $casts = ['status' => ProjectStatus::class];
+    protected $casts = [
+        'status' => ProjectStatus::class
+    ];
 
     protected function title(): Attribute
     {

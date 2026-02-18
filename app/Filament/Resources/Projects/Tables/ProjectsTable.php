@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Projects\Tables;
 
+use App\Enums\ProjectStatus;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ActionGroup;
@@ -17,6 +18,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Enums\FiltersLayout;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProjectsTable
 {
@@ -39,38 +41,52 @@ class ProjectsTable
                     ->label('ID')
                     ->sortable()
                     ->searchable(),
-                ImageColumn::make('image'),
+                ImageColumn::make('image')
+                    ->label('Image')
+                    ->disk('public')
+                    ->visibility('public')
+                    ->imageHeight(50),
 
                 TextColumn::make('title')
                     ->limit(30)
                     ->searchable(),
                 TextColumn::make('slug')
+                    ->limit(50)
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('description')
                     ->limit(50)
                     ->searchable()
+                    ->html()
+                    ->formatStateUsing(fn(string $state): string => strip_tags($state))
+                    ->tooltip(fn(string $state): string => strip_tags($state))
                     ->toggleable(isToggledHiddenByDefault: true),
+
                 TextColumn::make('excerpt')
                     ->limit(50)
                     ->searchable()
+                    ->tooltip(fn(string $state): string => $state)
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('url')
+                    ->limit(50)
                     ->searchable()
-                    ->icon(Heroicon::GlobeAlt)
+                    ->icon(Heroicon::Link)
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->openUrlInNewTab(),
                 TextColumn::make('github_url')
+                    ->limit(50)
                     ->searchable()
-                    ->icon(Heroicon::Link)
+                    ->icon(Heroicon::ServerStack)
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->openUrlInNewTab(),
 
                 TextColumn::make('completed_at')
                     ->date()
-                    ->sortable(),
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 ToggleColumn::make('is_featured')
                     ->sortable()
                     ->alignCenter()
@@ -97,12 +113,32 @@ class ProjectsTable
             ->stackedOnMobile()
             ->filters([
                 SelectFilter::make('status')
-                    ->label('Filter by status'),
+                    ->label('Filter by status')
+                    ->options(ProjectStatus::class)
+                    ->multiple()
+                    ->native(false),
+
                 TernaryFilter::make('is_featured')
-                    ->nullable(),
-                TernaryFilter::make('completed_at')
-                    ->nullable()
+                    ->label('Recommended')
+                    ->placeholder('All projects')
+                    ->trueLabel('Only Recommended')
+                    ->falseLabel('Without Recommendation')
+                    ->native(false),
+
+
+                TernaryFilter::make('image')
+                    ->label('Availability of cover')
+                    ->placeholder('All projects')
+                    ->trueLabel('With cover')
+                    ->falseLabel('Without cover')
+                    ->queries(
+                        true: fn(Builder $query) => $query->whereNotNull('image'),
+                        false: fn(Builder $query) => $query->whereNull('image'),
+                    )
+                    ->native(false),
             ], layout: FiltersLayout::AboveContent)
+            ->deferFilters(false)
+            ->persistFiltersInSession()
             ->recordActions([
                 ActionGroup::make([
                     ViewAction::make()
