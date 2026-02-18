@@ -12,6 +12,9 @@ echo "🚀 Laravel entrypoint started"
 mkdir -p "$DB_DIR"
 chown -R www-data:www-data "$APP_DIR/storage"
 
+echo "🔗 Creating storage link..."
+php artisan storage:link --force
+
 # Створюємо файл бази даних, якщо він фізично відсутній
 if [ ! -f "$DB_FILE" ]; then
   echo "📦 SQLite database file not found, creating..."
@@ -41,6 +44,5 @@ php artisan optimize:clear || true
 
 echo "⚡️ Optimizing Laravel..."
 php artisan optimize
-
 
 exec "$@"
