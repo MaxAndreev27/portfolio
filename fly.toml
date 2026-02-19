@@ -19,7 +19,7 @@ console_command = 'php /var/www/html/artisan tinker'
   LOG_STDERR_FORMATTER = 'Monolog\Formatter\JsonFormatter'
   SESSION_DRIVER = 'cookie'
   SESSION_SECURE_COOKIE = 'true'
-  DATABASE_URL = 'sqlite:////var/www/html/storage/database/database.sqlite'
+  DATABASE_URL = 'sqlite:////var/www/html/storage/database.sqlite'
 
 [processes]
   app = "/usr/bin/supervisord -c /etc/supervisor/supervisord.conf"
