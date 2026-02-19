@@ -2,13 +2,16 @@
 
 namespace App\Providers;
 
+use App\Models\Project;
 use App\Models\User;
+use App\Observers\ProjectObserver;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Filament\Support\Facades\FilamentTimezone;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\DatePicker;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Project::observe(ProjectObserver::class);
+
         Gate::define('viewPulse', function (User $user) {
             return $user->hasRole('admin');
         });
@@ -51,6 +56,14 @@ class AppServiceProvider extends ServiceProvider
                 ->weekStartsOnMonday()
                 ->closeOnDateSelection()
                 ->displayFormat('d.m.Y H:i')
+                ->native(false);
+        });
+
+        DatePicker::configureUsing(function (DateTimePicker $component): void {
+            $component
+                ->weekStartsOnMonday()
+                ->closeOnDateSelection()
+                ->displayFormat('d.m.Y')
                 ->native(false);
         });
     }
