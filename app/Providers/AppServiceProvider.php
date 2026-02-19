@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Project;
 use App\Models\User;
+use App\Observers\ProjectObserver;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Filament\Support\Facades\FilamentTimezone;
@@ -29,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Project::observe(ProjectObserver::class);
+
         Gate::define('viewPulse', function (User $user) {
             return $user->hasRole('admin');
         });

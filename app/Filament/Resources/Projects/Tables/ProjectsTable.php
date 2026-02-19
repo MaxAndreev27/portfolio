@@ -19,6 +19,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Enums\FiltersLayout;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Vite;
 
 class ProjectsTable
 {
@@ -45,6 +46,7 @@ class ProjectsTable
                     ->label('Image')
                     ->disk('public')
                     ->visibility('public')
+                    ->defaultImageUrl(Vite::asset('resources/js/assets/images/default-image.webp'))
                     ->imageHeight(50),
 
                 TextColumn::make('title')

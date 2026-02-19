@@ -9,7 +9,7 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('filament:cleanup-import-export --days=1')->daily();
+Schedule::command('filament:cleanup-import-export --days=30')->daily();
 
 if (App::isLocal()) {
     Schedule::command('telescope:prune')->hourly();

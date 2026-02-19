@@ -114,12 +114,12 @@ class ProjectForm
                                     ->image()
                                     ->maxSize(1024)
                                     ->disk('public')
-                                    ->directory('projects')
                                     ->visibility('public')
+                                    ->directory('projects')
                                     ->getUploadedFileNameForStorageUsing(
                                         fn(TemporaryUploadedFile $file, Get $get): string => str($get('title'))
                                             ->slug()
-                                            ->limit(30, '')
+                                            ->limit(20, '')
                                             ->append('-' . now()->format('Y-m-d-H-i'))
                                             ->append('.' . $file->getClientOriginalExtension())
                                     )
@@ -134,8 +134,6 @@ class ProjectForm
                                     ->imageAspectRatio('16:9')
                                     ->automaticallyOpenImageEditorForAspectRatio()
                                     ->automaticallyResizeImagesMode('cover'),
-                                // ->automaticallyResizeImagesToWidth('1920')
-                                // ->automaticallyResizeImagesToHeight('1080'),
 
                                 Select::make('status')
                                     ->required()
