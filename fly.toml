@@ -13,11 +13,7 @@ console_command = 'php /var/www/html/artisan tinker'
     PHP_VERSION = '8.4'
 
 [env]
-  APP_ENV = 'production'
-  LOG_CHANNEL = 'stderr'
-  LOG_LEVEL = 'info'
   LOG_STDERR_FORMATTER = 'Monolog\Formatter\JsonFormatter'
-  SESSION_DRIVER = 'cookie'
   SESSION_SECURE_COOKIE = 'true'
 
 [processes]
@@ -25,13 +21,18 @@ console_command = 'php /var/www/html/artisan tinker'
 
 [http_service]
   internal_port = 8080
-  force_https = true
-  connect_timeout_ms = 8000
-  grace_period = "120s"
-  auto_stop_machines = 'stop'
   auto_start_machines = true
+  auto_stop_machines = 'stop'
   min_machines_running = 0
+  force_https = true
   processes = ['app']
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "15s"
+    timeout = "2s"
+    method = "get"
+    path = "/"
 
 [mounts]
   source = "portfolio_db"
@@ -42,5 +43,3 @@ console_command = 'php /var/www/html/artisan tinker'
   memory = '2gb'
   cpu_kind = 'shared'
   cpus = 2
-
-
