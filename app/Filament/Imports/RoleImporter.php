@@ -27,13 +27,13 @@ class RoleImporter extends Importer
         ];
     }
 
-    public function resolveRecord(): Role
+    public function resolveRecord(): ?Role
     {
-        $user = Role::firstOrNew([
+        $role = Role::firstOrNew([
             'name' => $this->data['name'],
         ]);
 
-        return $user;
+        return $role;
         // return new Role();
     }
 
