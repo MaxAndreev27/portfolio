@@ -63,10 +63,7 @@ RUN composer install --optimize-autoloader --no-dev \
     && mkdir -p storage/logs \
     && chown -R www-data:www-data /var/www/html \
     && echo "MAILTO=\"\"\n* * * * * www-data /usr/bin/php /var/www/html/artisan schedule:run" > /etc/cron.d/laravel \
-    && sed -i='' '/->withMiddleware(function (Middleware \$middleware) {/a\
-    \$middleware->trustProxies(at: "*");\
-    ' bootstrap/app.php; \
-    fi;
+    && sed -i '/->withMiddleware(function (Middleware \$middleware) {/a \    $middleware->trustProxies(at: "*");' bootstrap/app.php
 
 # Multi-stage build: Build static assets
 # This allows us to not include Node within the final container
