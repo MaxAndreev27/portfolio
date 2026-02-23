@@ -3,12 +3,17 @@
 namespace App\Filament\Resources\Projects\Tables;
 
 use App\Enums\ProjectStatus;
+use App\Filament\Exports\ProjectExporter;
+use App\Filament\Imports\ProjectImporter;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\ExportAction;
+use Filament\Actions\ExportBulkAction;
+use Filament\Actions\ImportAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -127,7 +132,6 @@ class ProjectsTable
                     ->falseLabel('Without Recommendation')
                     ->native(false),
 
-
                 TernaryFilter::make('image')
                     ->label('Availability of cover')
                     ->placeholder('All projects')
@@ -141,6 +145,15 @@ class ProjectsTable
             ], layout: FiltersLayout::AboveContent)
             ->deferFilters(false)
             ->persistFiltersInSession()
+            ->headerActions([
+                ImportAction::make()
+                    ->importer(ProjectImporter::class)
+                    ->chunkSize(100)
+                    ->csvDelimiter(';'),
+                ExportAction::make()
+                    ->exporter(ProjectExporter::class)
+                    ->chunkSize(100),
+            ])
             ->recordActions([
                 ActionGroup::make([
                     ViewAction::make()
@@ -155,6 +168,9 @@ class ProjectsTable
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
+                ExportBulkAction::make()
+                    ->exporter(ProjectExporter::class)
+                    ->chunkSize(100),
             ]);
     }
 }
