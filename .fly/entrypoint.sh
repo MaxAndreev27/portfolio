@@ -47,8 +47,8 @@ fi
 # 5️⃣ Фінальна оптимізація перед запуском
 # Очищаємо старі кеші та генеруємо нові для максимальної швидкості
 echo "⚡️ Optimizing Laravel..."
-php artisan optimize:clear || true
-php artisan filament:optimize || true
+php artisan config:cache
+php artisan route:cache
 
 echo "🏁 Entrypoint finished, starting application..."
 
