@@ -66,7 +66,7 @@ RUN composer install --optimize-autoloader --no-dev \
     && sed -i='' '/->withMiddleware(function (Middleware \$middleware) {/a\
     \$middleware->trustProxies(at: "*");\
     ' bootstrap/app.php; \
-    if [ -d .fly ]; then cp .fly/entrypoint.sh /entrypoint; chmod +x /entrypoint; fi;
+    fi;
 
 # Multi-stage build: Build static assets
 # This allows us to not include Node within the final container
@@ -147,7 +147,9 @@ COPY --from=node_modules_go_brrr /app/public /var/www/html/public-npm
 RUN rsync -ar /var/www/html/public-npm/ /var/www/html/public/ \
     && rm -rf /var/www/html/public-npm
 
-# Optimize filament for production
+# Optimize for production
+RUN php artisan view:cache
+RUN php artisan icons:cache
 RUN php artisan filament:optimize
 
 RUN chown -R www-data:www-data /var/www/html
