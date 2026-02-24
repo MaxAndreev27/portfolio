@@ -37,6 +37,7 @@ const updateActiveNav = () => {
     const sectionIds = [
         'main-hero',
         'main-about',
+        'main-projects',
         'main-technology',
         'main-contact',
     ];
@@ -115,7 +116,7 @@ onUnmounted(() => {
 
             <ul
                 id="main-menu"
-                class="text-2xl shadow md:text-xl md:shadow-none lg:text-2xl"
+                class="text-2xl shadow md:text-lg md:shadow-none lg:text-2xl"
                 :class="
                     mobileOpen
                         ? 'absolute top-full right-4 left-4 z-50 mt-2 flex flex-col rounded-xl bg-[var(--navbar)] p-2'
@@ -136,6 +137,16 @@ onUnmounted(() => {
                         :class="{ active: activeSection === 'main-about' }"
                         @click.prevent="scrollToSection($event, 'main-about')"
                         >About</a
+                    >
+                </li>
+                <li>
+                    <a
+                        href="#main-projects"
+                        :class="{ active: activeSection === 'main-projects' }"
+                        @click.prevent="
+                            scrollToSection($event, 'main-projects')
+                        "
+                        >Projects</a
                     >
                 </li>
                 <li>
@@ -186,7 +197,7 @@ nav > ul {
     list-style: none;
     height: 55px;
     isolation: isolate;
-    padding: 0 15px;
+    padding: 0 10px;
     --translate-x: 0;
     --translate-y: 0;
     --rotate-x: 0deg;
@@ -281,7 +292,7 @@ button .hamburger.open span:nth-child(3) {
 
 @media (max-width: 1023px) {
     nav > ul li a {
-        padding-inline: 10px;
+        padding-inline: 5px;
     }
 }
 </style>
