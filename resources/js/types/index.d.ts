@@ -44,4 +44,19 @@ export interface User {
     updated_at: string;
 }
 
+export interface Project {
+    id: number;
+    title: string;
+    slug: string;
+    description: string;
+    excerpt: string;
+    image: string;
+    url: string;
+    github_url: string;
+    completed_at: string | null;
+    is_featured: boolean;
+    order: number;
+    status: string;
+}
+
 export type BreadcrumbItemType = BreadcrumbItem;

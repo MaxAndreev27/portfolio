@@ -28,6 +28,8 @@ class Project extends Model
     ];
 
     protected $casts = [
+        'completed_at' => 'date',
+        'is_featured' => 'boolean',
         'status' => ProjectStatus::class
     ];
 

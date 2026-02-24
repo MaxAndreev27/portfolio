@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import FloatingMainMenu from '@/components/FloatingMainMenu.vue';
 import HeroSection from '@/sections/HeroSection.vue';
+import { Project } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { defineAsyncComponent } from 'vue';
 
 const AboutSection = defineAsyncComponent(
     () => import('@/sections/AboutSection.vue'),
+);
+const ProjectsSection = defineAsyncComponent(
+    () => import('@/sections/ProjectsSection.vue'),
 );
 const TechnologySection = defineAsyncComponent(
     () => import('@/sections/TechnologySection.vue'),
@@ -20,6 +24,7 @@ const FooterSection = defineAsyncComponent(
 withDefaults(
     defineProps<{
         canRegister: boolean;
+        projects: Project[];
     }>(),
     {
         canRegister: true,
@@ -41,6 +46,7 @@ withDefaults(
         <main class="flex w-full flex-col">
             <HeroSection />
             <AboutSection />
+            <ProjectsSection :projects="projects"/>
             <TechnologySection />
             <ContactSection />
         </main>
