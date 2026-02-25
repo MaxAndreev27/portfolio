@@ -14,6 +14,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\ExportAction;
 use Filament\Actions\ExportBulkAction;
 use Filament\Actions\ImportAction;
+use Filament\Support\Enums\TextSize;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
@@ -57,6 +58,15 @@ class ProjectsTable
                 TextColumn::make('title')
                     ->limit(30)
                     ->searchable(),
+
+                TextColumn::make('tags')
+                    ->badge()
+                    ->separator(',')
+                    ->color('primary')
+                    ->size(TextSize::Medium)
+                    ->icon(Heroicon::Tag)
+                    ->searchable(),
+
                 TextColumn::make('slug')
                     ->limit(50)
                     ->searchable()

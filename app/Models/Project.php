@@ -25,12 +25,14 @@ class Project extends Model
         'is_featured',
         'order',
         'status',
+        'tags',
     ];
 
     protected $casts = [
         'completed_at' => 'date',
         'is_featured' => 'boolean',
-        'status' => ProjectStatus::class
+        'status' => ProjectStatus::class,
+        'tags' => 'array',
     ];
 
     protected function title(): Attribute

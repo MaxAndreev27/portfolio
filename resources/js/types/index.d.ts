@@ -50,13 +50,14 @@ export interface Project {
     slug: string;
     description: string;
     excerpt: string;
-    image: string;
-    url: string;
-    github_url: string;
+    image: string | null;
+    url: string | null;
+    github_url: string | null;
     completed_at: string | null;
     is_featured: boolean;
     order: number;
-    status: string;
+    status: 'draft' | 'published' | 'archived';
+    tags: string[];
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;
