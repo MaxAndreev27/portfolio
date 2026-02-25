@@ -26,11 +26,12 @@ class HomeController extends Controller
                 'image' => $project->image ?
                     asset('storage/' . $project->image) :
                     Vite::asset('resources/js/assets/images/default-image.webp'),
-                // 'tags' => $project->tags,
-                // 'link' => $project->link,
                 'url' => $project->url,
                 'github_url' => $project->github_url,
                 'completed_at' => $project->completed_at?->format('Y-m-d'),
+                'tags' => $project->tags
+                    ? (is_array($project->tags) ? $project->tags : explode(',', $project->tags))
+                    : [],
             ]);
 
         return Inertia::render('Home', [

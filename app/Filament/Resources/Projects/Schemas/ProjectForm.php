@@ -19,6 +19,7 @@ use Illuminate\Support\Str;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Support\Icons\Heroicon;
 use App\Enums\ProjectStatus;
+use Filament\Forms\Components\TagsInput;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class ProjectForm
@@ -134,6 +135,24 @@ class ProjectForm
                                     ->imageAspectRatio('16:9')
                                     ->automaticallyOpenImageEditorForAspectRatio()
                                     ->automaticallyResizeImagesMode('cover'),
+
+                                TagsInput::make('tags')
+                                    ->placeholder('Add tag...')
+                                    ->color('primary')
+                                    ->separator(',')
+                                    ->reorderable()
+                                    ->trim()
+                                    ->nestedRecursiveRules([
+                                        'max:20',
+                                    ])
+                                    ->suggestions([
+                                        'Vue',
+                                        'Python',
+                                        'Laravel',
+                                        'Tailwind',
+                                        'PHP',
+                                        'Inertia',
+                                    ]),
 
                                 Select::make('status')
                                     ->required()

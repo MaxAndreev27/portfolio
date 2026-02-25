@@ -30,7 +30,7 @@ const year = props.project.completed_at
             </div>
 
             <div
-                class="absolute top-3 right-3 rounded-lg bg-white/90 px-2 py-1 text-xs font-bold text-gray-700 shadow-sm backdrop-blur dark:bg-gray-900/90 dark:text-gray-300"
+                class="absolute top-3 right-3 rounded-lg bg-white/90 px-2 py-1 text-sm font-bold text-gray-700 shadow-sm backdrop-blur dark:bg-gray-900/90 dark:text-gray-300"
             >
                 {{ year }}
             </div>
@@ -49,15 +49,15 @@ const year = props.project.completed_at
                 {{ project.excerpt }}
             </p>
 
-            <!-- <div class="mt-auto flex flex-wrap gap-2 pt-6">
+            <div class="mt-auto mb-6 flex flex-wrap gap-2">
                 <span
                     v-for="tag in project.tags"
                     :key="tag"
-                    class="inline-flex items-center rounded-md bg-indigo-50 px-2.5 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300"
+                    class="text-sm inline-flex items-center rounded-md bg-indigo-50 px-2 py-0.5 font-medium text-indigo-700 ring-1 ring-indigo-700/10 ring-inset dark:bg-indigo-900/30 dark:text-indigo-300 dark:ring-indigo-500/20"
                 >
                     {{ tag }}
                 </span>
-            </div> -->
+            </div>
 
             <div
                 class="mt-auto flex items-center justify-between border-t border-gray-300 pt-4 dark:border-gray-700"

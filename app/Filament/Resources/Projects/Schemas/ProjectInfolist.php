@@ -64,6 +64,14 @@ class ProjectInfolist
                                         'style' => 'width: 100%; height: auto; object-fit: cover;',
                                     ]),
 
+                                TextEntry::make('tags')
+                                    ->badge()
+                                    ->color('primary')
+                                    ->separator(',')
+                                    ->columnSpanFull()
+                                    ->size(TextSize::Medium)
+                                    ->icon(Heroicon::Tag),
+
                                 TextEntry::make('status')
                                     ->badge()
                                     ->formatStateUsing(fn($state) => $state->getLabel())
