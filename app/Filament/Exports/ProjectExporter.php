@@ -27,6 +27,8 @@ class ProjectExporter extends Exporter
             ExportColumn::make('is_featured'),
             ExportColumn::make('order'),
             ExportColumn::make('status'),
+            ExportColumn::make('tags')
+                ->formatStateUsing(fn($state) => is_array($state) ? implode(', ', $state) : $state),
         ];
     }
 

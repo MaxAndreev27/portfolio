@@ -53,14 +53,14 @@ const year = props.project.completed_at
                 <span
                     v-for="tag in project.tags"
                     :key="tag"
-                    class="text-sm inline-flex items-center rounded-md bg-indigo-50 px-2 py-0.5 font-medium text-indigo-700 ring-1 ring-indigo-700/10 ring-inset dark:bg-indigo-900/30 dark:text-indigo-300 dark:ring-indigo-500/20"
+                    class="inline-flex items-center rounded-md bg-indigo-50 px-2 py-0.5 text-sm font-medium text-indigo-700 ring-1 ring-indigo-700/10 ring-inset dark:bg-indigo-900/30 dark:text-indigo-300 dark:ring-indigo-500/20"
                 >
                     {{ tag }}
                 </span>
             </div>
 
             <div
-                class="mt-auto flex items-center justify-between border-t border-gray-300 pt-4 dark:border-gray-700"
+                class="mt-auto flex min-h-10 items-center justify-between border-t border-gray-300 pt-4 dark:border-gray-700"
             >
                 <a
                     v-if="project.github_url"
@@ -104,7 +104,7 @@ const year = props.project.completed_at
                     To site
                 </a>
 
-                <a
+                <!-- <a
                     :href="`/projects/${project.slug}`"
                     class="text-md inline-flex items-center font-semibold text-indigo-600 hover:text-indigo-500"
                 >
@@ -122,14 +122,9 @@ const year = props.project.completed_at
                             d="M9 5l7 7-7 7"
                         ></path>
                     </svg>
-                </a>
+                </a> -->
             </div>
         </div>
     </div>
 </template>
 
-<style scoped>
-/* .project-card {
-    font-family: 'Onest', sans-serif;
-} */
-</style>

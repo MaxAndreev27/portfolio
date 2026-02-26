@@ -13,25 +13,21 @@ class HomeController extends Controller
     public function index()
     {
         $projects = Project::query()
-            ->where('status', 'published')
-            ->where('is_featured', true)
+            ->select(['id', 'title', 'slug', 'excerpt', 'image', 'url', 'github_url', 'completed_at', 'tags'])
+            ->published()
+            ->featured()
             ->orderBy('order')
             ->get()
             ->map(fn($project) => [
                 'id' => $project->id,
                 'title' => $project->title,
                 'slug' => $project->slug,
-                // 'description' => $project->description,
                 'excerpt' => $project->excerpt,
-                'image' => $project->image ?
-                    asset('storage/' . $project->image) :
-                    Vite::asset('resources/js/assets/images/default-image.webp'),
+                'image' => $project->image_url,
                 'url' => $project->url,
                 'github_url' => $project->github_url,
                 'completed_at' => $project->completed_at?->format('Y-m-d'),
-                'tags' => $project->tags
-                    ? (is_array($project->tags) ? $project->tags : explode(',', $project->tags))
-                    : [],
+                'tags' => $project->tags,
             ]);
 
         return Inertia::render('Home', [
