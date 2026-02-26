@@ -139,7 +139,6 @@ class ProjectForm
                                 TagsInput::make('tags')
                                     ->placeholder('Add tag...')
                                     ->color('primary')
-                                    ->separator(',')
                                     ->reorderable()
                                     ->trim()
                                     ->nestedRecursiveRules([
