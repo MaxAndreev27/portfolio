@@ -35,13 +35,16 @@ class ProjectImporter extends Importer
                 ->helperText('Max 160')
                 ->rules(['nullable', 'max:160']),
 
+            // ImportColumn::make('image')
+            //     ->rules(['nullable']),
+
             ImportColumn::make('status')
                 ->helperText('Available values: ' . implode(', ', array_column(ProjectStatus::cases(), 'value'))),
 
-            ImportColumn::make('link')
+            ImportColumn::make('url')
                 ->rules(['nullable', 'url', 'max:255']),
 
-            ImportColumn::make('github_link')
+            ImportColumn::make('github_url')
                 ->rules(['nullable', 'url', 'max:255']),
 
             ImportColumn::make('completed_at')
@@ -55,6 +58,21 @@ class ProjectImporter extends Importer
                 ->helperText('Numeric values: min0, max100')
                 ->numeric()
                 ->rules(['nullable', 'integer', 'min:0', 'max:100']),
+
+            ImportColumn::make('tags')
+                ->castStateUsing(function ($state) {
+                    if (blank($state)) {
+                        return [];
+                    }
+                    if (is_array($state)) {
+                        return $state;
+                    }
+                    return collect(explode(',', (string) $state))
+                        ->map(fn($tag) => trim($tag))
+                        ->filter()
+                        ->values()
+                        ->toArray();
+                }),
         ];
     }
 
