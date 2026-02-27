@@ -21,6 +21,7 @@ use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Enums\FiltersLayout;
@@ -56,11 +57,12 @@ class ProjectsTable
                     ->imageHeight(50),
 
                 TextColumn::make('title')
-                    ->limit(30)
+                    ->limit(28)
                     ->searchable(),
 
                 TextColumn::make('tags')
                     ->badge()
+                    ->listWithLineBreaks()
                     ->separator(',')
                     ->color('primary')
                     ->size(TextSize::Medium)
@@ -68,12 +70,12 @@ class ProjectsTable
                     ->searchable(),
 
                 TextColumn::make('slug')
-                    ->limit(50)
+                    ->limit(30)
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('description')
-                    ->limit(50)
+                    ->limit(30)
                     ->searchable()
                     ->html()
                     ->formatStateUsing(fn(string $state): string => strip_tags($state))
@@ -81,19 +83,19 @@ class ProjectsTable
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('excerpt')
-                    ->limit(50)
+                    ->limit(30)
                     ->searchable()
                     ->tooltip(fn(string $state): string => $state)
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('url')
-                    ->limit(50)
+                    ->limit(30)
                     ->searchable()
                     ->icon(Heroicon::Link)
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->openUrlInNewTab(),
                 TextColumn::make('github_url')
-                    ->limit(50)
+                    ->limit(30)
                     ->searchable()
                     ->icon(Heroicon::ServerStack)
                     ->toggleable(isToggledHiddenByDefault: true)
@@ -110,10 +112,16 @@ class ProjectsTable
                     ->onColor('success')
                     ->offColor('danger'),
 
-                TextColumn::make('order')
-                    ->numeric()
-                    ->sortable()
-                    ->alignCenter(),
+                TextInputColumn::make('order')
+                    ->label('Order')
+                    ->tooltip('For manual sorting, high:0, low:100')
+                    ->type('number')
+                    ->inputMode('numeric')
+                    ->rules(['integer', 'min:0', 'max:100'])
+                    ->alignCenter()
+                    ->width('1%')
+                    ->sortable(),
+
                 IconColumn::make('status')
                     ->sortable()
                     ->alignCenter(),
