@@ -73,9 +73,9 @@ class ProjectForm
                                         'edit',
                                     ])
                                     ->validationMessages([
-                                        'unique' => 'Такий slug вже зайнятий, придумайте інший.',
+                                        'unique' => 'This slug is already taken, come up with another one.',
                                         'regex' => 'The slug should contain only lowercase Latin letters, numbers, and hyphens (e.g. "my-project").',
-                                        'not_in' => 'Цей slug зарезервований системою.',
+                                        'not_in' => 'This slug is reserved by the system.',
                                     ]),
 
                                 RichEditor::make('description')
@@ -127,13 +127,12 @@ class ProjectForm
                                     ->moveFiles()
                                     ->imageEditor()
                                     ->imageEditorAspectRatioOptions([
-                                        '16:9',
-                                        '4:3',
-                                        '1:1',
-                                        null,
+                                        '16:9' => '16:9',
+                                        '4:3' => '4:3',
+                                        '1:1' => '1:1',
                                     ])
-                                    ->imageAspectRatio('16:9')
-                                    ->automaticallyOpenImageEditorForAspectRatio()
+                                    ->imageEditorMode(2)
+                                    ->automaticallyCropImagesToAspectRatio('16:9')
                                     ->automaticallyResizeImagesMode('cover'),
 
                                 TagsInput::make('tags')
@@ -145,12 +144,14 @@ class ProjectForm
                                         'max:20',
                                     ])
                                     ->suggestions([
+                                        'PHP',
+                                        'WordPress',
+                                        'WooCommerce',
                                         'Vue',
+                                        'React',
                                         'Python',
                                         'Laravel',
                                         'Tailwind',
-                                        'PHP',
-                                        'Inertia',
                                     ]),
 
                                 Select::make('status')
@@ -189,7 +190,7 @@ class ProjectForm
                                     ->minValue(0)
                                     ->maxValue(100)
                                     ->step(1)
-                                    ->default(1),
+                                    ->default(0),
 
                                 DateTimePicker::make('created_at')
                                     ->suffixIcon(Heroicon::CalendarDays)
