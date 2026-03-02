@@ -25,9 +25,9 @@ import { TimelineList } from '@/components/ui/timeline-list';
                     <span class="font-semibold"
                         >Frameworks, CMS & UI Libraries:</span
                     >
-                    WordPress, Laravel (Blade, Livewire, Inertia), Next.js,
-                    Nestjs, React (Redux), Vue (Vuex, Pinia), Tailwind CSS,
-                    Bootstrap;
+                    WordPress, Laravel (Blade, Livewire, Inertia, Filament),
+                    Next.js, Nestjs, React (Redux), Vue (Vuex, Pinia), Tailwind
+                    CSS, Bootstrap;
                 </li>
                 <li class="mb-4 text-justify">
                     <span class="font-semibold">Testing:</span> PHPUnit, Jest,
