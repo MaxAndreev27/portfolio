@@ -57,12 +57,16 @@ class ProjectsTable
                     ->imageHeight(50),
 
                 TextColumn::make('title')
-                    ->limit(28)
+                    ->limit(30)
                     ->searchable(),
 
                 TextColumn::make('tags')
                     ->badge()
-                    ->listWithLineBreaks()
+                    ->extraAttributes([
+                        'class' => 'max-w-xs overflow-hidden',
+                        'style' => 'max-width: 200px;',
+                    ])
+                    ->wrap()
                     ->separator(',')
                     ->color('primary')
                     ->size(TextSize::Medium)
