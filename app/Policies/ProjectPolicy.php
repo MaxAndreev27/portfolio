@@ -13,7 +13,7 @@ class ProjectPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->hasRoles(['admin', 'editor', 'user']);
     }
 
     /**
@@ -21,7 +21,7 @@ class ProjectPolicy
      */
     public function view(User $user, Project $project): bool
     {
-        return true;
+        return $user->hasRoles(['admin', 'editor', 'user']);
     }
 
     /**
@@ -29,7 +29,7 @@ class ProjectPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        return $user->hasRoles(['admin', 'editor']);
     }
 
     /**
@@ -37,7 +37,15 @@ class ProjectPolicy
      */
     public function update(User $user, Project $project): bool
     {
-        return true;
+        return $user->hasRoles(['admin', 'editor']);
+    }
+
+    /**
+     * Determine whether the user can bulk delete any models.
+     */
+    public function deleteAny(User $user): bool
+    {
+        return $user->hasRoles(['admin', 'editor']);
     }
 
     /**
@@ -45,7 +53,7 @@ class ProjectPolicy
      */
     public function delete(User $user, Project $project): bool
     {
-        return true;
+        return $user->hasRoles(['admin', 'editor']);
     }
 
     /**
@@ -53,7 +61,7 @@ class ProjectPolicy
      */
     public function restore(User $user, Project $project): bool
     {
-        return true;
+        return $user->hasRoles(['admin', 'editor']);
     }
 
     /**
@@ -61,6 +69,6 @@ class ProjectPolicy
      */
     public function forceDelete(User $user, Project $project): bool
     {
-        return true;
+        return $user->hasRoles(['admin', 'editor']);
     }
 }
