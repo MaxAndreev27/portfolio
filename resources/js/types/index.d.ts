@@ -60,4 +60,13 @@ export interface Project {
     tags: string[];
 }
 
+export interface HomeSettings {
+    hero_is_featured: boolean;
+    hero_title: string;
+    hero_description: string;
+    hero_image: string | null;
+    hero_button_about: string;
+    hero_button_contact: string;
+}
+
 export type BreadcrumbItemType = BreadcrumbItem;

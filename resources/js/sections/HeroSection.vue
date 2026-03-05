@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import avatarUrl from '@/assets/images/avatar300.webp';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { GradientText } from '@/components/ui/gradient-text';
+import { HomeSettings } from '@/types';
+
+defineProps<{
+    homeSettings: HomeSettings;
+}>();
 
 const goToAbout = () => {
     const el = document.getElementById('main-about');
@@ -27,18 +31,19 @@ const goToContact = () => {
             <GradientText
                 as="h1"
                 class="mb-2 text-center text-5xl font-bold sm:text-6xl md:text-8xl"
-                >Max Andreev</GradientText
+                >{{ homeSettings.hero_title }}</GradientText
             >
             <h2
                 class="mb-4 text-center text-2xl font-bold uppercase sm:text-3xl md:text-5xl"
             >
-                Full-Stack Developer
+                {{ homeSettings.hero_description }}
             </h2>
             <Avatar
-                class="mb-8 h-[200px] w-[200px] overflow-hidden rounded-full sm:h-[300px] sm:w-[300px]"
+                class="mb-8 h-50 w-50 overflow-hidden rounded-full sm:h-75 sm:w-75"
             >
                 <AvatarImage
-                    :src="avatarUrl"
+                    v-if="homeSettings.hero_image"
+                    :src="homeSettings.hero_image"
                     :alt="'avatar'"
                     loading="eager"
                     fetchpriority="high"
@@ -53,14 +58,14 @@ const goToContact = () => {
                     variant="default"
                     size="xl2"
                     @click="goToAbout"
-                    >About me</Button
+                    >{{ homeSettings.hero_button_about }}</Button
                 >
                 <Button
                     class="cursor-pointer text-xl md:text-2xl"
                     variant="secondary"
                     size="xl2"
                     @click="goToContact"
-                    >Contact me</Button
+                    >{{ homeSettings.hero_button_contact }}</Button
                 >
             </div>
         </div>

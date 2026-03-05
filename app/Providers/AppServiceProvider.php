@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\HomeSettings;
 use App\Models\Project;
 use App\Models\User;
+use App\Observers\HomeSettingsObserver;
 use App\Observers\ProjectObserver;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -32,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Project::observe(ProjectObserver::class);
+        HomeSettings::observe(HomeSettingsObserver::class);
 
         Gate::define('viewPulse', function (User $user) {
             return $user->hasRole('admin');

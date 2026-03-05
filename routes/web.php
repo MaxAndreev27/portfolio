@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ContactController;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -21,8 +22,8 @@ Route::get('dashboard', function () {
 Route::fallback(function () {
     return Inertia::render('Errors/Error', [
         'status' => 404,
-        'message' => 'Сторінку не знайдено',
-    ])->toResponse(\Illuminate\Support\Facades\Request::create(request()->getRequestUri()))
+        'message' => 'Page not found',
+    ])->toResponse(Request::create(request()->getRequestUri()))
         ->setStatusCode(404);
 })->name('fallback');
 

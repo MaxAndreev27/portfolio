@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import FloatingMainMenu from '@/components/FloatingMainMenu.vue';
 import HeroSection from '@/sections/HeroSection.vue';
-import { Project } from '@/types';
+import { HomeSettings, Project } from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { defineAsyncComponent } from 'vue';
 
@@ -25,6 +25,7 @@ withDefaults(
     defineProps<{
         canRegister: boolean;
         projects: Project[];
+        homeSettings: HomeSettings;
     }>(),
     {
         canRegister: true,
@@ -44,9 +45,12 @@ withDefaults(
         <FloatingMainMenu />
 
         <main class="flex w-full flex-col">
-            <HeroSection />
+            <HeroSection
+                v-if="homeSettings.hero_is_featured"
+                :homeSettings="homeSettings"
+            />
             <AboutSection />
-            <ProjectsSection :projects="projects"/>
+            <ProjectsSection :projects="projects" />
             <TechnologySection />
             <ContactSection />
         </main>
