@@ -1,7 +1,17 @@
 <script setup lang="ts">
 import FloatingMainMenu from '@/components/FloatingMainMenu.vue';
 import HeroSection from '@/sections/HeroSection.vue';
-import { HomeSettings, Project } from '@/types';
+import {
+    AboutSettings,
+    ContactSettings,
+    FooterSettings,
+    HeroSettings,
+    MenuSettings,
+    Project,
+    ProjectsSettings,
+    SeoSettings,
+    TechnologySettings,
+} from '@/types';
 import { Head } from '@inertiajs/vue3';
 import { defineAsyncComponent } from 'vue';
 
@@ -24,8 +34,15 @@ const FooterSection = defineAsyncComponent(
 withDefaults(
     defineProps<{
         canRegister: boolean;
+        menuSettings: MenuSettings;
         projects: Project[];
-        homeSettings: HomeSettings;
+        heroSettings: HeroSettings;
+        aboutSettings: AboutSettings;
+        projectsSettings: ProjectsSettings;
+        technologySettings: TechnologySettings;
+        contactSettings: ContactSettings;
+        footerSettings: FooterSettings;
+        seoSettings: SeoSettings;
     }>(),
     {
         canRegister: true,
@@ -35,27 +52,52 @@ withDefaults(
 
 <template>
     <Head title="Home">
+        <title>{{ seoSettings.seo_title || heroSettings.hero_title }}</title>
         <meta
             name="description"
-            content="Site portfolio by Max Andreev Full-Stack Developer."
+            :content="
+                seoSettings.seo_description || heroSettings.hero_description
+            "
+        />
+        <meta
+            property="og:title"
+            :content="seoSettings.seo_title || heroSettings.hero_title"
+        />
+        <meta
+            property="og:description"
+            :content="
+                seoSettings.seo_description || heroSettings.hero_description
+            "
         />
     </Head>
 
     <div class="flex min-h-screen flex-col items-center justify-center">
-        <FloatingMainMenu />
+        <FloatingMainMenu :menuSettings="menuSettings" />
 
         <main class="flex w-full flex-col">
             <HeroSection
-                v-if="homeSettings.hero_is_featured"
-                :homeSettings="homeSettings"
+                v-if="heroSettings.hero_is_featured"
+                :heroSettings="heroSettings"
             />
-            <AboutSection />
-            <ProjectsSection :projects="projects" />
-            <TechnologySection />
-            <ContactSection />
+            <AboutSection
+                v-if="aboutSettings.about_is_featured"
+                :aboutSettings="aboutSettings"
+            />
+            <ProjectsSection
+                v-if="projectsSettings.projects_is_featured"
+                :projects="projects"
+                :projectsSettings="projectsSettings"
+            />
+            <TechnologySection
+                v-if="technologySettings.technology_is_featured"
+            />
+            <ContactSection
+                v-if="contactSettings.contact_is_featured"
+                :contactSettings="contactSettings"
+            />
         </main>
 
-        <FooterSection />
+        <FooterSection :footerSettings="footerSettings" />
 
         <div class="hidden h-14.5 lg:block"></div>
     </div>

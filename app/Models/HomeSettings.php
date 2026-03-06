@@ -20,11 +20,38 @@ class HomeSettings extends Model
         'hero_description',
         'hero_image',
         'hero_button_about',
-        'hero_button_contact'
+        'hero_button_contact',
+        //about
+        'about_is_featured',
+        'about_title',
+        'about_timeline',
+        'about_skills',
+        //projects
+        'projects_is_featured',
+        'projects_title',
+        //technology
+        'technology_is_featured',
+        //contact
+        'contact_is_featured',
+        'contact_title',
+        //footer
+        'footer_social_links',
+        'footer_copyright',
+        'footer_powered',
+        //SEO
+        'seo_title',
+        'seo_description',
     ];
 
     protected $casts = [
         'hero_is_featured' => 'boolean',
+        'about_is_featured' => 'boolean',
+        'about_timeline' => 'array',
+        'about_skills' => 'array',
+        'projects_is_featured' => 'boolean',
+        'technology_is_featured' => 'boolean',
+        'contact_is_featured' => 'boolean',
+        'footer_social_links' => 'array',
     ];
 
     protected function imageUrl(): Attribute

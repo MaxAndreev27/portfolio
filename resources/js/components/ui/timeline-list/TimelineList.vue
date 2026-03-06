@@ -1,45 +1,29 @@
 <script setup lang="ts">
+import { cn } from '@/lib/utils';
+import { TimelineEvent } from '@/types';
 import type { PrimitiveProps } from 'reka-ui';
 import type { HTMLAttributes } from 'vue';
-import { cn } from '@/lib/utils';
 
 interface Props extends PrimitiveProps {
     class?: HTMLAttributes['class']
+    aboutTimeline: TimelineEvent[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
     as: 'ul',
 })
+
 </script>
 
 <template>
-    <component :is="as" :class="cn('timeline', props.class)">
-        <li class="event">
-            <h3>2005-2010</h3>
-            <p>Graduated from University of Informatics and Artificial Intelligence, and obtained the qualification of a software engineer with a specialty in "Software for Automated Systems"</p>
-        </li>
-        <li class="event">
-            <h3>2010-2011</h3>
-            <p>Programmer at UniCredit bank</p>
-        </li>
-        <li class="event">
-            <h3>2011-2014</h3>
-            <p>Programmer at the Regional Directorate of the Bank "Kyivska Rus"</p>
-        </li>
-        <li class="event">
-            <h3>2015-2023</h3>
-            <p>Worked in the
-                <a
-                    class="font-bold text-pink-700 dark:text-pink-400"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://specialcase.net"
-                >SpecialCase</a>
-                team</p>
-        </li>
-        <li class="event">
-            <h3>2024-present</h3>
-            <p>Freelance</p>
+    <component v-if="aboutTimeline" :is="as" :class="cn('timeline', props.class)">
+        <li
+            v-for="(event, index) in aboutTimeline"
+            :key="index"
+            class="event"
+        >
+            <h3>{{ event.period }}</h3>
+            <div class="timeline-content" v-html="event.description"></div>
         </li>
     </component>
 </template>
@@ -62,9 +46,15 @@ const props = withDefaults(defineProps<Props>(), {
     font-weight: bold;
 }
 
-.timeline p {
-
+.timeline-content :deep(a) {
+    font-weight: 700;
+    color: var(--color-pink-700);
 }
+
+.dark .timeline-content :deep(a) {
+    color: var(--color-pink-400);
+}
+
 .timeline .event {
     border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
     padding-bottom: 20px;

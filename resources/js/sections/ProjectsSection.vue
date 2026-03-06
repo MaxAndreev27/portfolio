@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import ProjectCard from '@/components/ProjectCard.vue';
-import { Project } from '@/types';
+import { Project, ProjectsSettings } from '@/types';
 import { computed, ref } from 'vue';
 
 const props = defineProps<{
     projects: Project[];
+    projectsSettings: ProjectsSettings;
 }>();
 
 const activeCategory = ref('All');
@@ -50,9 +51,10 @@ const filteredProjects = computed(() => {
         <div class="mx-auto max-w-7xl px-4">
             <div class="mb-12">
                 <h2
+                    v-if="projectsSettings.projects_title"
                     class="text-4xl font-extrabold text-gray-900 sm:text-4xl dark:text-white"
                 >
-                    My projects
+                    {{ projectsSettings.projects_title }}
                 </h2>
                 <div class="mt-2 h-1.5 w-20 rounded-full bg-indigo-600"></div>
             </div>

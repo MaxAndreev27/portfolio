@@ -60,13 +60,69 @@ export interface Project {
     tags: string[];
 }
 
-export interface HomeSettings {
+export interface MenuSettings {
+    hero_is_featured: boolean;
+    about_is_featured: boolean;
+    projects_is_featured: boolean;
+    technology_is_featured: boolean;
+    contact_is_featured: boolean;
+}
+
+export interface HeroSettings {
     hero_is_featured: boolean;
     hero_title: string;
     hero_description: string;
     hero_image: string | null;
     hero_button_about: string;
     hero_button_contact: string;
+}
+
+interface TimelineEvent {
+    period: string;
+    description: string;
+}
+
+interface AboutSkill {
+    category: string;
+    content: string;
+}
+
+export interface AboutSettings {
+    about_is_featured: boolean;
+    about_title: string;
+    about_timeline: TimelineEvent[];
+    about_skills: AboutSkill[];
+}
+
+export interface ProjectsSettings {
+    projects_is_featured: boolean;
+    projects_title: string;
+}
+
+export interface TechnologySettings {
+    technology_is_featured: boolean;
+}
+
+export interface ContactSettings {
+    contact_is_featured: boolean;
+    contact_title: string;
+}
+
+interface SocialLinks {
+    label: string;
+    url: string;
+    icon: string | null;
+}
+
+export interface FooterSettings {
+    footer_social_links: SocialLinks[];
+    footer_copyright: string;
+    footer_powered: string;
+}
+
+export interface SeoSettings {
+    seo_title: string;
+    seo_description: string;
 }
 
 export type BreadcrumbItemType = BreadcrumbItem;

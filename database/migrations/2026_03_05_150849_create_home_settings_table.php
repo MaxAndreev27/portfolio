@@ -13,12 +13,34 @@ return new class extends Migration
     {
         Schema::create('home_settings', function (Blueprint $table) {
             $table->id();
+            //hero
             $table->boolean('hero_is_featured')->default(true);
             $table->string('hero_title')->nullable();
             $table->string('hero_description')->nullable();
             $table->string('hero_image')->nullable();
             $table->string('hero_button_about')->nullable();
             $table->string('hero_button_contact')->nullable();
+            //about
+            $table->boolean('about_is_featured')->default(true);
+            $table->string('about_title')->nullable();
+            $table->json('about_timeline')->nullable();
+            $table->json('about_skills')->nullable();
+            //projects
+            $table->boolean('projects_is_featured')->default(true);
+            $table->string('projects_title')->nullable();
+            //technology
+            $table->boolean('technology_is_featured')->default(true);
+            //contact
+            $table->boolean('contact_is_featured')->default(true);
+            $table->string('contact_title')->nullable();
+            //footer
+            $table->json('footer_social_links')->nullable();
+            $table->string('footer_copyright')->nullable();
+            $table->string('footer_powered')->nullable();
+            //SEO
+            $table->string('seo_title')->nullable();
+            $table->text('seo_description')->nullable();
+
             $table->timestamps();
         });
     }

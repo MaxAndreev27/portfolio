@@ -49,14 +49,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300;900&display=swap"
         media="print" onload="this.media='all'">
 
-
     <noscript>
         <link rel="stylesheet" href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@300;900&display=swap" />
     </noscript>
-
-    <link rel="preload" as="image" href="{{ Vite::asset('resources/js/assets/images/avatar300.webp') }}"
-        fetchpriority="high">
 
     @vite(['resources/css/app.css', 'resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
     @inertiaHead

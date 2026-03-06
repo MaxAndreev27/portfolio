@@ -2,11 +2,25 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { GradientText } from '@/components/ui/gradient-text';
-import { HomeSettings } from '@/types';
+import { HeroSettings } from '@/types';
+import { computed } from 'vue';
 
-defineProps<{
-    homeSettings: HomeSettings;
+const props = defineProps<{
+    heroSettings: HeroSettings;
 }>();
+
+const activeButtonsCount = computed(() => {
+    let count = 0;
+    if (props.heroSettings.hero_button_about) count++;
+    if (props.heroSettings.hero_button_contact) count++;
+    return count;
+});
+
+const gridConfigClasses = computed(() => {
+    return activeButtonsCount.value === 2
+        ? 'grid-cols-2'
+        : 'grid-cols-1 justify-items-center';
+});
 
 const goToAbout = () => {
     const el = document.getElementById('main-about');
@@ -29,21 +43,23 @@ const goToContact = () => {
             class="container mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center"
         >
             <GradientText
+                v-if="heroSettings.hero_title"
                 as="h1"
                 class="mb-2 text-center text-5xl font-bold sm:text-6xl md:text-8xl"
-                >{{ homeSettings.hero_title }}</GradientText
+                >{{ heroSettings.hero_title }}</GradientText
             >
             <h2
+                v-if="heroSettings.hero_description"
                 class="mb-4 text-center text-2xl font-bold uppercase sm:text-3xl md:text-5xl"
             >
-                {{ homeSettings.hero_description }}
+                {{ heroSettings.hero_description }}
             </h2>
             <Avatar
                 class="mb-8 h-50 w-50 overflow-hidden rounded-full sm:h-75 sm:w-75"
             >
                 <AvatarImage
-                    v-if="homeSettings.hero_image"
-                    :src="homeSettings.hero_image"
+                    v-if="heroSettings.hero_image"
+                    :src="heroSettings.hero_image"
                     :alt="'avatar'"
                     loading="eager"
                     fetchpriority="high"
@@ -52,20 +68,25 @@ const goToContact = () => {
                     avatar
                 </AvatarFallback>
             </Avatar>
-            <div class="grid grid-cols-2 gap-4 md:gap-6">
+            <div
+                v-if="activeButtonsCount"
+                :class="['grid gap-4 md:gap-6', gridConfigClasses]"
+            >
                 <Button
+                    v-if="heroSettings.hero_button_about"
                     class="cursor-pointer text-xl md:text-2xl"
                     variant="default"
                     size="xl2"
                     @click="goToAbout"
-                    >{{ homeSettings.hero_button_about }}</Button
+                    >{{ heroSettings.hero_button_about }}</Button
                 >
                 <Button
+                    v-if="heroSettings.hero_button_contact"
                     class="cursor-pointer text-xl md:text-2xl"
                     variant="secondary"
                     size="xl2"
                     @click="goToContact"
-                    >{{ homeSettings.hero_button_contact }}</Button
+                    >{{ heroSettings.hero_button_contact }}</Button
                 >
             </div>
         </div>

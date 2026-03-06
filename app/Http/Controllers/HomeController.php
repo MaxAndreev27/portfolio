@@ -13,8 +13,6 @@ class HomeController extends Controller
     {
         $homeSettings = HomeSettings::first();
 
-        // dd($homeSettings);
-
         $projects = Project::query()
             ->select(['id', 'title', 'slug', 'excerpt', 'image', 'url', 'github_url', 'completed_at', 'tags'])
             ->published()
@@ -36,14 +34,51 @@ class HomeController extends Controller
         return Inertia::render('Home', [
             'canRegister' => Features::enabled(Features::registration()),
             'projects' => $projects,
-            'homeSettings' => $homeSettings ? [
+            'menuSettings' => $homeSettings ? [
+                'hero_is_featured' => (bool) $homeSettings->hero_is_featured,
+                'about_is_featured' => (bool) $homeSettings->about_is_featured,
+                'projects_is_featured' => (bool) $homeSettings->projects_is_featured,
+                'technology_is_featured' => (bool) $homeSettings->technology_is_featured,
+                'contact_is_featured' => (bool) $homeSettings->contact_is_featured,
+            ] : null,
+            'heroSettings' => $homeSettings ? [
                 'hero_is_featured' => (bool) $homeSettings->hero_is_featured,
                 'hero_title' => $homeSettings->hero_title,
                 'hero_description' => $homeSettings->hero_description,
                 'hero_image' => $homeSettings->image_url,
                 'hero_button_about' => $homeSettings->hero_button_about,
                 'hero_button_contact' => $homeSettings->hero_button_contact,
-            ] : null
+            ] : null,
+            'aboutSettings' => $homeSettings ? [
+                'about_is_featured' => (bool) $homeSettings->about_is_featured,
+                'about_title' => $homeSettings->about_title,
+                'about_timeline' => $homeSettings->about_timeline,
+                'about_skills' => $homeSettings->about_skills,
+            ] : null,
+            'projectsSettings' => $homeSettings ? [
+                'projects_is_featured' => (bool) $homeSettings->projects_is_featured,
+                'projects_title' => $homeSettings->projects_title,
+            ] : null,
+            'technologySettings' => $homeSettings ? [
+                'technology_is_featured' => (bool) $homeSettings->technology_is_featured,
+            ] : null,
+            'contactSettings' => $homeSettings ? [
+                'contact_is_featured' => (bool) $homeSettings->contact_is_featured,
+                'contact_title' => $homeSettings->contact_title,
+            ] : null,
+            'footerSettings' => $homeSettings ? [
+                'footer_social_links' => collect($homeSettings->footer_social_links)->map(fn($item) => [
+                    'label' => $item['label'] ?? '',
+                    'url' => $item['url'] ?? '#',
+                    'icon' => !empty($item['icon']) ? asset('storage/' . $item['icon']) : null,
+                ]),
+                'footer_copyright' => $homeSettings->footer_copyright,
+                'footer_powered' => $homeSettings->footer_powered,
+            ] : null,
+            'seoSettings' => $homeSettings ? [
+                'seo_title' => $homeSettings->seo_title,
+                'seo_description' => $homeSettings->seo_description,
+            ] : null,
         ]);
     }
 }
