@@ -11,8 +11,13 @@ import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
 import { store } from '@/routes/contact';
+import { ContactSettings } from '@/types';
 import { Form, useForm, usePage } from '@inertiajs/vue3';
 import { ref, watch } from 'vue';
+
+defineProps<{
+    contactSettings: ContactSettings;
+}>();
 
 const showSuccess = ref(false);
 const showError = ref(false);
@@ -69,9 +74,10 @@ const handleKeyPress = () => {
                     <Card class="rounded-xl">
                         <CardHeader class="px-4 pt-4 pb-0 text-center sm:px-10">
                             <GlitchText
+                                v-if="contactSettings.contact_title"
                                 class="content-center text-4xl font-bold sm:text-5xl lg:text-6xl"
                                 data-text="Contact me"
-                                >Contact me</GlitchText
+                                >{{ contactSettings.contact_title }}</GlitchText
                             >
                         </CardHeader>
                         <CardContent class="p-4 sm:px-10">

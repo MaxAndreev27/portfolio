@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import AppearanceTabs from '@/components/AppearanceTabs.vue';
+import { MenuSettings } from '@/types';
 import { onMounted, onUnmounted, ref } from 'vue';
+
+const props = defineProps<{
+    menuSettings: MenuSettings;
+}>();
 
 const mobileOpen = ref(false);
 const activeSection = ref('');
@@ -33,14 +38,22 @@ const scrollToSection = (e: Event, id: string) => {
     closeMobile(); // Закриваємо меню після кліку
 };
 
+const sections = [
+    { id: 'main-hero', active: props.menuSettings.hero_is_featured },
+    { id: 'main-about', active: props.menuSettings.about_is_featured },
+    { id: 'main-projects', active: props.menuSettings.projects_is_featured },
+    {
+        id: 'main-technology',
+        active: props.menuSettings.technology_is_featured,
+    },
+    { id: 'main-contact', active: props.menuSettings.contact_is_featured },
+];
+
 const updateActiveNav = () => {
-    const sectionIds = [
-        'main-hero',
-        'main-about',
-        'main-projects',
-        'main-technology',
-        'main-contact',
-    ];
+    const sectionIds = sections
+        .filter((section) => section.active)
+        .map((section) => section.id);
+
     let current = '';
 
     for (const id of sectionIds) {
@@ -85,7 +98,7 @@ onUnmounted(() => {
 <template>
     <header class="fixed top-5 z-50 container w-full px-5">
         <nav
-            class="grid grid-cols-3 items-center gap-4 rounded-full bg-[var(--navbar)] px-5 shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 dark:ring-white/10"
+            class="grid grid-cols-3 items-center gap-4 rounded-full bg-(--navbar) px-5 shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 dark:ring-white/10"
         >
             <a href="/" class="logo flex justify-self-start">
                 <img
@@ -98,7 +111,7 @@ onUnmounted(() => {
 
             <button
                 @click.stop="toggleMobile"
-                class="flex h-[55px] items-center justify-self-center md:hidden"
+                class="flex h-13.75 items-center justify-self-center md:hidden"
                 :aria-expanded="mobileOpen"
                 aria-controls="main-menu"
                 aria-label="Відкрити головне меню"
@@ -119,11 +132,11 @@ onUnmounted(() => {
                 class="text-2xl shadow md:text-lg md:shadow-none lg:text-2xl"
                 :class="
                     mobileOpen
-                        ? 'absolute top-full right-4 left-4 z-50 mt-2 flex flex-col rounded-xl bg-[var(--navbar)] p-2'
+                        ? 'absolute top-full right-4 left-4 z-50 mt-2 flex flex-col rounded-xl bg-(--navbar) p-2'
                         : 'hidden justify-center justify-self-center md:flex'
                 "
             >
-                <li>
+                <li v-if="menuSettings.hero_is_featured">
                     <a
                         href="#main-hero"
                         :class="{ active: activeSection === 'main-hero' }"
@@ -131,7 +144,7 @@ onUnmounted(() => {
                         >Home</a
                     >
                 </li>
-                <li>
+                <li v-if="menuSettings.about_is_featured">
                     <a
                         href="#main-about"
                         :class="{ active: activeSection === 'main-about' }"
@@ -139,7 +152,7 @@ onUnmounted(() => {
                         >About</a
                     >
                 </li>
-                <li>
+                <li v-if="menuSettings.projects_is_featured">
                     <a
                         href="#main-projects"
                         :class="{ active: activeSection === 'main-projects' }"
@@ -149,7 +162,7 @@ onUnmounted(() => {
                         >Projects</a
                     >
                 </li>
-                <li>
+                <li v-if="menuSettings.technology_is_featured">
                     <a
                         href="#main-technology"
                         :class="{ active: activeSection === 'main-technology' }"
@@ -159,7 +172,7 @@ onUnmounted(() => {
                         >Technology</a
                     >
                 </li>
-                <li>
+                <li v-if="menuSettings.contact_is_featured">
                     <a
                         href="#main-contact"
                         :class="{ active: activeSection === 'main-contact' }"

@@ -562,7 +562,7 @@ onUnmounted(() => {
 <template>
     <section
         id="main-technology"
-        class="main-technology relative w-full overflow-hidden bg-[#000]"
+        class="main-technology relative w-full overflow-hidden bg-black"
         style="
             background-image: linear-gradient(
                 180deg,
@@ -573,7 +573,7 @@ onUnmounted(() => {
     >
         <div class="container mx-auto max-w-4xl overflow-visible px-0">
             <svg
-                class="main1 block h-auto w-[100%] overflow-visible sm:w-full"
+                class="main1 block h-auto w-full overflow-visible sm:w-full"
                 viewBox="-700 -600 1400 1400"
                 preserveAspectRatio="xMidYMid meet"
             >

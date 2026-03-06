@@ -1,53 +1,53 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { FooterSettings } from '@/types';
+
+defineProps<{
+    footerSettings: FooterSettings;
+}>();
+</script>
 
 <template>
     <footer
         id="footer-hero"
-        class="bg-transparent footer-hero footer mb-5 flex w-full justify-center px-5"
+        class="footer-hero footer mt-15 mb-5 flex w-full justify-center bg-transparent px-5"
     >
         <div
-            class="footer-container p-4 sm:p-8 mx-auto w-full rounded-xl border border-[var(--border)] bg-card shadow lg:container"
+            class="footer-container mx-auto w-full rounded-xl border border-border bg-card p-4 shadow sm:p-8 lg:container"
         >
             <div
+                v-if="
+                    footerSettings.footer_social_links &&
+                    footerSettings.footer_social_links.length > 0
+                "
                 class="footer-content mb-4 flex items-center justify-center gap-5"
             >
                 <a
-                    href="https://github.com/MaxAndreev27"
+                    v-for="(link, index) in footerSettings.footer_social_links"
+                    :key="index"
+                    :href="link.url"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="GitHub"
+                    :aria-label="link.label"
                     class="social-icon transform text-current transition-colors hover:-translate-y-1"
                 >
                     <img
-                        width="48px"
-                        height="48px"
-                        src="@/assets/images/github.svg"
-                        alt="LinkedIn"
-                    />
-                </a>
-                <a
-                    href="https://www.linkedin.com/in/your-profile"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label="LinkedIn"
-                    class="social-icon transform text-current transition-colors hover:-translate-y-1"
-                >
-                    <img
-                        width="48px"
-                        height="48px"
-                        src="@/assets/images/linkedin.svg"
-                        alt="LinkedIn"
-                    />
-                </a>
+                        v-if="link.icon"
+                        width="48"
+                        height="48"
+                        :src="link.icon"
+                        :alt="link.label"
+                /></a>
             </div>
             <div
                 class="footer-bottom border-top[var(--navbar-border)] border-t pt-5 text-center"
             >
-                <p>
-                    &copy; {{ new Date().getFullYear() }} Max Andreev. All
-                    rights reserved.
+                <p v-if="footerSettings.footer_copyright">
+                    &copy; {{ new Date().getFullYear() }}
+                    <span>{{ footerSettings.footer_copyright }}</span>
                 </p>
-                <p>Powered by Laravel and Vue</p>
+                <p v-if="footerSettings.footer_powered">
+                    {{ footerSettings.footer_powered }}
+                </p>
             </div>
         </div>
     </footer>
