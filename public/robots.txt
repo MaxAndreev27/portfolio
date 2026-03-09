@@ -1,2 +1,11 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /admin/*
+Disallow: /login
+Disallow: /dashboard
+Disallow: /telescope
+Disallow: /pulse
+Disallow: /register
+
+Sitemap: https://maxandreev.dev/sitemap.xml
