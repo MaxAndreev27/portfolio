@@ -22,6 +22,11 @@ class HomeSettingsSeeder extends Seeder
                 'hero_description' => 'Hero description',
                 'hero_button_about' => 'About me',
                 'hero_button_contact' => 'Contact me',
+                //menu settings
+                'about_is_featured' => true,
+                'projects_is_featured' => true,
+                'technology_is_featured' => true,
+                'contact_is_featured' => true,
             ]
         );
     }
