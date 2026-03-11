@@ -9,6 +9,16 @@ use Inertia\Inertia;
 
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
+Route::get('language/{locale}', function (string $locale) {
+    if (! array_key_exists($locale, config('locales.supported'))) {
+        abort(400);
+    }
+    session()->put('locale', $locale);
+    session()->save();
+
+    return back();
+});
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');

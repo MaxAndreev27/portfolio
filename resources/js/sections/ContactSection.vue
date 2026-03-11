@@ -76,9 +76,9 @@ const handleKeyPress = () => {
                             <GlitchText
                                 v-if="contactSettings.contact_title"
                                 class="content-center text-4xl font-bold sm:text-5xl lg:text-6xl"
-                                data-text="Contact me"
-                                >{{ contactSettings.contact_title }}</GlitchText
                             >
+                                {{ contactSettings.contact_title }}
+                            </GlitchText>
                         </CardHeader>
                         <CardContent class="p-4 sm:px-10">
                             <Form

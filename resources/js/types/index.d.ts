@@ -32,6 +32,8 @@ export type AppPageProps<
         registration: boolean;
         twoFactorAuthentication: boolean;
     };
+    locale: string;
+    locales: Record<string, string>;
 };
 
 export interface User {
@@ -66,6 +68,11 @@ export interface MenuSettings {
     projects_is_featured: boolean;
     technology_is_featured: boolean;
     contact_is_featured: boolean;
+    hero_menu_item: string;
+    about_menu_item: string;
+    projects_menu_item: string;
+    technology_menu_item: string;
+    contact_menu_item: string;
 }
 
 export interface HeroSettings {

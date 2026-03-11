@@ -40,6 +40,11 @@ class HomeController extends Controller
                 'projects_is_featured' => (bool) $homeSettings->projects_is_featured,
                 'technology_is_featured' => (bool) $homeSettings->technology_is_featured,
                 'contact_is_featured' => (bool) $homeSettings->contact_is_featured,
+                'hero_menu_item' => $homeSettings->hero_menu_item,
+                'about_menu_item' => $homeSettings->about_menu_item,
+                'projects_menu_item' => $homeSettings->projects_menu_item,
+                'technology_menu_item' => $homeSettings->technology_menu_item,
+                'contact_menu_item' => $homeSettings->contact_menu_item,
             ] : null,
             'heroSettings' => $homeSettings ? [
                 'hero_is_featured' => (bool) $homeSettings->hero_is_featured,

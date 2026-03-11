@@ -1,20 +1,38 @@
 <script setup lang="ts">
+import { cn } from '@/lib/utils';
 import type { PrimitiveProps } from 'reka-ui';
 import type { HTMLAttributes } from 'vue';
-import { cn } from '@/lib/utils';
+import { computed, useSlots } from 'vue';
 
 interface Props extends PrimitiveProps {
-    class?: HTMLAttributes['class']
+    class?: HTMLAttributes['class'];
 }
 
 const props = withDefaults(defineProps<Props>(), {
     as: 'h2',
-})
+});
 
+const slots = useSlots();
+
+const slotText = computed(() => {
+    if (!slots.default) return '';
+    const children = slots.default();
+    return children
+        .map((node) => {
+            if (typeof node.children === 'string') return node.children;
+            if (Array.isArray(node.children)) return '';
+            return '';
+        })
+        .join('');
+});
 </script>
 
 <template>
-    <component :is="as" :class="cn('glitch', props.class)">
+    <component
+        :is="as"
+        :class="cn('glitch', props.class)"
+        :data-text="slotText"
+    >
         <slot />
     </component>
 </template>
