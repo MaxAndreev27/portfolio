@@ -54,6 +54,8 @@ class HandleInertiaRequests extends Middleware
                 'registration' => \Laravel\Fortify\Features::enabled(\Laravel\Fortify\Features::registration()),
                 'twoFactorAuthentication' => \Laravel\Fortify\Features::enabled(\Laravel\Fortify\Features::twoFactorAuthentication()),
             ],
+            'locale' => session('locale', config('app.locale')),
+            'locales' => config('locales.supported'),
         ];
     }
 }

@@ -47,7 +47,10 @@ const filteredProjects = computed(() => {
 </script>
 
 <template>
-    <section id="main-projects" class="main-projects py-20 dark:bg-gray-900">
+    <section
+        id="main-projects"
+        class="main-projects w-full px-5 py-20 dark:bg-gray-900"
+    >
         <div class="mx-auto max-w-7xl px-4">
             <div class="mb-12">
                 <h2
@@ -56,7 +59,10 @@ const filteredProjects = computed(() => {
                 >
                     {{ projectsSettings.projects_title }}
                 </h2>
-                <div class="mt-2 h-1.5 w-20 rounded-full bg-indigo-600"></div>
+                <div
+                    v-if="projectsSettings.projects_title"
+                    class="mt-2 h-1.5 w-20 rounded-full bg-indigo-600"
+                ></div>
             </div>
             <div
                 class="mb-10 flex flex-wrap items-center justify-between gap-6"

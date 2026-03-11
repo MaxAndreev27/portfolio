@@ -9,10 +9,10 @@ defineProps<{
 <template>
     <footer
         id="footer-hero"
-        class="footer-hero footer mt-15 mb-5 flex w-full justify-center bg-transparent px-5"
+        class="footer-hero footer mx-auto mt-15 mb-5 flex w-full max-w-360 justify-center bg-transparent px-5"
     >
         <div
-            class="footer-container mx-auto w-full rounded-xl border border-border bg-card p-4 shadow sm:p-8 lg:container"
+            class="footer-container mx-auto w-full rounded-xl border border-border bg-card p-4 shadow sm:p-8"
         >
             <div
                 v-if="

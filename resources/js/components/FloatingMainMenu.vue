@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import AppearanceTabs from '@/components/AppearanceTabs.vue';
 import { MenuSettings } from '@/types';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { router, usePage } from '@inertiajs/vue3';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 
 const props = defineProps<{
     menuSettings: MenuSettings;
@@ -76,9 +77,23 @@ const handleClickOutside = (event: MouseEvent) => {
 };
 
 const handleResize = () => {
-    if (window.innerWidth > 767 && mobileOpen.value) {
+    if (window.innerWidth > 1023 && mobileOpen.value) {
         closeMobile();
     }
+};
+
+const page = usePage();
+const currentLocale = computed(() => page.props.locale);
+const locales = computed(() => page.props.locales);
+
+const switchLanguage = (code: string) => {
+    router.get(
+        `/language/${code}`,
+        {},
+        {
+            preserveScroll: true,
+        },
+    );
 };
 
 onMounted(() => {
@@ -96,7 +111,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <header class="fixed top-5 z-50 container w-full px-5">
+    <header class="fixed top-5 z-50 mx-auto w-full max-w-360 px-5">
         <nav
             class="grid grid-cols-3 items-center gap-4 rounded-full bg-(--navbar) px-5 shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 dark:ring-white/10"
         >
@@ -111,10 +126,10 @@ onUnmounted(() => {
 
             <button
                 @click.stop="toggleMobile"
-                class="flex h-13.75 items-center justify-self-center md:hidden"
+                class="flex h-13.75 items-center justify-self-center lg:hidden"
                 :aria-expanded="mobileOpen"
                 aria-controls="main-menu"
-                aria-label="Відкрити головне меню"
+                aria-label="Open main menu"
             >
                 <span
                     :class="['hamburger', { open: mobileOpen }]"
@@ -123,66 +138,95 @@ onUnmounted(() => {
                     <span></span><span></span><span></span>
                 </span>
                 <span class="sr-only">
-                    {{ mobileOpen ? 'Закрити меню' : 'Відкрити меню' }}
+                    {{ mobileOpen ? 'Close menu' : 'Open menu' }}
                 </span>
             </button>
 
             <ul
                 id="main-menu"
-                class="text-2xl shadow md:text-lg md:shadow-none lg:text-2xl"
+                class="text-2xl shadow lg:text-lg lg:shadow-none xl:text-2xl"
                 :class="
                     mobileOpen
                         ? 'absolute top-full right-4 left-4 z-50 mt-2 flex flex-col rounded-xl bg-(--navbar) p-2'
-                        : 'hidden justify-center justify-self-center md:flex'
+                        : 'hidden justify-center justify-self-center lg:flex'
                 "
             >
                 <li v-if="menuSettings.hero_is_featured">
                     <a
+                        v-if="menuSettings.hero_menu_item"
                         href="#main-hero"
+                        class="whitespace-nowrap"
                         :class="{ active: activeSection === 'main-hero' }"
                         @click.prevent="scrollToSection($event, 'main-hero')"
-                        >Home</a
+                        >{{ menuSettings.hero_menu_item }}</a
                     >
                 </li>
                 <li v-if="menuSettings.about_is_featured">
                     <a
+                        v-if="menuSettings.about_menu_item"
                         href="#main-about"
+                        class="whitespace-nowrap"
                         :class="{ active: activeSection === 'main-about' }"
                         @click.prevent="scrollToSection($event, 'main-about')"
-                        >About</a
+                        >{{ menuSettings.about_menu_item }}</a
                     >
                 </li>
                 <li v-if="menuSettings.projects_is_featured">
                     <a
+                        v-if="menuSettings.projects_menu_item"
                         href="#main-projects"
+                        class="whitespace-nowrap"
                         :class="{ active: activeSection === 'main-projects' }"
                         @click.prevent="
                             scrollToSection($event, 'main-projects')
                         "
-                        >Projects</a
+                        >{{ menuSettings.projects_menu_item }}</a
                     >
                 </li>
                 <li v-if="menuSettings.technology_is_featured">
                     <a
+                        v-if="menuSettings.technology_menu_item"
                         href="#main-technology"
+                        class="whitespace-nowrap"
                         :class="{ active: activeSection === 'main-technology' }"
                         @click.prevent="
                             scrollToSection($event, 'main-technology')
                         "
-                        >Technology</a
+                        >{{ menuSettings.technology_menu_item }}</a
                     >
                 </li>
                 <li v-if="menuSettings.contact_is_featured">
                     <a
+                        v-if="menuSettings.contact_menu_item"
                         href="#main-contact"
+                        class="whitespace-nowrap"
                         :class="{ active: activeSection === 'main-contact' }"
                         @click.prevent="scrollToSection($event, 'main-contact')"
-                        >Contact</a
+                        >{{ menuSettings.contact_menu_item }}</a
                     >
                 </li>
             </ul>
 
-            <AppearanceTabs class="isolate justify-self-end" />
+            <div class="inline-flex justify-self-end">
+                <div
+                    class="mx-2 inline-flex w-fit shrink-0 items-center gap-0.5 rounded-full border border-white/5 bg-white/5 p-0.5"
+                >
+                    <button
+                        v-for="(name, code) in locales"
+                        :key="code"
+                        @click="switchLanguage(code as string)"
+                        :class="[
+                            'flex h-6 w-8 cursor-pointer items-center justify-center rounded-full text-sm font-bold uppercase transition-all',
+                            currentLocale === code
+                                ? 'bg-white/10 text-primary shadow-sm'
+                                : 'text-muted-foreground hover:text-pink-600',
+                        ]"
+                    >
+                        {{ code }}
+                    </button>
+                </div>
+                <AppearanceTabs class="isolate justify-self-end" />
+            </div>
         </nav>
     </header>
 </template>
@@ -288,7 +332,7 @@ button .hamburger.open span:nth-child(3) {
     transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
     nav > ul {
         height: auto;
         padding: 8px;
@@ -300,6 +344,12 @@ button .hamburger.open span:nth-child(3) {
     }
     button .hamburger {
         height: 70%;
+    }
+}
+
+@media (max-width: 1279px) {
+    nav > ul li a {
+        padding-inline: 10px;
     }
 }
 
