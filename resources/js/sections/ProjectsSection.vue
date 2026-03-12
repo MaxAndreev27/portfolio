@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ProjectCard from '@/components/ProjectCard.vue';
+import { useTrans } from '@/composables/useTrans';
 import { Project, ProjectsSettings } from '@/types';
 import { computed, ref } from 'vue';
 
@@ -7,6 +8,8 @@ const props = defineProps<{
     projects: Project[];
     projectsSettings: ProjectsSettings;
 }>();
+
+const { t } = useTrans();
 
 const activeCategory = ref('All');
 const sortBy = ref('newest'); // 'newest', 'oldest', 'alphabetical'
@@ -83,31 +86,44 @@ const filteredProjects = computed(() => {
                     </button>
                 </div>
 
-                <div class="relative min-w-45">
-                    <select
-                        v-model="sortBy"
-                        class="w-full cursor-pointer appearance-none rounded-xl border-gray-200 bg-white px-4 py-2.5 pr-10 text-sm font-medium shadow-sm transition-all focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-                    >
-                        <option value="newest">Latest First</option>
-                        <option value="oldest">Oldest First</option>
-                        <option value="alphabetical">By Name (A-Z)</option>
-                    </select>
-                    <div
-                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500"
-                    >
-                        <svg
-                            class="h-4 w-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                <div class="min-w-45">
+                    <label class="text-lg" for="sorting-list">{{
+                        t('projects.sorting-label')
+                    }}</label>
+                    <div class="relative mt-2">
+                        <select
+                            name="sorting-list"
+                            id="sorting-list"
+                            v-model="sortBy"
+                            class="text-md w-full cursor-pointer appearance-none rounded-xl border-gray-200 bg-white px-4 py-2.5 pr-10 font-medium shadow-sm transition-all focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
                         >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M19 9l-7 7-7-7"
-                            />
-                        </svg>
+                            <option value="newest">
+                                {{ t('projects.options.latest-first') }}
+                            </option>
+                            <option value="oldest">
+                                {{ t('projects.options.oldest-first') }}
+                            </option>
+                            <option value="alphabetical">
+                                {{ t('projects.options.by-name') }}
+                            </option>
+                        </select>
+                        <div
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500"
+                        >
+                            <svg
+                                class="h-4 w-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M19 9l-7 7-7-7"
+                                />
+                            </svg>
+                        </div>
                     </div>
                 </div>
             </div>

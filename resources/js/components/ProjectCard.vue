@@ -66,8 +66,9 @@ const year = props.project.completed_at
                     v-if="project.github_url"
                     :href="project.github_url"
                     target="_blank"
-                    class="text-md flex items-center font-medium text-gray-500 transition-colors hover:text-gray-900 dark:hover:text-white"
+                    class="text-md flex items-center font-medium text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
                     title="GitHub"
+                    :aria-label="`GitHub repository for ${project.title}`"
                 >
                     <svg
                         class="mr-1 h-5 w-5"
@@ -85,8 +86,9 @@ const year = props.project.completed_at
                     v-if="project.url"
                     :href="project.url"
                     target="_blank"
-                    class="text-md flex items-center font-medium text-indigo-600 transition-colors hover:text-indigo-500"
-                    title="Перейти на сайт"
+                    class="text-md flex items-center font-medium text-indigo-700 transition-colors hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
+                    title="To site"
+                    :aria-label="`Visit live site for ${project.title}`"
                 >
                     <svg
                         class="mr-1 h-5 w-5"
@@ -106,7 +108,7 @@ const year = props.project.completed_at
 
                 <!-- <a
                     :href="`/projects/${project.slug}`"
-                    class="text-md inline-flex items-center font-semibold text-indigo-600 hover:text-indigo-500"
+                    class="text-md inline-flex items-center font-semibold text-indigo-700 hover:text-indigo-500"
                 >
                     Details
                     <svg
@@ -127,4 +129,3 @@ const year = props.project.completed_at
         </div>
     </div>
 </template>
-
