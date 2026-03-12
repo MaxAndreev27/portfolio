@@ -10,6 +10,7 @@ import { Keypad } from '@/components/ui/keypad';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { Textarea } from '@/components/ui/textarea';
+import { useTrans } from '@/composables/useTrans';
 import { store } from '@/routes/contact';
 import { ContactSettings } from '@/types';
 import { Form, useForm, usePage } from '@inertiajs/vue3';
@@ -18,6 +19,8 @@ import { ref, watch } from 'vue';
 defineProps<{
     contactSettings: ContactSettings;
 }>();
+
+const { t } = useTrans();
 
 const showSuccess = ref(false);
 const showError = ref(false);
@@ -88,8 +91,8 @@ const handleKeyPress = () => {
                             >
                                 <div class="grid gap-4">
                                     <div class="grid gap-2">
-                                        <Label class="text-lg" for="email"
-                                            >Name*</Label
+                                        <Label class="text-lg" for="name"
+                                            >{{ t('contactform.name') }}*</Label
                                         >
                                         <Input
                                             class="text-lg"
@@ -97,7 +100,11 @@ const handleKeyPress = () => {
                                             type="text"
                                             name="name"
                                             required
-                                            placeholder="Name"
+                                            :placeholder="
+                                                t(
+                                                    'contactform.placeholders.name',
+                                                )
+                                            "
                                             v-model="form.name"
                                         />
                                         <InputError
@@ -106,7 +113,9 @@ const handleKeyPress = () => {
                                     </div>
                                     <div class="grid gap-2">
                                         <Label class="text-lg" for="email"
-                                            >Email*</Label
+                                            >{{
+                                                t('contactform.email')
+                                            }}*</Label
                                         >
                                         <Input
                                             class="text-lg"
@@ -114,7 +123,11 @@ const handleKeyPress = () => {
                                             type="email"
                                             name="email"
                                             required
-                                            placeholder="email@example.com"
+                                            :placeholder="
+                                                t(
+                                                    'contactform.placeholders.email',
+                                                )
+                                            "
                                             v-model="form.email"
                                         />
                                         <InputError
@@ -123,14 +136,20 @@ const handleKeyPress = () => {
                                     </div>
                                     <div class="grid gap-2">
                                         <Label class="text-lg" for="email"
-                                            >Message*</Label
+                                            >{{
+                                                t('contactform.message')
+                                            }}*</Label
                                         >
                                         <Textarea
                                             class="h-30 text-lg"
                                             id="message"
                                             name="message"
                                             required
-                                            placeholder="Message"
+                                            :placeholder="
+                                                t(
+                                                    'contactform.placeholders.message',
+                                                )
+                                            "
                                             v-model="form.message"
                                         />
                                         <InputError
@@ -145,7 +164,9 @@ const handleKeyPress = () => {
                                         data-test="login-button"
                                     >
                                         <Spinner v-if="form.processing" />
-                                        <span v-else>Send Message</span>
+                                        <span v-else>{{
+                                            t('contactform.submit')
+                                        }}</span>
                                     </Button>
                                 </div>
                             </Form>

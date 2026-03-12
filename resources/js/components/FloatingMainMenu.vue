@@ -82,20 +82,6 @@ const handleResize = () => {
     }
 };
 
-// const page = usePage();
-// const currentLocale = computed(() => page.props.locale);
-// const locales = computed(() => page.props.locales);
-
-// const switchLanguage = (code: string) => {
-//     router.get(
-//         `/language/${code}`,
-//         {},
-//         {
-//             preserveScroll: true,
-//         },
-//     );
-// };
-
 onMounted(() => {
     window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', updateActiveNav);
