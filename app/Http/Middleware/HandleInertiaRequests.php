@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Illuminate\Support\Facades\File;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -56,6 +57,22 @@ class HandleInertiaRequests extends Middleware
             ],
             'locale' => session('locale', config('app.locale')),
             'locales' => config('locales.supported'),
+            'translations' => $this->translations(),
         ];
+    }
+
+    protected function translations(): array
+    {
+        $locale = session('locale', config('app.locale'));
+        $path = lang_path($locale);
+
+        $translations = [];
+
+        foreach (File::files($path) as $file) {
+            $translations[$file->getFilenameWithoutExtension()]
+                = require $file->getRealPath();
+        }
+
+        return $translations;
     }
 }

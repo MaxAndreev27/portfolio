@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import AppearanceTabs from '@/components/AppearanceTabs.vue';
 import { MenuSettings } from '@/types';
-import { router, usePage } from '@inertiajs/vue3';
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
+import LocaleSwitcher from './LocaleSwitcher.vue';
 
 const props = defineProps<{
     menuSettings: MenuSettings;
@@ -82,20 +82,6 @@ const handleResize = () => {
     }
 };
 
-const page = usePage();
-const currentLocale = computed(() => page.props.locale);
-const locales = computed(() => page.props.locales);
-
-const switchLanguage = (code: string) => {
-    router.get(
-        `/language/${code}`,
-        {},
-        {
-            preserveScroll: true,
-        },
-    );
-};
-
 onMounted(() => {
     window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', updateActiveNav);
@@ -113,7 +99,7 @@ onUnmounted(() => {
 <template>
     <header class="fixed top-5 z-50 mx-auto w-full max-w-360 px-5">
         <nav
-            class="grid grid-cols-3 items-center gap-4 rounded-full bg-(--navbar) px-5 shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 dark:ring-white/10"
+            class="grid grid-cols-[max-content_1fr_max-content] items-center gap-4 rounded-full bg-(--navbar) px-5 shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 dark:ring-white/10"
         >
             <a href="/" class="logo flex justify-self-start">
                 <img
@@ -208,23 +194,7 @@ onUnmounted(() => {
             </ul>
 
             <div class="inline-flex justify-self-end">
-                <div
-                    class="mx-2 inline-flex w-fit shrink-0 items-center gap-0.5 rounded-full border border-white/5 bg-white/5 p-0.5"
-                >
-                    <button
-                        v-for="(name, code) in locales"
-                        :key="code"
-                        @click="switchLanguage(code as string)"
-                        :class="[
-                            'flex h-6 w-8 cursor-pointer items-center justify-center rounded-full text-sm font-bold uppercase transition-all',
-                            currentLocale === code
-                                ? 'bg-white/10 text-primary shadow-sm'
-                                : 'text-muted-foreground hover:text-pink-600',
-                        ]"
-                    >
-                        {{ code }}
-                    </button>
-                </div>
+                <LocaleSwitcher />
                 <AppearanceTabs class="isolate justify-self-end" />
             </div>
         </nav>
