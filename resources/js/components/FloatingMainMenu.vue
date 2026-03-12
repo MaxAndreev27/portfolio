@@ -101,7 +101,7 @@ onUnmounted(() => {
         <nav
             class="grid grid-cols-[max-content_1fr_max-content] items-center gap-4 rounded-full bg-(--navbar) px-5 shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 dark:ring-white/10"
         >
-            <a href="/" class="logo flex justify-self-start">
+            <a href="/" class="logo hidden justify-self-start sm:flex">
                 <img
                     src="@/assets/images/cicd.svg"
                     width="80"
