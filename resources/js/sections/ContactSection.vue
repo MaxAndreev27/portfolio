@@ -92,8 +92,11 @@ const handleKeyPress = () => {
                                 <div class="grid gap-4">
                                     <div class="grid gap-2">
                                         <Label class="text-lg" for="name"
-                                            >{{ t('contactform.name') }}*</Label
-                                        >
+                                            >{{ t('contactform.name')
+                                            }}<span class="text-pink-600"
+                                                >*</span
+                                            >
+                                        </Label>
                                         <Input
                                             class="text-lg"
                                             id="name"
@@ -113,9 +116,10 @@ const handleKeyPress = () => {
                                     </div>
                                     <div class="grid gap-2">
                                         <Label class="text-lg" for="email"
-                                            >{{
-                                                t('contactform.email')
-                                            }}*</Label
+                                            >{{ t('contactform.email')
+                                            }}<span class="text-pink-600"
+                                                >*</span
+                                            ></Label
                                         >
                                         <Input
                                             class="text-lg"
@@ -135,10 +139,11 @@ const handleKeyPress = () => {
                                         />
                                     </div>
                                     <div class="grid gap-2">
-                                        <Label class="text-lg" for="email"
-                                            >{{
-                                                t('contactform.message')
-                                            }}*</Label
+                                        <Label class="text-lg" for="message"
+                                            >{{ t('contactform.message')
+                                            }}<span class="text-pink-600"
+                                                >*</span
+                                            ></Label
                                         >
                                         <Textarea
                                             class="h-30 text-lg"
