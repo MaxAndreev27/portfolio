@@ -77,7 +77,7 @@ const handleClickOutside = (event: MouseEvent) => {
 };
 
 const handleResize = () => {
-    if (window.innerWidth > 1023 && mobileOpen.value) {
+    if (window.innerWidth > 767 && mobileOpen.value) {
         closeMobile();
     }
 };
@@ -101,7 +101,7 @@ onUnmounted(() => {
         <nav
             class="grid grid-cols-[max-content_1fr_max-content] items-center gap-4 rounded-full bg-(--navbar) px-5 shadow ring-1 ring-black/5 backdrop-blur-lg backdrop-contrast-105 backdrop-saturate-150 dark:ring-white/10"
         >
-            <a href="/" class="logo hidden justify-self-start sm:flex">
+            <a href="/" class="logo hidden justify-self-start lg:flex">
                 <img
                     src="@/assets/images/cicd.svg"
                     width="80"
@@ -112,7 +112,7 @@ onUnmounted(() => {
 
             <button
                 @click.stop="toggleMobile"
-                class="flex h-13.75 items-center justify-self-center lg:hidden"
+                class="flex h-13.75 items-center justify-self-center md:hidden"
                 :aria-expanded="mobileOpen"
                 aria-controls="main-menu"
                 aria-label="Open main menu"
@@ -130,11 +130,11 @@ onUnmounted(() => {
 
             <ul
                 id="main-menu"
-                class="text-2xl shadow lg:text-lg lg:shadow-none xl:text-2xl"
+                class="text-2xl shadow md:text-base lg:text-xl lg:shadow-none xl:text-2xl"
                 :class="
                     mobileOpen
                         ? 'absolute top-full right-4 left-4 z-50 mt-2 flex flex-col rounded-xl bg-(--navbar) p-2'
-                        : 'hidden justify-center justify-self-center lg:flex'
+                        : 'hidden justify-center justify-self-center md:flex'
                 "
             >
                 <li v-if="menuSettings.hero_is_featured">
@@ -302,7 +302,7 @@ button .hamburger.open span:nth-child(3) {
     transform: translate(-50%, -50%) rotate(-45deg);
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 767px) {
     nav > ul {
         height: auto;
         padding: 8px;
