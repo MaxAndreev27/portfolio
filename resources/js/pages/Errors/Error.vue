@@ -11,7 +11,7 @@ const props = defineProps({
     },
     message: {
         type: String,
-        default: 'Щось пішло не так',
+        default: 'Something went wrong',
     },
     exception: {
         type: Object,
@@ -20,7 +20,7 @@ const props = defineProps({
 });
 
 const title = computed(() => {
-    return `Помилка ${props.status} - ${props.message}`;
+    return `Error ${props.status} - ${props.message}`;
 });
 
 const scene = ref<HTMLElement | null>(null);
