@@ -10,7 +10,8 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 window.Pusher = Pusher;
 
-console.log('key: ' + import.meta.env.VITE_REVERB_APP_KEY);
+console.log('appName: ' + import.meta.env.VITE_APP_NAME);
+// console.log('key: ' + import.meta.env.VITE_REVERB_APP_KEY);
 console.log('wsHost: ' + import.meta.env.VITE_REVERB_HOST);
 console.log('wsPort: ' + import.meta.env.VITE_REVERB_PORT);
 console.log('wssPort: ' + import.meta.env.VITE_REVERB_PORT);
