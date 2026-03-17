@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ChatWidget from '@/components/ChatWidget.vue';
 import FloatingMainMenu from '@/components/FloatingMainMenu.vue';
 import HeroSection from '@/sections/HeroSection.vue';
 import {
@@ -98,6 +99,8 @@ withDefaults(
         </main>
 
         <FooterSection :footerSettings="footerSettings" />
+
+        <ChatWidget />
 
         <div class="hidden h-14.5 lg:block"></div>
     </div>
