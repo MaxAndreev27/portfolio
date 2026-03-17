@@ -108,6 +108,19 @@ COPY --from=base /var/www/html/vendor /app/vendor
 # який вимагає ваш фронтенд.
 RUN php artisan wayfinder:generate --with-form
 
+# --- ДОДАЙТЕ ЦІ РЯДКИ ТУТ ---
+ARG VITE_REVERB_APP_KEY
+ARG VITE_REVERB_HOST
+ARG VITE_REVERB_PORT
+ARG VITE_REVERB_SCHEME
+
+# Експортуємо їх як змінні середовища для процесу збірки Vite
+ENV VITE_REVERB_APP_KEY=$VITE_REVERB_APP_KEY
+ENV VITE_REVERB_HOST=$VITE_REVERB_HOST
+ENV VITE_REVERB_PORT=$VITE_REVERB_PORT
+ENV VITE_REVERB_SCHEME=$VITE_REVERB_SCHEME
+# ----------------------------
+
 # Use yarn or npm depending on what type of
 # lock file we might find. Defaults to
 # NPM if no lock file is found.
