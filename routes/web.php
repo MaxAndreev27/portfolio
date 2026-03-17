@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SitemapController;
@@ -30,6 +31,11 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+//Routes for Broadcasting ChatWidget
+Route::post('/chat/send', [ChatController::class, 'sendMessage'])->middleware(['auth', 'verified'])->name('chat.send');
+
+Route::get('/chat/messages/{userId}', [ChatController::class, 'getMessages'])->middleware(['auth'])->name('chat.get');
 
 // Fallback route for 404 errors
 Route::fallback(function () {

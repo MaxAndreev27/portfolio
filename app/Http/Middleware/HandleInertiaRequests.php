@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -58,6 +59,7 @@ class HandleInertiaRequests extends Middleware
             'locale' => session('locale', config('app.locale')),
             'locales' => config('locales.supported'),
             'translations' => $this->translations(),
+            'users' => User::select('id', 'name')->get(),
         ];
     }
 
