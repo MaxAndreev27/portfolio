@@ -18,7 +18,6 @@ import { computed, defineAsyncComponent } from 'vue';
 
 const page = usePage();
 const isAuth = computed(() => !!page.props.auth.user);
-console.log('isAuth: ' + isAuth.value);
 
 const AboutSection = defineAsyncComponent(
     () => import('@/sections/AboutSection.vue'),
