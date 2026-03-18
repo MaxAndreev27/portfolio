@@ -11,6 +11,7 @@ console_command = 'php /var/www/html/artisan tinker'
   [build.args]
     NODE_VERSION = '24'
     PHP_VERSION = '8.4'
+    VITE_APP_NAME = 'Portfolio'
     VITE_REVERB_APP_KEY = '33vpneybjabste7jx3dr'
     VITE_REVERB_HOST = 'maxandreev.dev'
     VITE_REVERB_PORT = '443'

@@ -109,12 +109,14 @@ COPY --from=base /var/www/html/vendor /app/vendor
 RUN php artisan wayfinder:generate --with-form
 
 # --- ДОДАЙТЕ ЦІ РЯДКИ ТУТ ---
+ARG VITE_APP_NAME
 ARG VITE_REVERB_APP_KEY
 ARG VITE_REVERB_HOST
 ARG VITE_REVERB_PORT
 ARG VITE_REVERB_SCHEME
 
 # Експортуємо їх як змінні середовища для процесу збірки Vite
+ENV VITE_APP_NAME=$VITE_APP_NAME
 ENV VITE_REVERB_APP_KEY=$VITE_REVERB_APP_KEY
 ENV VITE_REVERB_HOST=$VITE_REVERB_HOST
 ENV VITE_REVERB_PORT=$VITE_REVERB_PORT
