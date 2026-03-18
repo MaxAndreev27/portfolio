@@ -13,8 +13,12 @@ import {
     SeoSettings,
     TechnologySettings,
 } from '@/types';
-import { Head } from '@inertiajs/vue3';
-import { defineAsyncComponent } from 'vue';
+import { Head, usePage } from '@inertiajs/vue3';
+import { computed, defineAsyncComponent } from 'vue';
+
+const page = usePage();
+const isAuth = computed(() => !!page.props.auth.user);
+console.log('isAuth: ' + isAuth.value);
 
 const AboutSection = defineAsyncComponent(
     () => import('@/sections/AboutSection.vue'),
@@ -100,7 +104,7 @@ withDefaults(
 
         <FooterSection :footerSettings="footerSettings" />
 
-        <ChatWidget />
+        <ChatWidget v-if="isAuth" />
 
         <div class="hidden h-14.5 lg:block"></div>
     </div>
