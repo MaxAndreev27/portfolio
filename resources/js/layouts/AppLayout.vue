@@ -11,7 +11,6 @@ interface Props {
 
 const page = usePage();
 const isAuth = computed(() => !!page.props.auth.user);
-console.log('isAuth: ' + isAuth.value);
 
 withDefaults(defineProps<Props>(), {
     breadcrumbs: () => [],

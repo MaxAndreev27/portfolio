@@ -10,12 +10,12 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 window.Pusher = Pusher;
 
-console.log('appName: ' + import.meta.env.VITE_APP_NAME);
+// console.log('appName: ' + import.meta.env.VITE_APP_NAME);
 // console.log('key: ' + import.meta.env.VITE_REVERB_APP_KEY);
-console.log('wsHost: ' + import.meta.env.VITE_REVERB_HOST);
-console.log('wsPort: ' + import.meta.env.VITE_REVERB_PORT);
-console.log('wssPort: ' + import.meta.env.VITE_REVERB_PORT);
-console.log('forceTLS: ' + import.meta.env.VITE_REVERB_SCHEME);
+// console.log('wsHost: ' + import.meta.env.VITE_REVERB_HOST);
+// console.log('wsPort: ' + import.meta.env.VITE_REVERB_PORT);
+// console.log('wssPort: ' + import.meta.env.VITE_REVERB_PORT);
+// console.log('forceTLS: ' + import.meta.env.VITE_REVERB_SCHEME);
 
 window.Echo = new Echo({
     broadcaster: 'reverb',

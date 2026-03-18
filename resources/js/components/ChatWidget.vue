@@ -209,7 +209,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="fixed right-6 bottom-6 z-9999 flex flex-col items-end">
+    <div
+        class="fixed right-2 bottom-6 z-9999 flex flex-col items-end md:right-6"
+    >
         <Transition
             enter-active-class="transition duration-300 ease-out"
             enter-from-class="transform translate-y-10 opacity-0 scale-95"
@@ -220,7 +222,7 @@ onUnmounted(() => {
         >
             <div
                 v-if="isOpen"
-                class="mb-4 flex h-140 w-100 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-800"
+                class="mb-4 flex h-140 w-94 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl sm:w-140 md:w-160 dark:border-gray-700 dark:bg-gray-800"
             >
                 <div
                     class="flex items-center justify-between bg-indigo-600 p-4 text-white"
@@ -249,7 +251,7 @@ onUnmounted(() => {
 
                 <div class="flex h-full overflow-hidden">
                     <div
-                        class="w-20 overflow-y-auto border-r border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900/20"
+                        class="flex w-34 flex-col overflow-y-auto border-r border-gray-200 bg-gray-50 sm:w-40 md:w-46 dark:border-gray-700 dark:bg-gray-900"
                     >
                         <div
                             v-for="user in allUsers.filter(
@@ -257,29 +259,43 @@ onUnmounted(() => {
                             )"
                             :key="user.id"
                             @click="selectUser(user.id)"
-                            class="relative flex cursor-pointer justify-center p-3 hover:bg-gray-100 dark:hover:bg-gray-700"
-                            :title="user.name"
+                            class="relative flex cursor-pointer items-center gap-3 p-3 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+                            :class="
+                                selectedUserIds.includes(user.id)
+                                    ? 'bg-indigo-50 dark:bg-gray-800'
+                                    : ''
+                            "
                         >
-                            <div
-                                :class="[
-                                    'flex h-10 w-10 items-center justify-center rounded-full border-2 text-xs font-bold uppercase',
-                                    selectedUserIds.includes(user.id)
-                                        ? 'border-indigo-500 bg-indigo-100 text-indigo-700'
-                                        : 'border-transparent bg-gray-200 text-gray-600',
-                                ]"
-                            >
-                                {{ user.name.charAt(0) }}
+                            <div class="relative shrink-0">
+                                <div
+                                    class="flex h-10 w-10 items-center justify-center rounded-full font-semibold text-white"
+                                    :class="
+                                        selectedUserIds.includes(user.id)
+                                            ? 'bg-indigo-600 ring-2 ring-indigo-400'
+                                            : 'bg-gray-400'
+                                    "
+                                >
+                                    {{ user.name.charAt(0).toUpperCase() }}
+                                </div>
+
+                                <span
+                                    v-if="onlineUserIds.includes(user.id)"
+                                    class="absolute right-0 bottom-0 h-3 w-3 rounded-full border-2 border-white bg-green-500 dark:border-gray-900"
+                                ></span>
                             </div>
-                            <span
-                                v-if="onlineUserIds.includes(user.id)"
-                                class="absolute right-4 bottom-3 h-3 w-3 rounded-full border-2 border-white bg-green-500"
-                            ></span>
-                            <span
-                                v-if="unreadCounts[user.id] > 0"
-                                class="absolute top-2 right-4 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[8px] text-white"
-                            >
-                                {{ unreadCounts[user.id] }}
-                            </span>
+
+                            <div class="min-w-0 flex-1">
+                                <p
+                                    class="truncate text-sm font-medium text-gray-900 dark:text-gray-100"
+                                >
+                                    {{ user.name }}
+                                </p>
+                            </div>
+
+                            <div
+                                v-if="unreadCounts[user.id]"
+                                class="h-2 w-2 rounded-full bg-indigo-600"
+                            ></div>
                         </div>
                     </div>
 
