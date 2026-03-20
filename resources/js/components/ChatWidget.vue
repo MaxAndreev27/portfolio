@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useTrans } from '@/composables/useTrans';
 import { usePage } from '@inertiajs/vue3';
 import axios from 'axios';
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
@@ -18,6 +19,7 @@ interface Message {
 }
 
 const page = usePage();
+const { t } = useTrans();
 
 // Отримуємо поточного користувача.
 // Якщо в Filament props.auth не доступний, можна додати логіку завантаження через axios.
@@ -227,7 +229,7 @@ onUnmounted(() => {
                 <div
                     class="flex items-center justify-between bg-indigo-600 p-4 text-white"
                 >
-                    <h3 class="font-bold">Повідомлення</h3>
+                    <h3 class="font-bold">{{ t('chatwidget.title') }}</h3>
                     <button
                         @click="isOpen = false"
                         class="cursor-pointer hover:opacity-75"
@@ -308,7 +310,7 @@ onUnmounted(() => {
                                 v-if="selectedUserIds.length === 0"
                                 class="flex h-full items-center justify-center text-center text-xs text-gray-400"
                             >
-                                Оберіть контакт зліва
+                                {{ t('chatwidget.select_contact') }}
                             </div>
                             <div
                                 v-for="msg in messages"
@@ -337,7 +339,7 @@ onUnmounted(() => {
                                     <span>{{
                                         msg.created_at
                                             ? formatFullDate(msg.created_at)
-                                            : 'надсилається...'
+                                            : t('chatwidget.sending')
                                     }}</span>
 
                                     <svg
@@ -362,9 +364,10 @@ onUnmounted(() => {
                             </div>
                             <div
                                 v-if="isTyping"
-                                class="animate-pulse text-[10px] text-gray-500 italic"
+                                class="animate-pulse text-sm text-gray-500 italic"
                             >
-                                {{ typingUser }} друкує...
+                                {{ typingUser }}
+                                {{ t('chatwidget.printing') }}...
                             </div>
                         </div>
 
@@ -377,17 +380,17 @@ onUnmounted(() => {
                                     @keydown="sendTypingEvent"
                                     @keyup.enter="sendMessage"
                                     :disabled="selectedUserIds.length === 0"
-                                    placeholder="Текст..."
+                                    :placeholder="t('chatwidget.text')"
                                     class="w-full rounded-lg border-gray-300 text-lg focus:ring-indigo-500 dark:bg-gray-800"
                                 />
                                 <button
                                     @click="sendMessage"
                                     :disabled="!newMessage.trim()"
-                                    class="text-indigo-600 hover:scale-110 disabled:opacity-50"
+                                    class="text-indigo-600 hover:scale-110 disabled:opacity-50 cursor-pointer"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
+                                        class="h-8 w-8"
                                         fill="none"
                                         viewBox="0 0 24 24"
                                         stroke="currentColor"
