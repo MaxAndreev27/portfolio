@@ -22,7 +22,6 @@ const page = usePage();
 const { t } = useTrans();
 
 // Отримуємо поточного користувача.
-// Якщо в Filament props.auth не доступний, можна додати логіку завантаження через axios.
 const currentUser = computed(() => page.props.auth?.user as User);
 const allUsers = computed(() => (page.props.users as User[]) || []);
 
@@ -386,7 +385,7 @@ onUnmounted(() => {
                                 <button
                                     @click="sendMessage"
                                     :disabled="!newMessage.trim()"
-                                    class="text-indigo-600 hover:scale-110 disabled:opacity-50 cursor-pointer"
+                                    class="cursor-pointer text-indigo-600 hover:scale-110 disabled:opacity-50"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
