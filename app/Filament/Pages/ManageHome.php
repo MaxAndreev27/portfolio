@@ -24,6 +24,7 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Textarea;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Filament\Schemas\Components\Section;
 
 
 class ManageHome extends Page implements HasForms
@@ -314,52 +315,6 @@ class ManageHome extends Page implements HasForms
                                                                             ->label('Footer powered')
                                                                             ->placeholder('Text under copyright')
                                                                             ->maxLength(255),
-
-                                                                        Repeater::make('footer_social_links')
-                                                                            ->columnSpanFull()
-                                                                            ->grid(2)
-                                                                            ->label('Social links')
-                                                                            ->schema([
-                                                                                TextInput::make('label')
-                                                                                    ->label('Label (aria-label)')
-                                                                                    ->placeholder('GitHub')
-                                                                                    ->required()
-                                                                                    ->maxLength(50),
-
-                                                                                TextInput::make('url')
-                                                                                    ->label('Link (href)')
-                                                                                    ->url()
-                                                                                    ->required()
-                                                                                    ->maxLength(255),
-
-                                                                                FileUpload::make('icon')
-                                                                                    ->label('Іконка (SVG)')
-                                                                                    ->image()
-                                                                                    ->maxSize(1024)
-                                                                                    ->required()
-                                                                                    ->disk('public')
-                                                                                    ->visibility('public')
-                                                                                    ->directory('social-icons')
-                                                                                    ->getUploadedFileNameForStorageUsing(
-                                                                                        fn(TemporaryUploadedFile $file): string => (string) str('icon')
-                                                                                            ->slug()
-                                                                                            ->limit(20, '')
-                                                                                            ->append('-' . now()->format('Y-m-d-H-i'))
-                                                                                            ->append('.' . $file->getClientOriginalExtension())
-                                                                                    )
-                                                                                    ->moveFiles()
-                                                                                    ->imageEditor()
-                                                                                    ->imageEditorAspectRatioOptions([
-                                                                                        '1:1' => '1:1',
-                                                                                    ])
-                                                                                    ->imageEditorMode(2)
-                                                                                    ->automaticallyCropImagesToAspectRatio('1:1')
-                                                                                    ->automaticallyResizeImagesMode('cover'),
-                                                                            ])
-                                                                            ->itemLabel(fn(array $state): ?string => $state['label'] ?? null)
-                                                                            ->collapsible()
-                                                                            ->cloneable()
-                                                                            ->reorderableWithButtons(),
                                                                     ]),
                                                                 Group::make()
                                                                     ->columnSpan(1)
@@ -394,6 +349,53 @@ class ManageHome extends Page implements HasForms
                                     ])
                             )->toArray()
                     ),
+                Section::make('Footer Social links')
+                    ->schema([
+                        Repeater::make("footer_social_links")
+                            ->columnSpanFull()
+                            ->grid(2)
+                            ->label('Social links')
+                            ->schema([
+                                TextInput::make('label')
+                                    ->label('Label (aria-label)')
+                                    ->placeholder('GitHub for example')
+                                    ->required()
+                                    ->maxLength(50),
+
+                                TextInput::make('url')
+                                    ->label('Link (href)')
+                                    ->url()
+                                    ->required()
+                                    ->maxLength(255),
+
+                                FileUpload::make('icon')
+                                    ->label('Іконка (SVG)')
+                                    ->image()
+                                    ->maxSize(1024)
+                                    ->required()
+                                    ->disk('public')
+                                    ->visibility('public')
+                                    ->directory('social-icons')
+                                    ->getUploadedFileNameForStorageUsing(
+                                        fn(TemporaryUploadedFile $file): string => (string) str('icon')
+                                            ->append('-' . now()->format('Y-m-d-H-i-s'))
+                                            ->append('-' . uniqid())
+                                            ->append('.' . $file->getClientOriginalExtension())
+                                    )
+                                    ->moveFiles()
+                                    ->imageEditor()
+                                    ->imageEditorAspectRatioOptions([
+                                        '1:1' => '1:1',
+                                    ])
+                                    ->imageEditorMode(2)
+                                    ->automaticallyCropImagesToAspectRatio('1:1')
+                                    ->automaticallyResizeImagesMode('cover'),
+                            ])
+                            ->itemLabel(fn(array $state): ?string => $state['label'] ?? null)
+                            ->collapsible()
+                            ->cloneable()
+                            ->reorderableWithButtons(),
+                    ]),
             ])
             ->statePath('data');
     }
