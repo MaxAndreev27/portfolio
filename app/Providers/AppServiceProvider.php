@@ -14,6 +14,9 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\DatePicker;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,6 +36,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        RateLimiter::for('global', function (Request $request) {
+            return Limit::perMinute(100)->by($request->ip())->response(function (Request $request, array $headers) {
+                return response('Too many requests. Try again later.', 429, $headers);
+            });
+        });
+
         Project::observe(ProjectObserver::class);
         HomeSettings::observe(HomeSettingsObserver::class);
 

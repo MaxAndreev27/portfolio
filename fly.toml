@@ -32,6 +32,11 @@ console_command = 'php /var/www/html/artisan tinker'
   force_https = true
   processes = ['app']
 
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 30
+    hard_limit = 50
+
   [[http_service.checks]]
     grace_period = "25s"
     interval = "15s"
@@ -45,6 +50,6 @@ console_command = 'php /var/www/html/artisan tinker'
   processes = ['app']
 
 [[vm]]
-  memory = '2gb'
+  memory = '1gb'
   cpu_kind = 'shared'
-  cpus = 2
+  cpus = 1
