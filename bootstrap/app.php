@@ -22,7 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
         // Додаємо throttle до глобального стеку мідлварів
-        $middleware->append(ThrottleRequests::class . ':global');
+        // $middleware->append(ThrottleRequests::class . ':global');
 
         $middleware->web(append: [
             HandleAppearance::class,
