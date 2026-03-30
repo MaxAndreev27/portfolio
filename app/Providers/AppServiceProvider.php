@@ -36,11 +36,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // RateLimiter::for('global', function (Request $request) {
-        //     return Limit::perMinute(100)->by($request->ip())->response(function (Request $request, array $headers) {
-        //         return response('Too many requests. Try again later.', 429, $headers);
-        //     });
-        // });
+        RateLimiter::for('global', function (Request $request) {
+            // Check the path /pulse and Livewire queries (Pulse works on them)
+            if ($request->is('pulse*') || $request->hasHeader('X-Livewire')) {
+                return Limit::none();
+            }
+            return Limit::perMinute(100)->by($request->ip())->response(function (Request $request, array $headers) {
+                return response('Too many requests. Try again later.', 429, $headers);
+            });
+        });
 
         Project::observe(ProjectObserver::class);
         HomeSettings::observe(HomeSettingsObserver::class);
