@@ -27,8 +27,8 @@ console_command = 'php /var/www/html/artisan tinker'
 [http_service]
   internal_port = 8080
   auto_start_machines = true
-  auto_stop_machines = "off"
-  min_machines_running = 1
+  auto_stop_machines = "suspend"
+  min_machines_running = 0
   force_https = true
   processes = ['app']
 
