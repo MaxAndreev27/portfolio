@@ -29,8 +29,8 @@ window.Echo = new Echo({
 });
 
 import.meta.glob([
-  './assets/images/**',
-]);
+    './assets/{images,fonts,sounds}/**/*.{webp,jpg,jpeg,png,svg,woff,woff2,eot,ttf,otf,mp3,wav,ogg}',
+], { eager: true });
 
 createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
