@@ -54,7 +54,7 @@ const filteredProjects = computed(() => {
         id="main-projects"
         class="main-projects w-full px-5 py-20 dark:bg-gray-900"
     >
-        <div class="mx-auto max-w-7xl px-4">
+        <div class="mx-auto max-w-7xl">
             <div class="mb-12">
                 <h2
                     v-if="projectsSettings.projects_title"
