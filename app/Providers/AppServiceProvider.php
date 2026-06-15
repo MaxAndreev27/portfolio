@@ -37,6 +37,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->runningInConsole() && !file_exists(database_path('database.sqlite'))) {
+            return;
+        }
+
         // 1. Додайте цей блок для вирішення проблеми з SQLite
         if (DB::connection() instanceof \Illuminate\Database\SQLiteConnection) {
             DB::statement('PRAGMA journal_mode=WAL;');
