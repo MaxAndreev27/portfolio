@@ -5,7 +5,7 @@
 
 app = 'portfoliomax'
 primary_region = 'fra'
-console_command = 'php /var/www/html/artisan tinker'
+console_command = 'php /app/artisan tinker'
 
 [build]
   [build.args]
@@ -46,7 +46,7 @@ console_command = 'php /var/www/html/artisan tinker'
 
 [mounts]
   source = "portfolio_db"
-  destination = "/var/www/html/storage"
+  destination = "/app/storage"
   processes = ['app']
 
 [[vm]]

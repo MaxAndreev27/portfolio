@@ -16,6 +16,7 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
 
 class AppServiceProvider extends ServiceProvider
@@ -36,14 +37,21 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // 1. Додайте цей блок для вирішення проблеми з SQLite
+        if (DB::connection() instanceof \Illuminate\Database\SQLiteConnection) {
+            DB::statement('PRAGMA journal_mode=WAL;');
+            DB::statement('PRAGMA synchronous=NORMAL;');
+        }
+
         RateLimiter::for('global', function (Request $request) {
             // Check the path /pulse and Livewire queries (Pulse works on them)
             if ($request->is('pulse*') || $request->hasHeader('X-Livewire')) {
                 return Limit::none();
             }
-            return Limit::perMinute(100)->by($request->ip())->response(function (Request $request, array $headers) {
-                return response('Too many requests. Try again later.', 429, $headers);
-            });
+            // return Limit::perMinute(100)->by($request->ip())->response(function (Request $request, array $headers) {
+            //     return response('Too many requests. Try again later.', 429, $headers);
+            // });
+            return Limit::perMinute(150)->by($request->ip());
         });
 
         Project::observe(ProjectObserver::class);

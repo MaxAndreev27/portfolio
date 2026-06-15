@@ -1,7 +1,7 @@
-#!/usr/bin/env sh
+#!/bin/sh
 set -e
 
-APP_DIR="/var/www/html"
+APP_DIR="/app"
 DB_FILE="$APP_DIR/storage/database.sqlite"
 SEED_FLAG="$APP_DIR/storage/.seeded"
 
@@ -28,6 +28,7 @@ fi
 
 # 3️⃣ Налаштування посилань та оптимізація
 echo "🔗 Creating storage link..."
+rm -f public/storage
 php artisan storage:link --force
 
 echo "🧱 Running migrations..."

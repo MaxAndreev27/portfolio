@@ -1,172 +1,49 @@
-# syntax = docker/dockerfile:experimental
+# Використовуємо офіційний образ FrankenPHP з PHP 8.4
+FROM dunglas/frankenphp:1-php8.4
 
-ARG PHP_VERSION=8.4
-ARG NODE_VERSION=24
-FROM ubuntu:22.04 as base
-LABEL fly_launch_runtime="laravel"
+# Встановлюємо PHP-розширення та Composer
+RUN install-php-extensions pcntl opcache gd zip intl pdo_sqlite mbstring xml @composer
 
-# PHP_VERSION needs to be repeated here
-# See https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
-ARG PHP_VERSION
-ENV DEBIAN_FRONTEND=noninteractive \
-    COMPOSER_ALLOW_SUPERUSER=1 \
-    COMPOSER_HOME=/composer \
-    COMPOSER_MAX_PARALLEL_HTTP=24 \
-    PHP_PM_MAX_CHILDREN=10 \
-    PHP_PM_START_SERVERS=3 \
-    PHP_MIN_SPARE_SERVERS=2 \
-    PHP_MAX_SPARE_SERVERS=4 \
-    PHP_DATE_TIMEZONE=UTC \
-    PHP_DISPLAY_ERRORS=Off \
-    PHP_ERROR_REPORTING=22527 \
-    PHP_MEMORY_LIMIT=256M \
-    PHP_MAX_EXECUTION_TIME=90 \
-    PHP_POST_MAX_SIZE=100M \
-    PHP_UPLOAD_MAX_FILE_SIZE=100M \
-    PHP_ALLOW_URL_FOPEN=Off
+# Встановлюємо системні залежності
+RUN apt-get update && apt-get install -y git supervisor && rm -rf /var/lib/apt/lists/*
 
-# Prepare base container:
-# 1. Install PHP, Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-COPY .fly/php/ondrej_ubuntu_php.gpg /etc/apt/trusted.gpg.d/ondrej_ubuntu_php.gpg
-ADD .fly/php/packages/${PHP_VERSION}.txt /tmp/php-packages.txt
+# Створюємо директорію для конфігів Supervisor
+RUN mkdir -p /etc/supervisor/conf.d/
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends gnupg2 ca-certificates git-core curl zip unzip \
-    rsync vim-tiny htop sqlite3 nginx supervisor cron \
-    && ln -sf /usr/bin/vim.tiny /etc/alternatives/vim \
-    && ln -sf /etc/alternatives/vim /usr/bin/vim \
-    && echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu jammy main" > /etc/apt/sources.list.d/ondrej-ubuntu-php-focal.list \
-    && apt-get update \
-    && apt-get -y --no-install-recommends install $(cat /tmp/php-packages.txt) \
-    && ln -sf /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm \
-    && mkdir -p /var/www/html/public && echo "index" > /var/www/html/public/index.php \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
-
-# 2. Copy config files to proper locations
-COPY .fly/nginx/ /etc/nginx/
-COPY .fly/fpm/ /etc/php/${PHP_VERSION}/fpm/
-COPY .fly/supervisor/ /etc/supervisor/
-COPY .fly/entrypoint.sh /entrypoint
-COPY .fly/start-nginx.sh /usr/local/bin/start-nginx
-#RUN chmod 754 /usr/local/bin/start-nginx
-RUN chmod +x /usr/local/bin/start-nginx
-RUN chmod +x /entrypoint
-
-# 3. Copy application code, skipping files based on .dockerignore
-COPY . /var/www/html
-WORKDIR /var/www/html
-
-# 4. Setup application dependencies
-RUN composer install --optimize-autoloader --no-dev \
-    && mkdir -p storage/logs \
-    && chown -R www-data:www-data /var/www/html \
-    && echo "MAILTO=\"\"\n* * * * * www-data /usr/bin/php /var/www/html/artisan schedule:run" > /etc/cron.d/laravel \
-    && sed -i '/->withMiddleware(function (Middleware \$middleware) {/a \    $middleware->trustProxies(at: "*");' bootstrap/app.php
-
-# Multi-stage build: Build static assets
-# This allows us to not include Node within the final container
-FROM node:${NODE_VERSION} as node_modules_go_brrr
-
-ARG PHP_VERSION
-
-# 🚀 Крок 1: Обхід помилки 'add-apt-repository'
-# Замість невдалого 'add-apt-repository', копіюємо налаштування репозиторію PPA з 'base' стадії.
-RUN apt-get update && apt-get install -y ca-certificates
-
-# Копіюємо список джерел (sources.list.d) та ключ PPA (trusted.gpg.d)
-COPY --from=base /etc/apt/sources.list.d/ /etc/apt/sources.list.d/
-COPY --from=base /etc/apt/trusted.gpg.d/ /etc/apt/trusted.gpg.d/
-
-# 🚀 Крок 2: Встановлення PHP-розширень
-# Це дозволить Laravel коректно завантажити конфігурацію (вирішує помилку "Class config does not exist").
-RUN apt-get update && \
-    apt-get install -y \
-    php${PHP_VERSION}-common \
-    php${PHP_VERSION}-cli \
-    php${PHP_VERSION}-opcache \
-    php${PHP_VERSION}-xml \
-    php${PHP_VERSION}-sqlite3  \
-    php${PHP_VERSION}-mbstring \
-    libmariadb3 \
-    && rm -rf /var/lib/apt/lists/*
-
-# Копіюємо бінарник PHP з "base" стадії
-COPY --from=base /usr/bin/php /usr/bin/php
-
-# Створюємо робочий каталог та копіюємо файли застосунку
-RUN mkdir -p /app
+# Встановлюємо робочу директорію
 WORKDIR /app
+
+# Встановлення Node.js та збірка
+RUN apt-get update && apt-get install -y nodejs npm
+COPY package*.json ./
+RUN npm install
 COPY . .
+ENV VITE_WAYFINDER=false
+RUN npm run build
 
-# Копіюємо vendor
-COPY --from=base /var/www/html/vendor /app/vendor
+# Копіюємо проект
+COPY . /app
 
-# 💡 НОВИЙ КРОК: Згенерувати Wayfinder файли/типи
-# Це створює файл `resources/js/routes.ts` або подібний,
-# який вимагає ваш фронтенд.
-RUN php artisan wayfinder:generate --with-form
+# Встановлюємо залежності Composer
+RUN composer install --no-dev --optimize-autoloader
 
-# --- ДОДАЙТЕ ЦІ РЯДКИ ТУТ ---
-ARG VITE_APP_NAME
-ARG VITE_REVERB_APP_KEY
-ARG VITE_REVERB_HOST
-ARG VITE_REVERB_PORT
-ARG VITE_REVERB_SCHEME
+# Копіюємо конфігурацію Supervisor
+COPY .fly/supervisor/supervisord.conf /etc/supervisor/supervisord.conf
+COPY .fly/supervisor/conf.d/ /etc/supervisor/conf.d/
 
-# Експортуємо їх як змінні середовища для процесу збірки Vite
-ENV VITE_APP_NAME=$VITE_APP_NAME
-ENV VITE_REVERB_APP_KEY=$VITE_REVERB_APP_KEY
-ENV VITE_REVERB_HOST=$VITE_REVERB_HOST
-ENV VITE_REVERB_PORT=$VITE_REVERB_PORT
-ENV VITE_REVERB_SCHEME=$VITE_REVERB_SCHEME
-# ----------------------------
+# Робимо скрипт entrypoint.sh виконуваним
+RUN chmod +x /app/entrypoint.sh
 
-# Use yarn or npm depending on what type of
-# lock file we might find. Defaults to
-# NPM if no lock file is found.
-# Note: We run "production" for Mix and "build" for Vite
-RUN if [ -f "vite.config.js" ] || [ -f "vite.config.ts" ]; then \
-    ASSET_CMD="build"; \
-    else \
-    ASSET_CMD="production"; \
-    fi; \
-    if [ -f "yarn.lock" ]; then \
-    yarn install --frozen-lockfile; \
-    VITE_WAYFINDER=false yarn $ASSET_CMD; \
-    elif [ -f "pnpm-lock.yaml" ]; then \
-    corepack enable && corepack prepare pnpm@latest-8 --activate; \
-    pnpm install --frozen-lockfile; \
-    VITE_WAYFINDER=false pnpm run $ASSET_CMD; \
-    elif [ -f "package-lock.json" ]; then \
-    npm ci --no-audit; \
-    VITE_WAYFINDER=false npm run $ASSET_CMD; \
-    else \
-    npm install; \
-    VITE_WAYFINDER=false npm run $ASSET_CMD; \
-    fi;
+# Встановлюємо права доступу для веб-користувача
+RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
 
-# From our base container created above, we
-# create our final image, adding in static
-# assets that we generated above
-FROM base
+# Очищуємо права і встановлюємо їх заново для всіх
+COPY entrypoint.sh /app/entrypoint.sh
+RUN chmod 755 /app/entrypoint.sh
 
-# Packages like Laravel Nova may have added assets to the public directory
-# or maybe some custom assets were added manually! Either way, we merge
-# in the assets we generated above rather than overwrite them
-COPY --from=node_modules_go_brrr /app/public /var/www/html/public-npm
-RUN rsync -ar /var/www/html/public-npm/ /var/www/html/public/ \
-    && rm -rf /var/www/html/public-npm
+# Встановлюємо права доступу для веб-користувача
+RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
 
-# Optimize for production
-RUN php artisan view:cache
-RUN php artisan icons:cache
-RUN php artisan filament:optimize
-
-RUN chown -R www-data:www-data /var/www/html
-
-# 5. Setup Entrypoint
-EXPOSE 8080
-
-ENTRYPOINT ["/entrypoint"]
+# ЗАПУСК: Спочатку виконуємо entrypoint, потім запускаємо supervisord
+ENTRYPOINT ["/bin/sh", "/app/entrypoint.sh"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
