@@ -16,6 +16,7 @@
         "laravel/reverb": "^1.8",
         "laravel/tinker": "^3.0",
         "laravel/wayfinder": "^0.1.9",
+        "predis/predis": "*",
         "resend/resend-php": "^1.1",
         "spatie/laravel-translatable": "^6.13"
     },
