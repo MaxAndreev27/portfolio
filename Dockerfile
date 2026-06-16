@@ -5,8 +5,6 @@ ARG NODE_VERSION=24
 FROM ubuntu:24.04 as base
 LABEL fly_launch_runtime="laravel"
 
-# PHP_VERSION needs to be repeated here
-# See https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
 ARG PHP_VERSION
 ENV DEBIAN_FRONTEND=noninteractive \
     COMPOSER_ALLOW_SUPERUSER=1 \
@@ -25,7 +23,6 @@ ENV DEBIAN_FRONTEND=noninteractive \
     PHP_UPLOAD_MAX_FILE_SIZE=100M \
     PHP_ALLOW_URL_FOPEN=Off
 
-# Prepare base container:
 # 1. Install PHP, Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 COPY .fly/php/ondrej_ubuntu_php.gpg /etc/apt/trusted.gpg.d/ondrej_ubuntu_php.gpg
@@ -36,7 +33,7 @@ RUN apt-get update \
     rsync vim-tiny htop sqlite3 nginx supervisor cron \
     && ln -sf /usr/bin/vim.tiny /etc/alternatives/vim \
     && ln -sf /etc/alternatives/vim /usr/bin/vim \
-    && echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu noble main" > /etc/apt/sources.list.d/ondrej-ubuntu-php-focal.list \
+    && echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu noble main" > /etc/apt/sources.list.d/ondrej-ubuntu-php-noble.list \
     && apt-get update \
     && apt-get -y --no-install-recommends install $(cat /tmp/php-packages.txt) \
     && ln -sf /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm \
@@ -50,11 +47,10 @@ COPY .fly/fpm/ /etc/php/${PHP_VERSION}/fpm/
 COPY .fly/supervisor/ /etc/supervisor/
 COPY .fly/entrypoint.sh /entrypoint
 COPY .fly/start-nginx.sh /usr/local/bin/start-nginx
-#RUN chmod 754 /usr/local/bin/start-nginx
 RUN chmod +x /usr/local/bin/start-nginx
 RUN chmod +x /entrypoint
 
-# 3. Copy application code, skipping files based on .dockerignore
+# 3. Copy application code
 COPY . /var/www/html
 WORKDIR /var/www/html
 
@@ -65,68 +61,36 @@ RUN composer install --optimize-autoloader --no-dev \
     && echo "MAILTO=\"\"\n* * * * * www-data /usr/bin/php /var/www/html/artisan schedule:run" > /etc/cron.d/laravel \
     && sed -i '/->withMiddleware(function (Middleware \$middleware) {/a \    $middleware->trustProxies(at: "*");' bootstrap/app.php
 
-# Multi-stage build: Build static assets
-# This allows us to not include Node within the final container
-FROM node:${NODE_VERSION} as node_modules_go_brrr
 
-ARG PHP_VERSION
+# 🚀 Збірка статики: використовуємо рідний base образ і просто додаємо Node.js
+FROM base as node_modules_go_brrr
 
-# 🚀 Крок 1: Обхід помилки 'add-apt-repository'
-# Замість невдалого 'add-apt-repository', копіюємо налаштування репозиторію PPA з 'base' стадії.
-RUN apt-get update && apt-get install -y ca-certificates
+ARG NODE_VERSION
 
-# Копіюємо список джерел (sources.list.d) та ключ PPA (trusted.gpg.d)
-COPY --from=base /etc/apt/sources.list.d/ /etc/apt/sources.list.d/
-COPY --from=base /etc/apt/trusted.gpg.d/ /etc/apt/trusted.gpg.d/
-
-# 🚀 Крок 2: Встановлення PHP-розширень
-# Це дозволить Laravel коректно завантажити конфігурацію (вирішує помилку "Class config does not exist").
-RUN apt-get update && \
-    apt-get install -y \
-    php${PHP_VERSION}-common \
-    php${PHP_VERSION}-cli \
-    php${PHP_VERSION}-opcache \
-    php${PHP_VERSION}-xml \
-    php${PHP_VERSION}-sqlite3  \
-    php${PHP_VERSION}-mbstring \
-    libmariadb3 \
+# Встановлюємо Node.js прямо в наше Ubuntu-середовище через офіційний скрипт Nodesource
+RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
+    && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# Копіюємо бінарник PHP з "base" стадії
-COPY --from=base /usr/bin/php /usr/bin/php
+WORKDIR /var/www/html
 
-# Створюємо робочий каталог та копіюємо файли застосунку
-RUN mkdir -p /app
-WORKDIR /app
-COPY . .
-
-# Копіюємо vendor
-COPY --from=base /var/www/html/vendor /app/vendor
-
-# 💡 НОВИЙ КРОК: Згенерувати Wayfinder файли/типи
-# Це створює файл `resources/js/routes.ts` або подібний,
-# який вимагає ваш фронтенд.
+# PHP, код та vendor вже на місці, бо ми наслідуємося від stage 'base'!
 RUN php artisan wayfinder:generate --with-form
 
-# --- ДОДАЙТЕ ЦІ РЯДКИ ТУТ ---
+# Передача ARG для Vite
 ARG VITE_APP_NAME
 ARG VITE_REVERB_APP_KEY
 ARG VITE_REVERB_HOST
 ARG VITE_REVERB_PORT
 ARG VITE_REVERB_SCHEME
 
-# Експортуємо їх як змінні середовища для процесу збірки Vite
-ENV VITE_APP_NAME=$VITE_APP_NAME
-ENV VITE_REVERB_APP_KEY=$VITE_REVERB_APP_KEY
-ENV VITE_REVERB_HOST=$VITE_REVERB_HOST
-ENV VITE_REVERB_PORT=$VITE_REVERB_PORT
-ENV VITE_REVERB_SCHEME=$VITE_REVERB_SCHEME
-# ----------------------------
+ENV VITE_APP_NAME=$VITE_APP_NAME \
+    VITE_REVERB_APP_KEY=$VITE_REVERB_APP_KEY \
+    VITE_REVERB_HOST=$VITE_REVERB_HOST \
+    VITE_REVERB_PORT=$VITE_REVERB_PORT \
+    VITE_REVERB_SCHEME=$VITE_REVERB_SCHEME
 
-# Use yarn or npm depending on what type of
-# lock file we might find. Defaults to
-# NPM if no lock file is found.
-# Note: We run "production" for Mix and "build" for Vite
+# Компіляція фронтенду
 RUN if [ -f "vite.config.js" ] || [ -f "vite.config.ts" ]; then \
     ASSET_CMD="build"; \
     else \
@@ -147,26 +111,21 @@ RUN if [ -f "vite.config.js" ] || [ -f "vite.config.ts" ]; then \
     VITE_WAYFINDER=false npm run $ASSET_CMD; \
     fi;
 
-# From our base container created above, we
-# create our final image, adding in static
-# assets that we generated above
+
+# 🏁 Фінальний образ
 FROM base
 
-# Packages like Laravel Nova may have added assets to the public directory
-# or maybe some custom assets were added manually! Either way, we merge
-# in the assets we generated above rather than overwrite them
-COPY --from=node_modules_go_brrr /app/public /var/www/html/public-npm
+# Забираємо скомпільовану статику
+COPY --from=node_modules_go_brrr /var/www/html/public /var/www/html/public-npm
 RUN rsync -ar /var/www/html/public-npm/ /var/www/html/public/ \
     && rm -rf /var/www/html/public-npm
 
-# Optimize for production
+# Оптимізація Laravel
 RUN php artisan view:cache
 RUN php artisan icons:cache
 RUN php artisan filament:optimize
 
 RUN chown -R www-data:www-data /var/www/html
 
-# 5. Setup Entrypoint
 EXPOSE 8080
-
 ENTRYPOINT ["/entrypoint"]
