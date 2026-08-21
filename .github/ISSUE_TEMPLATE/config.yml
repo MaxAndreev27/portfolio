@@ -1,0 +1,6 @@
+blank_issues_enabled: true
+default_labels: []
+contact_links:
+  - name: Security vulnerability report
+    url: https://github.com/MaxAndreev27/portfolio/security/advisories/new
+    about: Please use this form for confidential security reports instead of public issues.
