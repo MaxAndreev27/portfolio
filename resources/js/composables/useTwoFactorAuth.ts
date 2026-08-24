@@ -22,7 +22,6 @@
 //     () => qrCodeSvg.value !== null && manualSetupKey.value !== null,
 // );
 
-
 // export const useTwoFactorAuth = () => {
 //     const fetchQrCode = async (): Promise<void> => {
 //         try {
