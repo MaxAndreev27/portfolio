@@ -41,7 +41,7 @@ class HomeSettingsObserver
             Storage::disk('public')->delete($homeSettings->hero_image);
         }
 
-        if (!empty($homeSettings->footer_social_links)) {
+        if (! empty($homeSettings->footer_social_links)) {
             // Collect al paths 'icon' from array
             $icons = collect($homeSettings->footer_social_links)
                 ->pluck('icon')

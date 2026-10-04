@@ -3,10 +3,10 @@
 namespace App\Filament\Exports;
 
 use App\Models\User;
+use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Actions\Exports\ExportColumn;
 use Filament\Actions\Exports\Exporter;
 use Filament\Actions\Exports\Models\Export;
-use Filament\Actions\Exports\Enums\ExportFormat;
 use Illuminate\Support\Number;
 
 class UserExporter extends Exporter
@@ -24,16 +24,16 @@ class UserExporter extends Exporter
             ExportColumn::make('two_factor_confirmed_at'),
             ExportColumn::make('roles_list')
                 ->label('Roles')
-                ->state(fn(User $record): string => $record->roles->pluck('name')->implode(', ')),
+                ->state(fn (User $record): string => $record->roles->pluck('name')->implode(', ')),
         ];
     }
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'Your user export has completed and ' . Number::format($export->successful_rows) . ' ' . str('row')->plural($export->successful_rows) . ' exported.';
+        $body = 'Your user export has completed and '.Number::format($export->successful_rows).' '.str('row')->plural($export->successful_rows).' exported.';
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
-            $body .= ' ' . Number::format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to export.';
+            $body .= ' '.Number::format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to export.';
         }
 
         return $body;
@@ -59,6 +59,6 @@ class UserExporter extends Exporter
 
     public function getFileName(Export $export): string
     {
-        return "export-users-{$export->getKey()}-" . now()->format('Y-m-d_H-i-s');
+        return "export-users-{$export->getKey()}-".now()->format('Y-m-d_H-i-s');
     }
 }

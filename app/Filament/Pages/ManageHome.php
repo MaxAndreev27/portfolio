@@ -3,34 +3,32 @@
 namespace App\Filament\Pages;
 
 use App\Models\HomeSettings;
-use Filament\Pages\Page;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
-use Filament\Notifications\Notification;
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Tabs;
-use Filament\Schemas\Components\Tabs\Tab;
-use Filament\Support\Icons\Heroicon;
-use Filament\Schemas\Components\Group;
-use Filament\Schemas\Components\Grid;
-use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Notifications\Notification;
+use Filament\Pages\Page;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
-use Filament\Schemas\Components\Section;
-
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class ManageHome extends Page implements HasForms
 {
     use InteractsWithForms;
-
 
     protected string $view = 'filament.pages.manage-home';
 
@@ -50,7 +48,7 @@ class ManageHome extends Page implements HasForms
 
     public static function canAccess(): bool
     {
-        return Gate::allows('update', HomeSettings::first() ?? new HomeSettings());
+        return Gate::allows('update', HomeSettings::first() ?? new HomeSettings);
     }
 
     public function form(Schema $schema): Schema
@@ -63,8 +61,7 @@ class ManageHome extends Page implements HasForms
                     ->tabs(
                         collect(config('locales.supported'))
                             ->map(
-                                fn($label, $locale) =>
-                                Tab::make($label)
+                                fn ($label, $locale) => Tab::make($label)
                                     ->schema([
                                         Tabs::make('Tabs')
                                             ->persistTab()
@@ -108,11 +105,11 @@ class ManageHome extends Page implements HasForms
                                                                             ->visibility('public')
                                                                             ->directory('home-page')
                                                                             ->getUploadedFileNameForStorageUsing(
-                                                                                fn(TemporaryUploadedFile $file): string => (string) str('hero-avatar')
+                                                                                fn (TemporaryUploadedFile $file): string => (string) str('hero-avatar')
                                                                                     ->slug()
                                                                                     ->limit(20, '')
-                                                                                    ->append('-' . now()->format('Y-m-d-H-i'))
-                                                                                    ->append('.' . $file->getClientOriginalExtension())
+                                                                                    ->append('-'.now()->format('Y-m-d-H-i'))
+                                                                                    ->append('.'.$file->getClientOriginalExtension())
                                                                             )
                                                                             ->moveFiles()
                                                                             ->imageEditor()
@@ -163,7 +160,7 @@ class ManageHome extends Page implements HasForms
                                                                                     ])
                                                                                     ->required(),
                                                                             ])
-                                                                            ->itemLabel(fn(array $state): ?string => $state['period'] ?? null)
+                                                                            ->itemLabel(fn (array $state): ?string => $state['period'] ?? null)
                                                                             ->collapsible()
                                                                             ->cloneable()
                                                                             ->reorderableWithButtons(),
@@ -181,10 +178,10 @@ class ManageHome extends Page implements HasForms
                                                                                     ->placeholder('e.g. PHP, JavaScript, TypeScript')
                                                                                     ->required(),
                                                                             ])
-                                                                            ->itemLabel(fn(array $state): ?string => $state['category'] ?? null) // Показує назву категорії у заголовку блоку
+                                                                            ->itemLabel(fn (array $state): ?string => $state['category'] ?? null) // Показує назву категорії у заголовку блоку
                                                                             ->collapsible()
                                                                             ->cloneable()
-                                                                            ->reorderableWithButtons()
+                                                                            ->reorderableWithButtons(),
                                                                     ]),
                                                                 Group::make()
                                                                     ->columnSpan(1)
@@ -331,7 +328,7 @@ class ManageHome extends Page implements HasForms
                                                             ->maxLength(60)
                                                             ->reactive()
                                                             ->helperText(function ($state) {
-                                                                return (60 - mb_strlen($state ?? '')) . " left";
+                                                                return (60 - mb_strlen($state ?? '')).' left';
                                                             }),
 
                                                         Textarea::make("seo_description.$locale")
@@ -341,9 +338,9 @@ class ManageHome extends Page implements HasForms
                                                             ->maxLength(160)
                                                             ->reactive()
                                                             ->helperText(function ($state) {
-                                                                return (160 - mb_strlen($state ?? '')) . " left";
+                                                                return (160 - mb_strlen($state ?? '')).' left';
                                                             }),
-                                                    ])
+                                                    ]),
                                             ]),
 
                                     ])
@@ -351,7 +348,7 @@ class ManageHome extends Page implements HasForms
                     ),
                 Section::make('Footer Social links')
                     ->schema([
-                        Repeater::make("footer_social_links")
+                        Repeater::make('footer_social_links')
                             ->columnSpanFull()
                             ->grid(2)
                             ->label('Social links')
@@ -377,10 +374,10 @@ class ManageHome extends Page implements HasForms
                                     ->visibility('public')
                                     ->directory('social-icons')
                                     ->getUploadedFileNameForStorageUsing(
-                                        fn(TemporaryUploadedFile $file): string => (string) str('icon')
-                                            ->append('-' . now()->format('Y-m-d-H-i-s'))
-                                            ->append('-' . uniqid())
-                                            ->append('.' . $file->getClientOriginalExtension())
+                                        fn (TemporaryUploadedFile $file): string => (string) str('icon')
+                                            ->append('-'.now()->format('Y-m-d-H-i-s'))
+                                            ->append('-'.uniqid())
+                                            ->append('.'.$file->getClientOriginalExtension())
                                     )
                                     ->moveFiles()
                                     ->imageEditor()
@@ -391,7 +388,7 @@ class ManageHome extends Page implements HasForms
                                     ->automaticallyCropImagesToAspectRatio('1:1')
                                     ->automaticallyResizeImagesMode('cover'),
                             ])
-                            ->itemLabel(fn(array $state): ?string => $state['label'] ?? null)
+                            ->itemLabel(fn (array $state): ?string => $state['label'] ?? null)
                             ->collapsible()
                             ->cloneable()
                             ->reorderableWithButtons(),
@@ -414,7 +411,7 @@ class ManageHome extends Page implements HasForms
             ->label('Export JSON')
             ->icon('heroicon-o-arrow-up-tray')
             ->color('gray')
-            ->action(fn() => $this->export());
+            ->action(fn () => $this->export());
     }
 
     public function export()
@@ -427,7 +424,7 @@ class ManageHome extends Page implements HasForms
         ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
         return response()->streamDownload(
-            fn() => print($json),
+            fn () => print ($json),
             'home-settings.json'
         );
     }
@@ -445,7 +442,7 @@ class ManageHome extends Page implements HasForms
                     ->disk('local')
                     ->acceptedFileTypes(['application/json']),
             ])
-            ->action(fn(array $data) => $this->import($data));
+            ->action(fn (array $data) => $this->import($data));
     }
 
     public function import(array $data): void

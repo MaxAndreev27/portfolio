@@ -8,6 +8,11 @@ import { defineConfig } from 'vite';
 const runWayfinder = process.env.VITE_WAYFINDER !== 'false';
 
 export default defineConfig({
+    server: {
+        watch: {
+            ignored: ['**/vendor/**', '**/storage/**', '**/node_modules/**', '**/public/build/**'],
+        },
+    },
     plugins: [
         laravel({
             input: ['resources/css/app.css', 'resources/js/app.ts'],

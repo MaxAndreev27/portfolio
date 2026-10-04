@@ -3,11 +3,11 @@
 namespace App\Filament\Resources\Users\Schemas;
 
 use Filament\Infolists\Components\TextEntry;
-use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Support\Enums\TextSize;
+use Filament\Support\Icons\Heroicon;
 
 class UserInfolist
 {
@@ -40,14 +40,14 @@ class UserInfolist
                                     ->badge()
                                     ->size(TextSize::Medium)
                                     ->icon(
-                                        fn(string $state): Heroicon => match ($state) {
+                                        fn (string $state): Heroicon => match ($state) {
                                             'admin' => Heroicon::BuildingLibrary,
                                             'editor' => Heroicon::PencilSquare,
                                             'user' => Heroicon::User,
                                             default => Heroicon::User,
                                         }
                                     )
-                                    ->color(fn(string $state): string => match ($state) {
+                                    ->color(fn (string $state): string => match ($state) {
                                         'admin' => 'success',
                                         'editor' => 'warning',
                                         'user' => 'gray',

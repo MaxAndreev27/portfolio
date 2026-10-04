@@ -12,27 +12,27 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('home_settings', function (Blueprint $table) {
-            //hero
+            // hero
             $table->json('hero_menu_item')->nullable()->after('hero_is_featured');
             $table->json('hero_title')->nullable()->change();
             $table->json('hero_description')->nullable()->change();
             $table->json('hero_button_about')->nullable()->change();
             $table->json('hero_button_contact')->nullable()->change();
-            //about
+            // about
             $table->json('about_menu_item')->nullable()->after('about_is_featured');
             $table->json('about_title')->nullable()->change();
-            //projects
+            // projects
             $table->json('projects_menu_item')->nullable()->after('projects_is_featured');
             $table->json('projects_title')->nullable()->change();
-            //technology
+            // technology
             $table->json('technology_menu_item')->nullable()->after('technology_is_featured');
-            //contact
+            // contact
             $table->json('contact_menu_item')->nullable()->after('contact_is_featured');
             $table->json('contact_title')->nullable()->change();
-            //footer
+            // footer
             $table->json('footer_copyright')->nullable()->change();
             $table->json('footer_powered')->nullable()->change();
-            //SEO
+            // SEO
             $table->json('seo_title')->nullable()->change();
             $table->json('seo_description')->nullable()->change();
         });

@@ -5,26 +5,26 @@ namespace App\Filament\Resources\Projects\Tables;
 use App\Enums\ProjectStatus;
 use App\Filament\Exports\ProjectExporter;
 use App\Filament\Imports\ProjectImporter;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ActionGroup;
-use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
+use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Actions\ExportAction;
 use Filament\Actions\ExportBulkAction;
 use Filament\Actions\ImportAction;
+use Filament\Actions\ViewAction;
 use Filament\Support\Enums\TextSize;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ToggleColumn;
-use Filament\Tables\Columns\IconColumn;
-use Filament\Tables\Table;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextInputColumn;
+use Filament\Tables\Columns\ToggleColumn;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
-use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Vite;
 
@@ -82,14 +82,14 @@ class ProjectsTable
                     ->limit(30)
                     ->searchable()
                     ->html()
-                    ->formatStateUsing(fn(string $state): string => strip_tags($state))
-                    ->tooltip(fn(string $state): string => strip_tags($state))
+                    ->formatStateUsing(fn (string $state): string => strip_tags($state))
+                    ->tooltip(fn (string $state): string => strip_tags($state))
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('excerpt')
                     ->limit(30)
                     ->searchable()
-                    ->tooltip(fn(string $state): string => $state)
+                    ->tooltip(fn (string $state): string => $state)
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('url')
@@ -160,8 +160,8 @@ class ProjectsTable
                     ->trueLabel('With cover')
                     ->falseLabel('Without cover')
                     ->queries(
-                        true: fn(Builder $query) => $query->whereNotNull('image'),
-                        false: fn(Builder $query) => $query->whereNull('image'),
+                        true: fn (Builder $query) => $query->whereNotNull('image'),
+                        false: fn (Builder $query) => $query->whereNull('image'),
                     )
                     ->native(false),
             ], layout: FiltersLayout::AboveContent)

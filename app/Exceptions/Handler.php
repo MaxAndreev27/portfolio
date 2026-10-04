@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Exceptions;
+
 use Inertia\Inertia;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
@@ -24,7 +25,7 @@ class Handler extends \Illuminate\Foundation\Exceptions\Handler
                 429 => 'Забагато запитів',
                 500 => 'Внутрішня помилка сервера',
                 503 => 'Сервіс тимчасово недоступний',
-                -1   => 'Щось пішло не так', // Default message
+                -1 => 'Щось пішло не так', // Default message
             ];
 
             $message = $messages[$status] ?? $messages[500];

@@ -74,14 +74,14 @@ class ProjectInfolist
 
                                 TextEntry::make('status')
                                     ->badge()
-                                    ->formatStateUsing(fn($state) => $state->getLabel())
+                                    ->formatStateUsing(fn ($state) => $state->getLabel())
                                     ->size(TextSize::Medium)
-                                    ->color(fn($state) => $state->getColor())
-                                    ->icon(fn($state) => $state->getIcon()),
+                                    ->color(fn ($state) => $state->getColor())
+                                    ->icon(fn ($state) => $state->getIcon()),
 
                                 TextEntry::make('url')
                                     ->placeholder('-')
-                                    ->url(fn($state) => $state)
+                                    ->url(fn ($state) => $state)
                                     ->openUrlInNewTab()
                                     ->size(TextSize::Medium)
                                     ->icon(Heroicon::Link)
@@ -89,7 +89,7 @@ class ProjectInfolist
 
                                 TextEntry::make('github_url')
                                     ->placeholder('-')
-                                    ->url(fn($state) => $state)
+                                    ->url(fn ($state) => $state)
                                     ->openUrlInNewTab()
                                     ->size(TextSize::Medium)
                                     ->icon(Heroicon::ServerStack)

@@ -47,13 +47,16 @@ class OptimizeTelescopeDatabase extends Command
                 $connection->statement('VACUUM ANALYZE telescope_monitoring');
             } else {
                 $this->warn("Driver '{$driver}' is not supported.");
+
                 return self::FAILURE;
             }
 
             $this->info('Optimization completed successfully.');
+
             return self::SUCCESS;
         } catch (\Throwable $e) {
-            $this->error('Optimization failed: ' . $e->getMessage());
+            $this->error('Optimization failed: '.$e->getMessage());
+
             return self::FAILURE;
         }
     }

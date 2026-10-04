@@ -5,8 +5,9 @@ namespace App\Http\Middleware;
 use App\Models\User;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
-use Inertia\Middleware;
 use Illuminate\Support\Facades\File;
+use Inertia\Middleware;
+use Laravel\Fortify\Features;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -49,12 +50,12 @@ class HandleInertiaRequests extends Middleware
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'flash' => [
-                'success' => fn() => $request->session()->get('success'),
-                'error' => fn() => $request->session()->get('error'),
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error'),
             ],
             'features' => [
-                'registration' => \Laravel\Fortify\Features::enabled(\Laravel\Fortify\Features::registration()),
-                'twoFactorAuthentication' => \Laravel\Fortify\Features::enabled(\Laravel\Fortify\Features::twoFactorAuthentication()),
+                'registration' => Features::enabled(Features::registration()),
+                'twoFactorAuthentication' => Features::enabled(Features::twoFactorAuthentication()),
             ],
             'locale' => session('locale', config('app.locale')),
             'locales' => config('locales.supported'),

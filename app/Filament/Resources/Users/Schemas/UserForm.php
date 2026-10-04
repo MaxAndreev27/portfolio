@@ -2,12 +2,12 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Grid;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 
@@ -39,8 +39,8 @@ class UserForm
                                 TextInput::make('password')
                                     ->password()
                                     ->revealable()
-                                    ->required(fn(string $operation): bool => $operation === 'create')
-                                    ->dehydrated(fn($state) => filled($state))
+                                    ->required(fn (string $operation): bool => $operation === 'create')
+                                    ->dehydrated(fn ($state) => filled($state))
                                     ->minLength(5)
                                     ->maxLength(255)
                                     ->confirmed(),

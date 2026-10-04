@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageSent;
 use App\Models\Conversation;
 use App\Models\Message;
-use App\Events\MessageSent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,13 +25,13 @@ class ChatController extends Controller
         // 1. Знаходимо або створюємо розмову
         $conversationId = $request->conversation_id;
 
-        if (!$conversationId) {
+        if (! $conversationId) {
             // Шукаємо існуючу розмову з цими ж учасниками (для 1-на-1 або груп)
             $conversation = Conversation::whereHas('users', function ($q) use ($allParticipants) {
                 $q->whereIn('user_id', $allParticipants);
             }, '=', count($allParticipants))->first();
 
-            if (!$conversation) {
+            if (! $conversation) {
                 $conversation = Conversation::create([
                     'is_group' => count($recipientIds) > 1,
                     'name' => count($recipientIds) > 1 ? 'Group Chat' : null,
@@ -54,7 +54,7 @@ class ChatController extends Controller
 
         return response()->json([
             'conversationId' => $conversationId,
-            'message' => $message->load('sender')
+            'message' => $message->load('sender'),
         ]);
     }
 
@@ -67,13 +67,13 @@ class ChatController extends Controller
             $q->whereIn('user_id', [$senderId, $userId]);
         }, '=', 2)->first();
 
-        if (!$conversation) {
+        if (! $conversation) {
             return response()->json(['messages' => [], 'conversationId' => null]);
         }
 
         return response()->json([
             'conversationId' => $conversation->id,
-            'messages' => $conversation->messages()->with('sender')->latest()->get()->reverse()->values()
+            'messages' => $conversation->messages()->with('sender')->latest()->get()->reverse()->values(),
         ]);
     }
 }
