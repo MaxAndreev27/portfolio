@@ -39,7 +39,7 @@ class ProjectImporter extends Importer
             //     ->rules(['nullable']),
 
             ImportColumn::make('status')
-                ->helperText('Available values: ' . implode(', ', array_column(ProjectStatus::cases(), 'value'))),
+                ->helperText('Available values: '.implode(', ', array_column(ProjectStatus::cases(), 'value'))),
 
             ImportColumn::make('url')
                 ->rules(['nullable', 'url', 'max:255']),
@@ -67,8 +67,9 @@ class ProjectImporter extends Importer
                     if (is_array($state)) {
                         return $state;
                     }
+
                     return collect(explode(',', (string) $state))
-                        ->map(fn($tag) => trim($tag))
+                        ->map(fn ($tag) => trim($tag))
                         ->filter()
                         ->values()
                         ->toArray();
@@ -78,24 +79,25 @@ class ProjectImporter extends Importer
 
     public function resolveRecord(): ?Project
     {
-        if (!empty($this->data['slug'])) {
+        if (! empty($this->data['slug'])) {
             $this->data['slug'] = Str::slug($this->data['slug']);
-        } elseif (!empty($this->data['title'])) {
+        } elseif (! empty($this->data['title'])) {
             $this->data['slug'] = Str::slug($this->data['title']);
         }
 
         $project = Project::firstOrNew([
             'slug' => $this->data['slug'],
         ]);
+
         return $project;
     }
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Your project import has completed and ' . Number::format($import->successful_rows) . ' ' . str('row')->plural($import->successful_rows) . ' imported.';
+        $body = 'Your project import has completed and '.Number::format($import->successful_rows).' '.str('row')->plural($import->successful_rows).' imported.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . Number::format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to import.';
+            $body .= ' '.Number::format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to import.';
         }
 
         return $body;

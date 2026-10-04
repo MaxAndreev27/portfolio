@@ -7,16 +7,16 @@ use App\Models\Project;
 use App\Models\User;
 use App\Observers\HomeSettingsObserver;
 use App\Observers\ProjectObserver;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\ServiceProvider;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Support\Facades\FilamentTimezone;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\DatePicker;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -41,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
             if ($request->is('pulse*') || $request->hasHeader('X-Livewire')) {
                 return Limit::none();
             }
+
             return Limit::perMinute(100)->by($request->ip())->response(function (Request $request, array $headers) {
                 return response('Too many requests. Try again later.', 429, $headers);
             });

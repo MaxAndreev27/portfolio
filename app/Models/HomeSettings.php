@@ -2,51 +2,53 @@
 
 namespace App\Models;
 
+use Database\Factories\HomeSettingsFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Vite;
 use Spatie\Translatable\HasTranslations;
 
 class HomeSettings extends Model
 {
-    /** @use HasFactory<\Database\Factories\HomeSettingsFactory> */
+    /** @use HasFactory<HomeSettingsFactory> */
     use HasFactory;
+
     use HasTranslations;
 
     protected $fillable = [
         'id',
-        //menu
+        // menu
         'hero_menu_item',
         'about_menu_item',
         'projects_menu_item',
         'technology_menu_item',
         'contact_menu_item',
-        //hero section
+        // hero section
         'hero_is_featured',
         'hero_title',
         'hero_description',
         'hero_image',
         'hero_button_about',
         'hero_button_contact',
-        //about
+        // about
         'about_is_featured',
         'about_title',
         'about_timeline',
         'about_skills',
-        //projects
+        // projects
         'projects_is_featured',
         'projects_title',
-        //technology
+        // technology
         'technology_is_featured',
-        //contact
+        // contact
         'contact_is_featured',
         'contact_title',
-        //footer
+        // footer
         'footer_social_links',
         'footer_copyright',
         'footer_powered',
-        //SEO
+        // SEO
         'seo_title',
         'seo_description',
     ];
@@ -69,7 +71,7 @@ class HomeSettings extends Model
         'footer_copyright',
         'footer_powered',
         'seo_title',
-        'seo_description'
+        'seo_description',
     ];
 
     protected $casts = [
@@ -84,8 +86,8 @@ class HomeSettings extends Model
     protected function imageUrl(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->hero_image
-                ? asset('storage/' . $this->hero_image)
+            get: fn () => $this->hero_image
+                ? asset('storage/'.$this->hero_image)
                 : Vite::asset('resources/js/assets/images/default-avatar.webp')
         );
     }

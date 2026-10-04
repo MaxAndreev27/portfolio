@@ -2,13 +2,13 @@
 
 namespace App\Filament\Imports;
 
-use App\Models\User;
 use App\Models\Role;
+use App\Models\User;
 use Filament\Actions\Imports\ImportColumn;
 use Filament\Actions\Imports\Importer;
 use Filament\Actions\Imports\Models\Import;
-use Illuminate\Support\Number;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Number;
 
 class UserImporter extends Importer
 {
@@ -50,10 +50,10 @@ class UserImporter extends Importer
 
     public static function getCompletedNotificationBody(Import $import): string
     {
-        $body = 'Your user import has completed and ' . Number::format($import->successful_rows) . ' ' . str('row')->plural($import->successful_rows) . ' imported.';
+        $body = 'Your user import has completed and '.Number::format($import->successful_rows).' '.str('row')->plural($import->successful_rows).' imported.';
 
         if ($failedRowsCount = $import->getFailedRowsCount()) {
-            $body .= ' ' . Number::format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to import.';
+            $body .= ' '.Number::format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to import.';
         }
 
         return $body;
@@ -66,13 +66,13 @@ class UserImporter extends Importer
 
         if ($rolesString) {
             $roleNames = collect(explode(',', $rolesString))
-                ->map(fn($name) => trim($name))
+                ->map(fn ($name) => trim($name))
                 ->filter()
                 ->toArray();
 
             $roleIds = Role::whereIn('name', $roleNames)->pluck('id')->toArray();
 
-            if (!empty($roleIds)) {
+            if (! empty($roleIds)) {
                 $this->record->roles()->sync($roleIds);
             }
         }

@@ -2,24 +2,24 @@
 
 namespace App\Filament\Resources\Projects\Schemas;
 
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Select;
-use Filament\Actions\Action;
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Utilities\Set;
-use Filament\Schemas\Components\Utilities\Get;
-use Illuminate\Support\Str;
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Support\Icons\Heroicon;
 use App\Enums\ProjectStatus;
+use Filament\Actions\Action;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class ProjectForm
@@ -46,7 +46,7 @@ class ProjectForm
                                             $set('slug', Str::slug($state));
                                         }
                                     })
-                                    ->dehydrateStateUsing(fn($state) => Str::ucfirst($state)),
+                                    ->dehydrateStateUsing(fn ($state) => Str::ucfirst($state)),
 
                                 TextInput::make('slug')
                                     ->belowContent('The Slug is generated automatically after filling in the Title, but you can also edit it manually.')
@@ -83,7 +83,7 @@ class ProjectForm
                                     ->maxLength(5000)
                                     ->reactive()
                                     ->helperText(function ($state) {
-                                        return (5000 - mb_strlen(html_entity_decode(strip_tags($state ?? '')))) . " left";
+                                        return (5000 - mb_strlen(html_entity_decode(strip_tags($state ?? '')))).' left';
                                     })
                                     ->fileAttachmentsDisk('public')
                                     ->fileAttachmentsDirectory('projects/content')
@@ -94,7 +94,7 @@ class ProjectForm
                                     ->maxLength(160)
                                     ->reactive()
                                     ->helperText(function ($state) {
-                                        return (160 - mb_strlen($state ?? '')) . " left";
+                                        return (160 - mb_strlen($state ?? '')).' left';
                                     })
                                     ->hintAction(
                                         Action::make('generateExcerpt')
@@ -118,11 +118,11 @@ class ProjectForm
                                     ->visibility('public')
                                     ->directory('projects')
                                     ->getUploadedFileNameForStorageUsing(
-                                        fn(TemporaryUploadedFile $file, Get $get): string => str($get('title'))
+                                        fn (TemporaryUploadedFile $file, Get $get): string => str($get('title'))
                                             ->slug()
                                             ->limit(20, '')
-                                            ->append('-' . now()->format('Y-m-d-H-i'))
-                                            ->append('.' . $file->getClientOriginalExtension())
+                                            ->append('-'.now()->format('Y-m-d-H-i'))
+                                            ->append('.'.$file->getClientOriginalExtension())
                                     )
                                     ->moveFiles()
                                     ->imageEditor()
@@ -161,8 +161,8 @@ class ProjectForm
                                     ->default(ProjectStatus::Published)
                                     ->native(false)
                                     ->live()
-                                    ->suffixIcon(fn($state) => $state instanceof ProjectStatus ? $state->getIcon() : 'heroicon-m-chevron-down')
-                                    ->suffixIconColor(fn($state) => $state instanceof ProjectStatus ? $state->getColor() : 'gray'),
+                                    ->suffixIcon(fn ($state) => $state instanceof ProjectStatus ? $state->getIcon() : 'heroicon-m-chevron-down')
+                                    ->suffixIconColor(fn ($state) => $state instanceof ProjectStatus ? $state->getColor() : 'gray'),
 
                                 TextInput::make('url')
                                     ->label('Website link')

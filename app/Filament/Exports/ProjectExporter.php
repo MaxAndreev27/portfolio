@@ -28,16 +28,16 @@ class ProjectExporter extends Exporter
             ExportColumn::make('order'),
             ExportColumn::make('status'),
             ExportColumn::make('tags')
-                ->formatStateUsing(fn($state) => is_array($state) ? implode(', ', $state) : $state),
+                ->formatStateUsing(fn ($state) => is_array($state) ? implode(', ', $state) : $state),
         ];
     }
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'Your project export has completed and ' . Number::format($export->successful_rows) . ' ' . str('row')->plural($export->successful_rows) . ' exported.';
+        $body = 'Your project export has completed and '.Number::format($export->successful_rows).' '.str('row')->plural($export->successful_rows).' exported.';
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
-            $body .= ' ' . Number::format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to export.';
+            $body .= ' '.Number::format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to export.';
         }
 
         return $body;
@@ -63,6 +63,6 @@ class ProjectExporter extends Exporter
 
     public function getFileName(Export $export): string
     {
-        return "export-projects-{$export->getKey()}-" . now()->format('Y-m-d_H-i-s');
+        return "export-projects-{$export->getKey()}-".now()->format('Y-m-d_H-i-s');
     }
 }

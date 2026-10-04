@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +15,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 
 class User extends Authenticatable implements FilamentUser
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
 
     /**
@@ -27,7 +28,7 @@ class User extends Authenticatable implements FilamentUser
         'email',
         'password',
         'email_verified_at',      // Додано
-        'two_factor_confirmed_at' // Додано
+        'two_factor_confirmed_at', // Додано
     ];
 
     /**
@@ -81,6 +82,7 @@ class User extends Authenticatable implements FilamentUser
         if ($this->hasRoles(['admin', 'editor', 'user'])) {
             return true;
         }
+
         return false;
     }
 }

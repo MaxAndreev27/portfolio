@@ -3,10 +3,10 @@
 namespace App\Filament\Exports;
 
 use App\Models\Role;
+use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Actions\Exports\ExportColumn;
 use Filament\Actions\Exports\Exporter;
 use Filament\Actions\Exports\Models\Export;
-use Filament\Actions\Exports\Enums\ExportFormat;
 use Illuminate\Support\Number;
 
 class RoleExporter extends Exporter
@@ -28,10 +28,10 @@ class RoleExporter extends Exporter
 
     public static function getCompletedNotificationBody(Export $export): string
     {
-        $body = 'Your role export has completed and ' . Number::format($export->successful_rows) . ' ' . str('row')->plural($export->successful_rows) . ' exported.';
+        $body = 'Your role export has completed and '.Number::format($export->successful_rows).' '.str('row')->plural($export->successful_rows).' exported.';
 
         if ($failedRowsCount = $export->getFailedRowsCount()) {
-            $body .= ' ' . Number::format($failedRowsCount) . ' ' . str('row')->plural($failedRowsCount) . ' failed to export.';
+            $body .= ' '.Number::format($failedRowsCount).' '.str('row')->plural($failedRowsCount).' failed to export.';
         }
 
         return $body;
@@ -57,6 +57,6 @@ class RoleExporter extends Exporter
 
     public function getFileName(Export $export): string
     {
-        return "export-roles-{$export->getKey()}-" . now()->format('Y-m-d_H-i-s');
+        return "export-roles-{$export->getKey()}-".now()->format('Y-m-d_H-i-s');
     }
 }

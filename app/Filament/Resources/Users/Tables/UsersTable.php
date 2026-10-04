@@ -4,21 +4,21 @@ namespace App\Filament\Resources\Users\Tables;
 
 use App\Filament\Exports\UserExporter;
 use App\Filament\Imports\UserImporter;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\ExportAction;
 use Filament\Actions\ExportBulkAction;
 use Filament\Actions\ImportAction;
-use Filament\Actions\ExportAction;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\ActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\ViewAction;
-use Filament\Actions\EditAction;
-use Filament\Actions\DeleteAction;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
-use Filament\Support\Icons\Heroicon;
-use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Table;
 
 class UsersTable
 {
@@ -57,14 +57,14 @@ class UsersTable
                     ->label('Ролі')
                     ->badge()
                     ->icon(
-                        fn(string $state): Heroicon => match ($state) {
+                        fn (string $state): Heroicon => match ($state) {
                             'admin' => Heroicon::BuildingLibrary,
                             'editor' => Heroicon::PencilSquare,
                             'user' => Heroicon::User,
                             default => Heroicon::User,
                         }
                     )
-                    ->color(fn(string $state): string => match ($state) {
+                    ->color(fn (string $state): string => match ($state) {
                         'admin' => 'success',
                         'editor' => 'warning',
                         'user' => 'gray',
@@ -96,7 +96,7 @@ class UsersTable
                 TernaryFilter::make('email_verified_at')
                     ->nullable(),
                 TernaryFilter::make('two_factor_confirmed_at')
-                    ->nullable()
+                    ->nullable(),
             ], layout: FiltersLayout::AboveContent)
             ->deferFilters(false)
             ->persistFiltersInSession()

@@ -19,7 +19,7 @@ class HomeController extends Controller
             ->featured()
             ->orderBy('order')
             ->get()
-            ->map(fn($project) => [
+            ->map(fn ($project) => [
                 'id' => $project->id,
                 'title' => $project->title,
                 'slug' => $project->slug,
@@ -72,10 +72,10 @@ class HomeController extends Controller
                 'contact_title' => $homeSettings->contact_title,
             ] : null,
             'footerSettings' => $homeSettings ? [
-                'footer_social_links' => collect($homeSettings->footer_social_links)->map(fn($item) => [
+                'footer_social_links' => collect($homeSettings->footer_social_links)->map(fn ($item) => [
                     'label' => $item['label'] ?? '',
                     'url' => $item['url'] ?? '#',
-                    'icon' => !empty($item['icon']) ? asset('storage/' . $item['icon']) : null,
+                    'icon' => ! empty($item['icon']) ? asset('storage/'.$item['icon']) : null,
                 ]),
                 'footer_copyright' => $homeSettings->footer_copyright,
                 'footer_powered' => $homeSettings->footer_powered,

@@ -3,7 +3,6 @@
 namespace App\Events;
 
 use App\Models\Message;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow; // Використовуємо Now для тестування без черг
@@ -30,7 +29,7 @@ class MessageSent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         $channels = [
-            new PrivateChannel('chat.' . $this->message->conversation_id),
+            new PrivateChannel('chat.'.$this->message->conversation_id),
         ];
 
         // Додаємо індивідуальні канали для кожного отримувача
@@ -38,7 +37,7 @@ class MessageSent implements ShouldBroadcastNow
         $participants = $this->message->conversation->users()->where('user_id', '!=', $this->message->user_id)->get();
 
         foreach ($participants as $participant) {
-            $channels[] = new PrivateChannel('App.Models.User.' . $participant->id);
+            $channels[] = new PrivateChannel('App.Models.User.'.$participant->id);
         }
 
         return $channels;

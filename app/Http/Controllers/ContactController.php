@@ -6,8 +6,8 @@ use App\Mail\ContactFormMail;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -30,9 +30,10 @@ class ContactController extends Controller
 
             return redirect()->back()->with('success', 'Message sent successfully!');
         } catch (Exception $e) {
-            Log::error('Помилка надсилання контактної форми: ' . $e->getMessage(), [
-                'email' => $validated['email']
+            Log::error('Помилка надсилання контактної форми: '.$e->getMessage(), [
+                'email' => $validated['email'],
             ]);
+
             return redirect()->back()->with('error', 'An error occurred!');
         }
     }
