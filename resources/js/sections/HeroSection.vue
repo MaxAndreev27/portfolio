@@ -66,9 +66,7 @@ const goToContact = () => {
                     loading="eager"
                     fetchpriority="high"
                 />
-                <span v-else>
-                    avatar
-                </span>
+                <span v-else> avatar </span>
             </div>
             <div
                 v-if="activeButtonsCount"
