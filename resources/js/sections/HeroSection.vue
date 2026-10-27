@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { GradientText } from '@/components/ui/gradient-text';
 import { HeroSettings } from '@/types';
@@ -54,20 +53,23 @@ const goToContact = () => {
             >
                 {{ heroSettings.hero_description }}
             </h2>
-            <Avatar
-                class="mb-8 h-50 w-50 overflow-hidden rounded-full sm:h-75 sm:w-75"
+            <div
+                class="relative mb-8 flex h-50 w-50 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#0f3045] text-white sm:h-75 sm:w-75"
             >
-                <AvatarImage
+                <img
                     v-if="heroSettings.hero_image"
                     :src="heroSettings.hero_image"
-                    :alt="'avatar'"
+                    alt="avatar"
+                    width="300"
+                    height="300"
+                    class="aspect-square size-full object-cover"
                     loading="eager"
                     fetchpriority="high"
                 />
-                <AvatarFallback class="rounded-lg bg-[#0f3045] text-white">
+                <span v-else>
                     avatar
-                </AvatarFallback>
-            </Avatar>
+                </span>
+            </div>
             <div
                 v-if="activeButtonsCount"
                 :class="['grid gap-4 md:gap-6', gridConfigClasses]"
