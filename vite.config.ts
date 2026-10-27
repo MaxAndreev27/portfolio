@@ -8,6 +8,9 @@ import { defineConfig } from 'vite';
 const runWayfinder = process.env.VITE_WAYFINDER !== 'false';
 
 export default defineConfig({
+    ssr: {
+        noExternal: true,
+    },
     server: {
         watch: {
             ignored: ['**/vendor/**', '**/storage/**', '**/node_modules/**', '**/public/build/**'],

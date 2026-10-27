@@ -6,6 +6,7 @@ FROM ubuntu:24.04 as base
 LABEL fly_launch_runtime="laravel"
 
 ARG PHP_VERSION
+ARG NODE_VERSION
 ENV DEBIAN_FRONTEND=noninteractive \
     COMPOSER_ALLOW_SUPERUSER=1 \
     COMPOSER_HOME=/composer \
@@ -41,6 +42,12 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
+# Node.js is required at runtime for Inertia SSR.
+RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
 # 2. Copy config files to proper locations
 COPY .fly/nginx/ /etc/nginx/
 COPY .fly/fpm/ /etc/php/${PHP_VERSION}/fpm/
@@ -67,11 +74,6 @@ FROM base as node_modules_go_brrr
 
 ARG NODE_VERSION
 
-# Встановлюємо Node.js прямо в наше Ubuntu-середовище через офіційний скрипт Nodesource
-RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
-    && apt-get install -y nodejs \
-    && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /var/www/html
 
 # PHP, код та vendor вже на місці, бо ми наслідуємося від stage 'base'!
@@ -92,7 +94,7 @@ ENV VITE_APP_NAME=$VITE_APP_NAME \
 
 # Компіляція фронтенду
 RUN if [ -f "vite.config.js" ] || [ -f "vite.config.ts" ]; then \
-    ASSET_CMD="build"; \
+    ASSET_CMD="build:ssr"; \
     else \
     ASSET_CMD="production"; \
     fi; \
@@ -119,6 +121,7 @@ FROM base
 COPY --from=node_modules_go_brrr /var/www/html/public /var/www/html/public-npm
 RUN rsync -ar /var/www/html/public-npm/ /var/www/html/public/ \
     && rm -rf /var/www/html/public-npm
+COPY --from=node_modules_go_brrr /var/www/html/bootstrap/ssr /var/www/html/bootstrap/ssr
 
 # Оптимізація Laravel
 RUN php artisan view:cache
