@@ -18,7 +18,11 @@ const year = props.project.completed_at
             <img
                 v-if="project.image"
                 :src="project.image"
+                :srcset="project.image_srcset || undefined"
+                sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 768px) 50vw, calc(100vw - 2.5rem)"
                 :alt="project.title"
+                width="1200"
+                height="675"
                 class="h-full w-full transform object-cover transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
             />

@@ -53,6 +53,7 @@ export interface Project {
     description: string;
     excerpt: string;
     image: string | null;
+    image_srcset: string | null;
     url: string | null;
     github_url: string | null;
     completed_at: string | null;
