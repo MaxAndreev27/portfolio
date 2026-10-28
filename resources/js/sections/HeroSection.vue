@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { GradientText } from '@/components/ui/gradient-text';
 import { HeroSettings } from '@/types';
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const props = defineProps<{
     heroSettings: HeroSettings;
@@ -21,6 +21,24 @@ const gridConfigClasses = computed(() => {
         : 'grid-cols-1 justify-items-center';
 });
 
+const isBackgroundAnimated = ref(false);
+
+// Start the decorative background drift only after the page has loaded,
+// so it doesn't repaint the hero while the LCP element is being rendered.
+onMounted(() => {
+    const start = () => {
+        isBackgroundAnimated.value = true;
+    };
+
+    if (document.readyState === 'complete') {
+        setTimeout(start, 500);
+    } else {
+        window.addEventListener('load', () => setTimeout(start, 500), {
+            once: true,
+        });
+    }
+});
+
 const goToAbout = () => {
     const el = document.getElementById('main-about');
     if (el) {
@@ -37,7 +55,13 @@ const goToContact = () => {
 </script>
 
 <template>
-    <section id="main-hero" class="main-hero w-full px-5">
+    <section
+        id="main-hero"
+        :class="[
+            'main-hero w-full px-5',
+            { 'main-hero--animated': isBackgroundAnimated },
+        ]"
+    >
         <div
             class="container mx-auto flex min-h-screen max-w-4xl flex-col items-center justify-center"
         >
@@ -97,10 +121,14 @@ const goToContact = () => {
 .main-hero {
     background-image: url('@/assets/images/heroBg768.webp');
     background-size: cover;
-    animation: animate-bg 30s ease infinite;
+    background-position: center 25%;
     background-color: #e0edfe;
     font-family: 'Onest', sans-serif;
     position: relative;
+}
+
+.main-hero--animated {
+    animation: animate-bg 30s ease infinite;
 }
 
 @media (min-width: 769px) {
