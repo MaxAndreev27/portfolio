@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
                 return Limit::none();
             }
 
-            return Limit::perMinute(100)->by($request->ip())->response(function (Request $request, array $headers) {
+            return Limit::perMinute(180)->by($request->ip())->response(function (Request $request, array $headers) {
                 return response('Too many requests. Try again later.', 429, $headers);
             });
         });
