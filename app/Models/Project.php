@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ProjectStatus;
+use App\Support\ProjectImageVariants;
 use Database\Factories\ProjectFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -60,6 +61,15 @@ class Project extends Model
             get: fn () => $this->image
                 ? asset('storage/'.$this->image)
                 : Vite::asset('resources/js/assets/images/default-image.webp')
+        );
+    }
+
+    protected function imageSrcset(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->image
+                ? ProjectImageVariants::srcset($this->image)
+                : null
         );
     }
 

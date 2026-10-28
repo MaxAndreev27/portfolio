@@ -25,6 +25,7 @@ class HomeController extends Controller
                 'slug' => $project->slug,
                 'excerpt' => $project->excerpt,
                 'image' => $project->image_url,
+                'image_srcset' => $project->image_srcset,
                 'url' => $project->url,
                 'github_url' => $project->github_url,
                 'completed_at' => $project->completed_at?->format('Y-m-d'),
