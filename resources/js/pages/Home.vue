@@ -73,6 +73,13 @@ withDefaults(
                 seoSettings.seo_description || heroSettings.hero_description
             "
         />
+        <link
+            v-if="heroSettings?.hero_image"
+            rel="preload"
+            as="image"
+            :href="heroSettings.hero_image"
+            fetchpriority="high"
+        />
     </Head>
 
     <div class="flex min-h-screen flex-col items-center justify-center">
