@@ -17,9 +17,9 @@ The architecture features a powerful developer dashboard via Filament, real-time
 
 Before installing the project, verify that your local environment includes:
 
-- **PHP ^8.3** with the `pdo_sqlite` extension enabled
-- **Node.js** (LTS version recommended) & **NPM**
-- **Composer**
+- **PHP ^8.5** with the `pdo_sqlite` and `gd` (with WebP support) extensions enabled
+- **Node.js 24** (CI and Docker use 24; Vite 8 requires `^20.19.0 || >=22.12.0`) & **NPM**
+- **Composer** 2
 
 ## 📖 Local Development Setup
 
@@ -30,3 +30,15 @@ The project includes a unified setup command that automatically installs PHP and
 ```bash
 composer run setup
 ```
+
+## 🖼️ Project Images
+
+Upload a single original image per project in the admin panel. Responsive WebP variants (480, 768 and 1200 px wide) are generated automatically on create/update and removed together with the original. To generate variants for projects that already exist, run once:
+
+```bash
+php artisan projects:generate-image-variants
+```
+
+## ⚡ Server-Side Rendering
+
+Production uses Inertia SSR: `npm run build:ssr` builds the client and the SSR bundle, and the Docker image runs the SSR server under Supervisor.
